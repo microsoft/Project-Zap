@@ -1,0 +1,342 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "orgName": {
+            "type": "string",
+            "defaultValue": "contoso",
+            "metadata": {
+                "description": "Customer name to be used for resource naming"
+            }
+        },
+        "repoUrl": {
+            "type": "string",
+            "defaultValue": "https://github.com/dwrightmsft/zap.git"
+        },
+        "b2cInstance": {
+            "type": "string",
+            "metadata": {
+                "description": "AAD B2C endpoint e.g. https://{b2ctenantname}.onmicrosoft.com/tfp/"
+            }
+        },
+        "b2cClientId": {
+            "type": "string",
+            "metadata": {
+                "description": "Client ID for app registration in AAD B2C"
+            }
+        },
+        "b2cDomain": {
+            "type": "string",
+            "metadata": {
+                "description": "AAD B2C domain name e.g. {b2ctenantname}.onmicrosoft.com"
+            }
+        },
+        "SignupSigninPolicyId": {
+            "type": "string",
+            "defaultValue": "B2C_1_susi",
+            "metadata": {
+                "description": "AAD B2C signup/signin policy ID e.g. B2C_1_susi"
+            }
+        },
+        "ResetPasswordPolicyId": {
+            "type": "string",
+            "defaultValue": "B2C_1_password_reset",
+            "metadata": {
+                "description": "AAD B2C password reset policy ID e.g. B2C_1_password_reset"
+            }
+        },
+        "EditProfilePolicyId": {
+            "type": "string",
+            "defaultValue": "B2C_1_edit_profile",
+            "metadata": {
+                "description": "AAD B2C edit profile policy ID e.g. B2C_1_edit_profile"
+            }
+        },
+        "managerCode": {
+            "type": "string",
+            "defaultValue": "123456",
+            "metadata": {
+                "description": "Initial code for manager sign up"
+            }
+        },
+        "extensionClientId": {
+            "type": "string",
+            "metadata": {
+                "description": "Application ID for B2C extensions app"
+            }
+        },
+        "appClientId": {
+            "type": "string",
+            "metadata": {
+                "description": "Application ID for B2C directory app"
+            }
+        },
+        "tenantId": {
+            "type": "string",
+            "metadata": {
+                "description": "AAD B2C tenant ID"
+            }
+        },
+        "appRegistrationClientSecret": {
+            "type": "securestring",
+            "metadata": {
+                "description": "Client secret for app registration"
+            }            
+        }
+    },
+    "variables": {
+        "appName": "zap",
+        "resgpguid": "[substring(replace(guid(resourceGroup().id), '-', ''), 0, 4)]",
+        "resourceName": "[concat(parameters('orgName'), '-', variables('appName'), '-', variables('resgpguid'))]",
+        "callbackPath": "/signin-oidc"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.DocumentDB/databaseAccounts",
+            "apiVersion": "2020-03-01",
+            "name": "[variables('resourceName')]",
+            "location": "[resourceGroup().location]",
+            "kind": "GlobalDocumentDB",
+            "properties": {
+                "databaseAccountOfferType": "Standard",
+                "consistencyPolicy": {
+                    "defaultConsistencyLevel": "Session",
+                    "maxIntervalInSeconds": 5,
+                    "maxStalenessPrefix": 100
+                },
+                "locations": [
+                    {
+                        "locationName": "[resourceGroup().location]",
+                        "failoverPriority": 0,
+                        "isZoneRedundant": false
+                    }
+                ],
+                "capabilities": []
+            }
+        },
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2018-02-01",
+            "name": "[concat(variables('appName'), '-plan')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('resourceName'))]"
+            ],
+            "location": "[resourceGroup().location]",
+            "sku": {
+                "name": "P1v2",
+                "tier": "PremiumV2",
+                "size": "P1v2",
+                "family": "Pv2",
+                "capacity": 1
+            },
+            "kind": "linux",
+            "properties": {
+                "maximumElasticWorkerCount": 1,
+                "reserved": true
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2018-11-01",
+            "name": "[variables('resourceName')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', concat(variables('appName'), '-plan'))]"
+            ],
+            "kind": "app,linux",
+            "properties": {
+                "enabled": true,
+                "hostNameSslStates": [
+                    {
+                        "name": "[concat(variables('resourceName'), '.azurewebsites.net')]",
+                        "sslState": "Disabled",
+                        "hostType": "Standard"
+                    },
+                    {
+                        "name": "[concat(variables('resourceName'), '.scm.azurewebsites.net')]",
+                        "sslState": "Disabled",
+                        "hostType": "Repository"
+                    }
+                ],
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', concat(variables('appName'), '-plan'))]",
+                "reserved": true,
+                "isXenon": false,
+                "hyperV": false,
+                "scmSiteAlsoStopped": false,
+                "clientAffinityEnabled": false,
+                "clientCertEnabled": false,
+                "hostNamesDisabled": false,
+                "containerSize": 0,
+                "dailyMemoryTimeQuota": 0,
+                "httpsOnly": true,
+                "redundancyMode": "None",
+                "siteConfig": {
+                    "appSettings": [
+                        {
+                            "Name": "CosmosEndpoint",
+                            "Value": "[reference(concat('Microsoft.DocumentDb/databaseAccounts/', variables('resourceName'))).documentEndpoint]"
+                        },
+                        {
+                            "Name": "CosmosKey",
+                            "Value": "[listKeys(resourceId('Microsoft.DocumentDb/databaseAccounts', variables('resourceName')), '2020-03-01').primaryMasterKey]"
+                        },
+                        {
+                            "Name": "AzureAdB2C__Instance",
+                            "Value": "[parameters('b2cInstance')]"
+                        },     
+                        {
+                            "Name": "AzureAdB2C__ClientId",
+                            "Value": "[parameters('b2cClientId')]"
+                        },
+                        {
+                            "Name": "AzureAdB2C__Callbackpath",
+                            "Value": "[variables('callbackPath')]"
+                        },
+                        {
+                            "Name": "AzureAdB2C__Domain",
+                            "Value": "[parameters('b2cDomain')]"
+                        },
+                        {
+                            "Name": "AzureAdB2C__SignUpSignInPolicyId",
+                            "Value": "[parameters('SignupSigninPolicyId')]"
+                        },
+                        {
+                            "Name": "AzureAdB2C__ResetPasswordPolicyId",
+                            "Value": "[parameters('ResetPasswordPolicyId')]"
+                        },
+                        {
+                            "Name": "AzureAdB2C__EditProfilePolicyId",
+                            "Value": "[parameters('EditProfilePolicyId')]"
+                        },
+                        {
+                            "Name": "ManagerCode",
+                            "Value": "[parameters('managerCode')]"
+                        },
+                        {
+                            "Name": "ExtensionId",
+                            "Value": "[parameters('extensionClientId')]"
+                        },
+                        {
+                            "Name": "ClientId",
+                            "Value": "[parameters('appClientId')]"
+                        }, 
+                        {
+                            "Name": "TenantId",
+                            "Value": "[parameters('tenantId')]"
+                        }, 
+                        {
+                            "Name": "ClientSecret",
+                            "Value": "[parameters('appRegistrationClientSecret')]"
+                        },
+                        {
+                            "name": "ASPNETCORE_ENVIRONMENT",
+                            "value": "Development"
+                        }          
+                    ]
+                }
+            },
+            "resources": [
+                {
+                    "type": "sourcecontrols",
+                    "apiVersion": "2018-02-01",
+                    "name": "web",
+                    "location": "[resourceGroup().location]",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/sites', variables('resourceName'))]"
+                    ],
+                    "properties": {
+                        "repoUrl": "[parameters('repoURL')]",
+                        "isManualIntegration": true
+                    }
+                }
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/config",
+            "apiVersion": "2018-11-01",
+            "name": "[concat(variables('resourceName'), '/web')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', variables('resourceName'))]"
+            ],
+            "properties": {
+                "numberOfWorkers": 1,
+                "defaultDocuments": [
+                    "Default.htm",
+                    "Default.html",
+                    "Default.asp",
+                    "index.htm",
+                    "index.html",
+                    "iisstart.htm",
+                    "default.aspx",
+                    "index.php",
+                    "hostingstart.html"
+                ],
+                "netFrameworkVersion": "v4.0",
+                "linuxFxVersion": "DOTNETCORE|3.1",
+                "requestTracingEnabled": false,
+                "remoteDebuggingEnabled": false,
+                "remoteDebuggingVersion": "VS2019",
+                "httpLoggingEnabled": false,
+                "logsDirectorySizeLimit": 35,
+                "detailedErrorLoggingEnabled": false,
+                "publishingUsername": "$projectzap",
+                "scmType": "None",
+                "use32BitWorkerProcess": true,
+                "webSocketsEnabled": false,
+                "alwaysOn": true,
+                "appCommandLine": "dotnet Project.Zap.dll",
+                "managedPipelineMode": "Integrated",
+                "virtualApplications": [
+                    {
+                        "virtualPath": "/",
+                        "physicalPath": "site\\wwwroot",
+                        "preloadEnabled": true
+                    }
+                ],
+                "loadBalancing": "LeastRequests",
+                "experiments": {
+                    "rampUpRules": []
+                },
+                "autoHealEnabled": false,
+                "localMySqlEnabled": false,
+                "ipSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 1,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "scmIpSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 1,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "scmIpSecurityRestrictionsUseMain": false,
+                "http20Enabled": false,
+                "minTlsVersion": "1.2",
+                "ftpsState": "AllAllowed",
+                "reservedInstanceCount": 0
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/hostNameBindings",
+            "apiVersion": "2018-11-01",
+            "name": "[concat(variables('resourceName'), '/', variables('resourceName'), '.azurewebsites.net')]",
+            "location": "South Central US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', variables('resourceName'))]"
+            ],
+            "properties": {
+                "siteName": "projectzap",
+                "hostNameType": "Verified"
+            }
+        }
+    ]
+}

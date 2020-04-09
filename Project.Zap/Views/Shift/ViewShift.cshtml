@@ -1,0 +1,25 @@
+﻿@model Project.Zap.Models.ShiftViewModel
+
+<h1>Shift details</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Store Name</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Work Type</th>
+            <th>Employee</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>@Model.StoreName</td>
+            <td>@Model.Start</td>
+            <td>@Model.End</td>
+            <td>@Model.WorkType</td>
+            <td>@ViewData["Employee"]</td>
+        </tr>
+    </tbody>
+</table>
+

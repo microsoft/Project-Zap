@@ -1,0 +1,24 @@
+﻿@model Project.Zap.Models.StoreViewModel
+
+<h3>Edit Store</h3>
+
+<form asp-controller="Organization" asp-action="EditStore" method="Post">
+    <div class="form-group">
+        <label asp-for="@Model.Name"></label>
+        <input type="text" asp-for="@Model.Name" class="form-control" />
+        <span asp-validation-for="@Model.Name"></span>
+    </div>
+    <h5>Address</h5>
+    <div class="form-group">
+        <label asp-for="@Model.Address.City"></label>
+        <input type="text" asp-for="@Model.Address.City" class="form-control" />
+        <span asp-validation-for="@Model.Address.City"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="@Model.Address.ZipOrPostCode"></label>
+        <input type="text" asp-for="@Model.Address.ZipOrPostCode" class="form-control" />
+        <span asp-validation-for="@Model.Address.ZipOrPostCode"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary mb-2">Update</button>
+</form>

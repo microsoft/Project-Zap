@@ -1,0 +1,43 @@
+﻿@model IEnumerable<Project.Zap.Models.ShiftViewModel>
+
+@{
+    ViewData["Title"] = "Upcoming shifts";
+}
+
+<h1>Upcoming shifts</h1>
+
+
+@if (ViewData.ContainsKey("NoShifts"))
+{
+    <div class="alert alert-info">
+        <strong>No shifts.</strong> @ViewData["NoShifts"]
+    </div>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Store Name</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Work Type</th>
+            <th>Cancel</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var shift in Model)
+        {
+            <tr>
+                <td>@shift.StoreName</td>
+                <td>@shift.Start</td>
+                <td>@shift.End</td>
+                <td>@shift.WorkType</td>
+                <td>
+                    <a asp-controller="Shift" asp-action="CancelShift" asp-route-StoreName="@shift.StoreName" asp-route-Start="@shift.Start.ToString("yyyy-MM-ddTHH:mm")" asp-route-End="@shift.End.ToString("yyyy-MM-ddTHH:mm")">Cancel</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

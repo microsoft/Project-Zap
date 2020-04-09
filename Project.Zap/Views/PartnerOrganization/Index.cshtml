@@ -1,0 +1,49 @@
+﻿@model IEnumerable<Project.Zap.Models.PartnerOrganizationViewModel>
+
+<div id="accordion">
+    <div class="card">
+        <div class="card-header" id="partnerHeader">
+            <h3>
+                <button class="btn" data-toggle="collapse" data-target="#partners" aria-expanded="true" aria-controls="partners">Partners</button>
+            </h3>
+        </div>
+
+        <div id="partners" class="collapse show" data-parent="#accordion" aria-labelledby="partnerHeader">
+            <div class="card-body">
+                <table class="table">
+                    <tr>
+                        <th>Name</th>
+                        <th>Registration Code</th>
+                        <th>Delete</th>
+                    </tr>
+
+                    @if (Model != null && Model.Any())
+                    {
+                        @foreach (var org in Model)
+                        {
+                            <tr>
+                                <td>@org.Name</td>
+                                <td>@org.RegistrationCode</td>
+                                <th><a asp-controller="PartnerOrganization" asp-action="DeletePartner" asp-route-id="@org.Name">Delete</a></th>
+                            </tr>
+                        }
+                    }
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header" id="newPartnerHeader">
+            <h3>
+                <button class="btn" data-toggle="collapse" data-target="#newPartner" aria-expanded="false" aria-controls="newPartner">New Partner</button>
+            </h3>
+        </div>
+
+        <div id="newPartner" class="collapse" data-parent="#accordion" aria-labelledby="newPartnerHeader">
+            <div class="card-body">
+                <partial name="AddPartner" model="new Project.Zap.Models.PartnerOrganizationViewModel()" />
+            </div>
+        </div>
+    </div>
+</div>

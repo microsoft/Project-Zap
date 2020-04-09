@@ -1,0 +1,16 @@
+﻿@model Project.Zap.Models.OrganizationViewModel
+
+<div class="text-center">
+    <h1 class="display-4">Setup Organization</h1>
+    <h3>First time setup</h3>
+
+    <form asp-controller="Organization" asp-action="Setup" method="post">
+        <div class="form-group">
+            <label asp-for="@Model.Name"></label>
+            <input type="text" asp-for="@Model.Name" class="form-control" />
+            <span asp-validation-for="@Model.Name"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary mb-2">Add</button>
+    </form>
+</div>

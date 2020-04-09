@@ -1,0 +1,50 @@
+﻿@model Project.Zap.Models.OrganizationViewModel
+
+<div id="accordion">
+    <div class="card">
+        <div class="card-header" id="storeHeader">
+            <h3>
+                <button class="btn" data-toggle="collapse" data-target="#stores" aria-expanded="true" aria-controls="stores">Stores</button>
+            </h3>
+        </div>
+
+        <div id="stores" class="collapse show" data-parent="#accordion" aria-labelledby="storeHeader">
+            <div class="card-body">
+                <table class="table">
+                    <tr>
+                        <th>Name</th>
+                        <th>City</th>
+                        <th>Zip or PostCode</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                    </tr>
+                    @foreach (var store in Model.Stores)
+                    {
+                    <tr>
+                        <td>@store.Name</td>
+                        <td>@store.Address.City</td>
+                        <td>@store.Address.ZipOrPostCode</td>
+                        <th><a asp-controller="Organization" asp-action="EditStore" asp-route-id="@store.Name">Edit</a></th>
+                        <th><a asp-controller="Organization" asp-action="DeleteStore" asp-route-id="@store.Name">Delete</a></th>
+                    </tr>
+                    }
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header" id="newStoreHeader">
+            <h3>
+                <button class="btn" data-toggle="collapse" data-target="#newStore" aria-expanded="false" aria-controls="newStore">New Store</button>
+            </h3>
+        </div>
+
+        <div id="newStore" class="collapse" data-parent="#accordion" aria-labelledby="newStoreHeader">
+            <div class="card-body">                
+                <partial name="AddStore" model="new Project.Zap.Models.StoreViewModel()" />
+            </div>
+        </div>
+    </div>
+</div>
+
