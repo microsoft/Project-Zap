@@ -33,6 +33,12 @@ namespace Project.Zap.Controllers
             return View("Index", this.organization.Map());
         }
 
+        [HttpGet]
+        public IActionResult Add()
+        {
+            return View();
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddStore(StoreViewModel viewModel)

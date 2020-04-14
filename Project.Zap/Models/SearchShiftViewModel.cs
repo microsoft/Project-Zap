@@ -8,7 +8,6 @@ namespace Project.Zap.Models
 {
     public class SearchShiftViewModel
     {
-        [BindProperty]
         [Display(Name = "StoreNames")]
         public SelectList StoreNames { get; set; }
 

@@ -31,6 +31,11 @@ namespace Project.Zap.Controllers
             return View("Index", partners.Map());
         }
 
+        [HttpGet]
+        public IActionResult Add()
+        {
+            return View();
+        }
        
 
         [HttpPost]
