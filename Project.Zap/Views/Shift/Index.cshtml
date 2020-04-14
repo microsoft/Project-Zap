@@ -61,7 +61,7 @@
 
                 @if ((await AuthorizationService.AuthorizeAsync(User, "OrgAManager")).Succeeded)
                 {
-                    <td><a asp-controller="Shift" asp-action="ViewShift" asp-route-StoreName="@shift.StoreName" asp-route-Start="@shift.Start.ToString("yyyy-MM-ddTHH:mm")" asp-route-End="@shift.End.ToString("yyyy-MM-ddTHH:mm")" asp-route-WorkType="@shift.WorkType">@Localizer["LinkView"]</a></td>
+                    <td><a asp-controller="Shift" asp-action="ViewShift" asp-route-StoreName="@shift.StoreName" asp-route-Start="@shift.Start.ToString("yyyy-MM-ddTHH:mm")" asp-route-End="@shift.End.ToString("yyyy-MM-ddTHH:mm")" asp-route-WorkType="@shift.WorkType"  asp-route-Quantity="@shift.Quantity" asp-route-Available="@shift.Available">@Localizer["LinkView"]</a></td>
 
                     <td><a asp-controller="Shift" asp-action="Delete" asp-route-StoreName="@shift.StoreName" asp-route-Start="@shift.Start.ToString("yyyy-MM-ddTHH:mm")" asp-route-End="@shift.End.ToString("yyyy-MM-ddTHH:mm")" asp-route-WorkType="@shift.WorkType">@Localizer["LinkDelete"]</a></td>
                 }
