@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Cosmos.Fluent;
@@ -14,6 +15,7 @@ using Microsoft.Extensions.Localization;
 using Microsoft.Graph;
 using Microsoft.Graph.Auth;
 using Microsoft.Identity.Client;
+using Project.Zap.Filters;
 using Project.Zap.Library.Models;
 using Project.Zap.Library.Services;
 using Project.Zap.Middleware;
@@ -65,7 +67,9 @@ namespace Project.Zap
             services.AddLocalization(options => options.ResourcesPath = "Resources");
             services.AddControllers().AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
                .AddDataAnnotationsLocalization();
-            services.AddRazorPages();            
+            services.AddRazorPages();
+
+            services.AddSingleton<IValidationAttributeAdapterProvider, DateLessThanAttributeAdapterProvider>();
 
             services.AddTransient<Database>(x => this.GetCosmosDatabase().Result);
             

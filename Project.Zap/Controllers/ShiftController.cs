@@ -181,6 +181,11 @@ namespace Project.Zap.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddShift(SearchShiftViewModel viewModel)
         {
+            if(!ModelState.IsValid)
+            {
+                return View("Add", viewModel);
+            }
+
             List<Shift> shifts = viewModel.NewShift.Map().ToList();
 
             shifts.ForEach(async x => await this.shiftRepository.Add(x));
