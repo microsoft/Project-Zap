@@ -12,7 +12,6 @@
     <div class="form-group">
         <label asp-for="@Model.NewShift.StoreName"></label>
         <select asp-for="@Model.NewShift.StoreName" asp-items="@Model.StoreNames">
-            <option>@Localizer["SelectStore"]</option>
         </select>
         <span asp-validation-for="@Model.NewShift.StoreName"></span>
     </div>
@@ -48,8 +47,6 @@
             var compareValue = $(compareDateId).val()
 
             return value < compareValue;
-
-            return true;
         });
 
         $.validator.unobtrusive.adapters.add('datelessthan', ['property'], function (options) {
