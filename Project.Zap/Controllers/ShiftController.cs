@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Localization;
 using Project.Zap.Helpers;
 using Project.Zap.Library.Models;
 using Project.Zap.Library.Services;
@@ -20,13 +21,14 @@ namespace Project.Zap.Controllers
         private readonly IRepository<Shift> shiftRepository;
         private readonly IRepository<Organization> organizationRepository;
         private readonly Microsoft.Graph.IGraphServiceClient graphServiceClient;
+        private readonly IStringLocalizer<ShiftController> stringLocalizer;
 
-        public ShiftController(IRepository<Shift> shiftRepository, IRepository<Organization> organizationRepository, Microsoft.Graph.IGraphServiceClient graphServiceClient)
+        public ShiftController(IRepository<Shift> shiftRepository, IRepository<Organization> organizationRepository, Microsoft.Graph.IGraphServiceClient graphServiceClient, IStringLocalizer<ShiftController> stringLocalizer)
         {
             this.shiftRepository = shiftRepository;
             this.organizationRepository = organizationRepository;
             this.graphServiceClient = graphServiceClient;
-
+            this.stringLocalizer = stringLocalizer;
         }
 
         public async Task<IActionResult> Index()
@@ -93,7 +95,7 @@ namespace Project.Zap.Controllers
             {
                 ViewData["NoShifts"] = "You have no shifts booked.";
             }
-            return View(shifts.Map());
+            return View("ViewShifts", shifts.Map());
         }
 
         [HttpGet]
@@ -160,7 +162,7 @@ namespace Project.Zap.Controllers
 
             await this.shiftRepository.Update(storeShift);
 
-            return await this.Index();
+            return this.ViewShifts();
         }
 
         [HttpGet]
