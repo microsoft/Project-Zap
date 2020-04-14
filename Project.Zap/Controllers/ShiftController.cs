@@ -97,7 +97,7 @@ namespace Project.Zap.Controllers
                 throw new ArgumentException("http://schemas.microsoft.com/identity/claims/objectidentifier claim is required ");
             }
 
-            IEnumerable<Shift> shifts = this.shiftRepository.Get(x => x.EmployeeId == id.Value).AsEnumerable();
+            IEnumerable<Shift> shifts = this.shiftRepository.Get(x => x.EmployeeId == id.Value && x.Start > DateTime.Now).AsEnumerable();
             if (shifts?.Any() == false)
             {
                 ViewData["NoShifts"] = "You have no shifts booked.";
