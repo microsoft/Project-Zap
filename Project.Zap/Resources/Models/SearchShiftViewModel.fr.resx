@@ -120,6 +120,9 @@
   <data name="Available" xml:space="preserve">
     <value>Disponible</value>
   </data>
+  <data name="Start" xml:space="preserve">
+    <value>Heure de début</value>
+  </data>
   <data name="StoreNames" xml:space="preserve">
     <value>Noms des magasins</value>
   </data>

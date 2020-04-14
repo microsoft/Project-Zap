@@ -49,7 +49,7 @@ namespace Project.Zap.Controllers
             this.organization.Stores.Add(store);
             await this.organizationRepository.Update(this.organization);
 
-            return Redirect($"/ShiftManagement/Index/{store.Name}");
+            return Redirect($"/Shift");
         }
 
         [HttpGet]

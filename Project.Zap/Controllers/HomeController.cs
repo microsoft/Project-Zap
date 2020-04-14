@@ -27,7 +27,7 @@ namespace Project.Zap.Controllers
 
             if (zapRole == null)
             {
-                throw new ArgumentException("Claim extension_zaprole is required ");
+                return View();
             }
 
             if(zapRole.Value == "org_a_manager")
