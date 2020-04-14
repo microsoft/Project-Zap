@@ -81,7 +81,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2020 - Project.Zap - <a asp-area="" asp-controller="Home" asp-action="Privacy">@Localizer["Privacy"]</a>
+            Powered by<img src="~/img/MS-Azure-logo.png" alt="Microsoft Azure logo"><a asp-area="" asp-controller="Home" asp-action="Privacy">@Localizer["Privacy"]</a>
             @if (User.Identity.IsAuthenticated)
             {
                 <span> - </span><a asp-controller="DataRequest" asp-action="Index">@Localizer["DataRequest"]</a>
