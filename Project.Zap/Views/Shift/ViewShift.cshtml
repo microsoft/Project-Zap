@@ -4,29 +4,54 @@
     @inject IViewLocalizer Localizer
 }
 
+@{
+    var employees = ViewData["Employees"] as List<Microsoft.Graph.User>;
+}
+
 
 @model Project.Zap.Models.ShiftViewModel
 
 <h1>@Localizer["Title"]</h1>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>@Localizer["TableStoreName"]</th>
-            <th>@Localizer["TableStart"]</th>
-            <th>@Localizer["TableEnd"]</th>
-            <th>@Localizer["TableWorkType"]</th>
-            <th>@Localizer["TableEmployee"]</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>@Model.StoreName</td>
-            <td>@Model.Start</td>
-            <td>@Model.End</td>
-            <td>@Model.WorkType</td>
-            <td>@ViewData["Employee"]</td>
-        </tr>
-    </tbody>
-</table>
+<dl class="row">
+
+    <dt class="col-sm-3">@Localizer["TableStoreName"]</dt>
+    <dd class="col-sm-9">@Model.StoreName</dd>
+
+    <dt class="col-sm-3">@Localizer["TableStart"]</dt>
+    <dd class="col-sm-9">@Model.Start</dd>
+
+    <dt class="col-sm-3">@Localizer["TableEnd"]</dt>
+    <dd class="col-sm-9">@Model.End</dd>
+
+    <dt class="col-sm-3 text-truncate">@Localizer["TableWorkType"]</dt>
+    <dd class="col-sm-9">@Model.WorkType</dd>
+
+    <dt class="col-sm-3">@Localizer["TableQuantity"]</dt>
+    <dd class="col-sm-9">@Model.Quantity</dd>
+
+    <dt class="col-sm-3">@Localizer["TableAvailable"]</dt>
+    <dd class="col-sm-9">@Model.Available</dd>
+
+    <dt class="col-sm-3">@Localizer["Employees"]</dt>
+    <dd>
+
+        <ul>
+            @if (ViewData.ContainsKey("NoEmployees"))
+            {
+                <li>@ViewData["NoEmployees"]</li>
+            }
+            else
+            {
+                @foreach (var employee in employees)
+                {
+                    <li>@employee.GivenName @employee.Surname</li>
+                }
+            }
+        </ul>
+    </dd>
+
+
+</dl>
+
 

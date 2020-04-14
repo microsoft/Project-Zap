@@ -109,14 +109,21 @@ namespace Project.Zap.Controllers
         [Authorize(Policy = "OrgAManager")]
         public IActionResult ViewShift(ShiftViewModel viewModel)
         {
-            
-            Shift shift = this.shiftRepository.Get(x => x.StoreName == viewModel.StoreName && x.Start == viewModel.Start && x.End == viewModel.End && x.WorkType == viewModel.WorkType).FirstOrDefault();
 
-            if (shift.EmployeeId != null)
+            IEnumerable<Shift> shifts = this.shiftRepository.Get(x => x.StoreName == viewModel.StoreName && x.Start == viewModel.Start && x.End == viewModel.End && x.WorkType == viewModel.WorkType).Where(x => x.EmployeeId != null);
+            List<Microsoft.Graph.User> list = new List<Microsoft.Graph.User>();
+
+            if (shifts.Count() == 0)
             {
-                var employee = graphServiceClient.Users[shift.EmployeeId].Request().GetAsync().Result;
-                ViewData["Employee"] = employee.GivenName + " " + employee.Surname;
+                ViewData["NoEmployees"] = "No employees are booked for this shift.";
             }
+
+            foreach (var shift in shifts)
+            {
+                list.Add(graphServiceClient.Users[shift.EmployeeId].Request().GetAsync().Result);
+            }
+
+            ViewData["Employees"] = list;
 
             return View(viewModel);
 
