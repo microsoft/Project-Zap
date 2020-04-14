@@ -19,7 +19,14 @@
     <div class="form-group">
         <label asp-for="@Model.NewShift.Start"></label>
         <input type="datetime-local" asp-for="@Model.NewShift.Start" />
+        <span asp-validation-for="@Model.NewShift.Start"></span>
     </div>
-    <span asp-validation-for="@Model.NewShift.Start"></span>
+    
+    <div class="form-group">
+        <label asp-for="@Model.Available"></label>
+        <input type="checkbox" asp-for="@Model.Available" />
+        <span asp-validation-for="@Model.Available"></span>
+    </div>
+
     <button type="submit" class="btn btn-primary mb-2">@Localizer["SearchButton"]</button>
 </form>

@@ -61,7 +61,9 @@ namespace Project.Zap.Controllers
             SearchShiftViewModel viewModel = new SearchShiftViewModel
             {
                 StoreNames = await this.GetStoreNames(),
-                Result = shifts.Where(x => x.Start.DayOfYear == search.NewShift.Start.DayOfYear).Map()
+                Result = shifts.Where(x => x.Start.DayOfYear == search.NewShift.Start.DayOfYear)
+                                .Map()
+                                .Where(x => search.Available ? x.Available > 0 : true)
             };
 
             return View("Index", viewModel);

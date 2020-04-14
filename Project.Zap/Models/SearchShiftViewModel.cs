@@ -12,5 +12,9 @@ namespace Project.Zap.Models
         public ShiftViewModel NewShift { get; set; }
 
         public IEnumerable<ShiftViewModel> Result { get; set; }
+
+        [Display(Name = "Available")]
+        public bool Available { get; set; } = true;
+        
     }
 }
