@@ -21,7 +21,6 @@ namespace Project.Zap.Controllers
         private readonly IRepository<Organization> organizationRepository;
         private readonly Microsoft.Graph.IGraphServiceClient graphServiceClient;
 
-
         public ShiftController(IRepository<Shift> shiftRepository, IRepository<Organization> organizationRepository, Microsoft.Graph.IGraphServiceClient graphServiceClient)
         {
             this.shiftRepository = shiftRepository;
@@ -72,7 +71,7 @@ namespace Project.Zap.Controllers
         [Authorize(Policy = "OrgAManager")]
         public async Task<IActionResult> Delete(ShiftViewModel viewModel)
         {
-            await this.shiftRepository.Delete(x => x.StoreName == viewModel.StoreName && x.Start == viewModel.Start && x.End == viewModel.End);
+            await this.shiftRepository.Delete(x => x.StoreName == viewModel.StoreName && x.Start == viewModel.Start && x.End == viewModel.End && x.WorkType == viewModel.WorkType);
             return await this.Index();
         }
 
@@ -100,7 +99,7 @@ namespace Project.Zap.Controllers
         public IActionResult ViewShift(ShiftViewModel viewModel)
         {
             
-            Shift shift = this.shiftRepository.Get(x => x.StoreName == viewModel.StoreName && x.Start == viewModel.Start && x.End == viewModel.End).FirstOrDefault();
+            Shift shift = this.shiftRepository.Get(x => x.StoreName == viewModel.StoreName && x.Start == viewModel.Start && x.End == viewModel.End && x.WorkType == viewModel.WorkType).FirstOrDefault();
 
             if (shift.EmployeeId != null)
             {
@@ -123,7 +122,7 @@ namespace Project.Zap.Controllers
                 throw new ArgumentException("http://schemas.microsoft.com/identity/claims/objectidentifier claim is required ");
             }
 
-            Shift shift = this.shiftRepository.Get(x => x.StoreName == viewModel.StoreName && x.Start == viewModel.Start && x.End == viewModel.End && x.Allocated == true).FirstOrDefault();
+            Shift shift = this.shiftRepository.Get(x => x.StoreName == viewModel.StoreName && x.Start == viewModel.Start && x.End == viewModel.End && x.WorkType == viewModel.WorkType && x.Allocated == true).FirstOrDefault();
 
             shift.EmployeeId = null;
             shift.Allocated = false;
@@ -146,7 +145,7 @@ namespace Project.Zap.Controllers
                 throw new ArgumentException("http://schemas.microsoft.com/identity/claims/objectidentifier claim is required ");
             }
 
-            Shift storeShift = this.shiftRepository.Get(x => x.StoreName == viewModel.StoreName && x.Start == viewModel.Start && x.End == viewModel.End && x.Allocated == false).FirstOrDefault();
+            Shift storeShift = this.shiftRepository.Get(x => x.StoreName == viewModel.StoreName && x.Start == viewModel.Start && x.End == viewModel.End && x.WorkType == viewModel.WorkType && x.Allocated == false).FirstOrDefault();
 
             if (storeShift == null)
             {

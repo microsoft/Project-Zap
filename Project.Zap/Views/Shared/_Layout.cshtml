@@ -1,6 +1,9 @@
 ﻿@{
     @using Microsoft.AspNetCore.Authorization
+    @using Microsoft.AspNetCore.Mvc.Localization
+
     @inject IAuthorizationService AuthorizationService
+    @inject IViewLocalizer Localizer
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -25,41 +28,41 @@
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">@Localizer["Home"]</a>
                         </li>
                         @if ((await AuthorizationService.AuthorizeAsync(User, "OrgAManager")).Succeeded)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Organization" asp-action="Index">Manage Organization</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Organization" asp-action="Index">@Localizer["ManageOrganization"]</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="PartnerOrganization" asp-action="Index">Partner Organizations</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="PartnerOrganization" asp-action="Index">@Localizer["PartnerOrganizations"]</a>
                             </li>
                         }
                         @if (User.Identity.IsAuthenticated)
                         {
                             <li class="dropdown">
-                                <a class="dropdown-toggle nav-link text-dark" data-toggle="dropdown" href="#">Shifts<b class="caret"></b></a>
+                                <a class="dropdown-toggle nav-link text-dark" data-toggle="dropdown" href="#">@Localizer["Shifts"]<b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     @if ((await AuthorizationService.AuthorizeAsync(User, "OrgAManager")).Succeeded)
                                     {
                                         <li class="nav-item">
-                                            <a class="nav-link text-dark" asp-area="" asp-controller="Shift" asp-action="Index">Search</a>
+                                            <a class="nav-link text-dark" asp-area="" asp-controller="Shift" asp-action="Index">@Localizer["Search"]</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link text-dark" asp-area="" asp-controller="Shift" asp-action="Add">Add</a>
+                                            <a class="nav-link text-dark" asp-area="" asp-controller="Shift" asp-action="Add">@Localizer["Add"]</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link text-dark" asp-area="" asp-controller="Shift" asp-action="Upload">Upload</a>
+                                            <a class="nav-link text-dark" asp-area="" asp-controller="Shift" asp-action="Upload">@Localizer["Upload"]</a>
                                         </li>
                                     }
                                     @if ((await AuthorizationService.AuthorizeAsync(User, "OrgBEmployee")).Succeeded)
                                     {
                                         <li class="nav-item">
-                                            <a class="nav-link text-dark" asp-area="" asp-controller="Shift" asp-action="ViewShifts">My Shifts</a>
+                                            <a class="nav-link text-dark" asp-area="" asp-controller="Shift" asp-action="ViewShifts">@Localizer["MyShifts"]</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link text-dark" asp-area="" asp-controller="Shift" asp-action="Index">Book Shifts</a>
+                                            <a class="nav-link text-dark" asp-area="" asp-controller="Shift" asp-action="Index">@Localizer["BookShifts"]</a>
                                         </li>
                                     }
                                 </ul>
@@ -78,13 +81,13 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2020 - Project.Zap - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2020 - Project.Zap - <a asp-area="" asp-controller="Home" asp-action="Privacy">@Localizer["Privacy"]</a>
             @if (User.Identity.IsAuthenticated)
             {
-                <span> - </span><a asp-controller="DataRequest" asp-action="Index">Data Request</a>
+                <span> - </span><a asp-controller="DataRequest" asp-action="Index">@Localizer["DataRequest"]</a>
             }
         </div>
-        
+
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>

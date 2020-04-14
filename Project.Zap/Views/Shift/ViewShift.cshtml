@@ -1,15 +1,22 @@
-﻿@model Project.Zap.Models.ShiftViewModel
+﻿@{
+    @using Microsoft.AspNetCore.Mvc.Localization
 
-<h1>Shift details</h1>
+    @inject IViewLocalizer Localizer
+}
+
+
+@model Project.Zap.Models.ShiftViewModel
+
+<h1>@Localizer["Title"]</h1>
 
 <table class="table">
     <thead>
         <tr>
-            <th>Store Name</th>
-            <th>Start Time</th>
-            <th>End Time</th>
-            <th>Work Type</th>
-            <th>Employee</th>
+            <th>@Localizer["TableStoreName"]</th>
+            <th>@Localizer["TableStart"]</th>
+            <th>@Localizer["TableEnd"]</th>
+            <th>@Localizer["TableWorkType"]</th>
+            <th>@Localizer["TableEmployee"]</th>
         </tr>
     </thead>
     <tbody>

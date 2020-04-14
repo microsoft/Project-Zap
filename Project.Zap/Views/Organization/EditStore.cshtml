@@ -1,6 +1,12 @@
-﻿@model Project.Zap.Models.StoreViewModel
+﻿@{
+    @using Microsoft.AspNetCore.Mvc.Localization
 
-<h3>Edit Store</h3>
+    @inject IViewLocalizer Localizer
+}
+
+@model Project.Zap.Models.StoreViewModel
+
+<h3>@Localizer["Title"]</h3>
 
 <form asp-controller="Organization" asp-action="EditStore" method="Post">
     <div class="form-group">
@@ -20,5 +26,5 @@
         <span asp-validation-for="@Model.Address.ZipOrPostCode"></span>
     </div>
 
-    <button type="submit" class="btn btn-primary mb-2">Update</button>
+    <button type="submit" class="btn btn-primary mb-2">@Localizer["Update"]</button>
 </form>
