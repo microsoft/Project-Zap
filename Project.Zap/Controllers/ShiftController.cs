@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Localization;
 using Project.Zap.Helpers;
 using Project.Zap.Library.Models;
 using Project.Zap.Library.Services;
@@ -21,17 +22,19 @@ namespace Project.Zap.Controllers
         private readonly IRepository<Organization> organizationRepository;
         private readonly Microsoft.Graph.IGraphServiceClient graphServiceClient;
 
-        public ShiftController(IRepository<Shift> shiftRepository, IRepository<Organization> organizationRepository, Microsoft.Graph.IGraphServiceClient graphServiceClient)
+        public ShiftController(
+            IRepository<Shift> shiftRepository, 
+            IRepository<Organization> organizationRepository, 
+            Microsoft.Graph.IGraphServiceClient graphServiceClient)
         {
             this.shiftRepository = shiftRepository;
             this.organizationRepository = organizationRepository;
             this.graphServiceClient = graphServiceClient;
-
         }
 
         public async Task<IActionResult> Index()
         {
-            IEnumerable<Shift> shifts = await this.shiftRepository.Get();
+            IEnumerable<Shift> shifts = this.shiftRepository.Get(x => x.Start > DateTime.Now);
             SearchShiftViewModel viewModel = new SearchShiftViewModel
             {
                 StoreNames = await this.GetStoreNames(),
@@ -88,12 +91,12 @@ namespace Project.Zap.Controllers
                 throw new ArgumentException("http://schemas.microsoft.com/identity/claims/objectidentifier claim is required ");
             }
 
-            IEnumerable<Shift> shifts = this.shiftRepository.Get(x => x.EmployeeId == id.Value).AsEnumerable();
+            IEnumerable<Shift> shifts = this.shiftRepository.Get(x => x.EmployeeId == id.Value && x.Start > DateTime.Now).AsEnumerable();
             if (shifts?.Any() == false)
             {
                 ViewData["NoShifts"] = "You have no shifts booked.";
             }
-            return View(shifts.Map());
+            return View("ViewShifts", shifts.Map());
         }
 
         [HttpGet]
@@ -154,6 +157,13 @@ namespace Project.Zap.Controllers
                 throw new ArgumentException("http://schemas.microsoft.com/identity/claims/objectidentifier claim is required ");
             }
 
+            IEnumerable<Shift> bookedShifts = this.shiftRepository.Get(x => x.EmployeeId == id.Value);
+            if(bookedShifts?.Where(x => x.Start.DayOfYear == viewModel.Start.DayOfYear && x.Start.Year == viewModel.Start.Year).FirstOrDefault() != null)
+            {
+                ViewData["ValidationError"] = "You are already booked to work on this day.";
+                return await this.Index();
+            }
+
             Shift storeShift = this.shiftRepository.Get(x => x.StoreName == viewModel.StoreName && x.Start == viewModel.Start && x.End == viewModel.End && x.WorkType == viewModel.WorkType && x.Allocated == false).FirstOrDefault();
 
             if (storeShift == null)
@@ -167,7 +177,7 @@ namespace Project.Zap.Controllers
 
             await this.shiftRepository.Update(storeShift);
 
-            return await this.Index();
+            return this.ViewShifts();
         }
 
         [HttpGet]

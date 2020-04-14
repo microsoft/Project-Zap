@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -22,6 +23,23 @@ namespace Project.Zap.Controllers
         [AllowAnonymous]
         public IActionResult Index()
         {
+            Claim zapRole = HttpContext.User.Claims.Where(x => x.Type == "extension_zaprole").FirstOrDefault();
+
+            if (zapRole == null)
+            {
+                throw new ArgumentException("Claim extension_zaprole is required ");
+            }
+
+            if(zapRole.Value == "org_a_manager")
+            {
+                return Redirect("/Shift");
+            }
+
+            if(zapRole.Value == "org_b_employee")
+            {
+                return Redirect("/Shift/ViewShifts");
+            }
+
             return View();
         }
 
