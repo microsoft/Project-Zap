@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
+    <div class="bg"></div>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
@@ -92,6 +93,7 @@
             </div>
         </nav>
     </header>
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
@@ -103,7 +105,7 @@
             Powered by<img src="~/img/MS-Azure-logo.png" alt="Microsoft Azure logo"><a asp-area="" asp-controller="Home" asp-action="Privacy">@Localizer["Privacy"]</a>
             @if (User.Identity.IsAuthenticated)
             {
-                <span> - </span><a asp-controller="DataRequest" asp-action="Index">@Localizer["DataRequest"]</a>
+            <span> - </span><a asp-controller="DataRequest" asp-action="Index">@Localizer["DataRequest"]</a>
             }
         </div>
 
