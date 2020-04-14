@@ -61,7 +61,9 @@ namespace Project.Zap.Controllers
             SearchShiftViewModel viewModel = new SearchShiftViewModel
             {
                 StoreNames = await this.GetStoreNames(),
-                Result = shifts.Where(x => x.Start.DayOfYear == search.NewShift.Start.DayOfYear).Map()
+                Result = shifts.Where(x => x.Start.DayOfYear == search.Start.DayOfYear)
+                                .Map()
+                                .Where(x => search.Available ? x.Available > 0 : true)
             };
 
             return View("Index", viewModel);
@@ -179,6 +181,11 @@ namespace Project.Zap.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddShift(SearchShiftViewModel viewModel)
         {
+            if(!ModelState.IsValid)
+            {
+                return View("Add", viewModel);
+            }
+
             List<Shift> shifts = viewModel.NewShift.Map().ToList();
 
             shifts.ForEach(async x => await this.shiftRepository.Add(x));

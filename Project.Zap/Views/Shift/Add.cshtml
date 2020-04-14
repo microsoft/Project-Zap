@@ -1,7 +1,7 @@
 ﻿@{
-    @using Microsoft.AspNetCore.Mvc.Localization
+                @using Microsoft.AspNetCore.Mvc.Localization
 
-    @inject IViewLocalizer Localizer
+                            @inject IViewLocalizer Localizer
 }
 
 @model Project.Zap.Models.SearchShiftViewModel
@@ -12,7 +12,6 @@
     <div class="form-group">
         <label asp-for="@Model.NewShift.StoreName"></label>
         <select asp-for="@Model.NewShift.StoreName" asp-items="@Model.StoreNames">
-            <option>@Localizer["SelectStore"]</option>
         </select>
         <span asp-validation-for="@Model.NewShift.StoreName"></span>
     </div>
@@ -39,3 +38,20 @@
     <input type="hidden" asp-for="@Model.NewShift.Available" />
     <button type="submit" class="btn btn-primary mb-2">@Localizer["AddButton"]</button>
 </form>
+
+@section Scripts
+{
+    <script>
+        $.validator.addMethod('datelessthan', function (value, element, params) {
+            var compareDateId = "#NewShift_" + params[0].dataset.valDatelessthanProperty;
+            var compareValue = $(compareDateId).val()
+
+            return value < compareValue;
+        });
+
+        $.validator.unobtrusive.adapters.add('datelessthan', ['property'], function (options) {
+            options.rules['datelessthan'] = [options.element, parseInt(options.params['property'])];
+            options.messages['datelessthan'] = options.message;
+        });
+    </script>
+}

@@ -11,15 +11,21 @@
     <div class="form-group">
         <label asp-for="@Model.NewShift.StoreName"></label>
         <select asp-for="@Model.NewShift.StoreName" asp-items="@Model.StoreNames">
-            <option value="">@Localizer["SelectStore"]</option>
         </select>
         <span asp-validation-for="@Model.NewShift.StoreName"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="@Model.NewShift.Start"></label>
-        <input type="datetime-local" asp-for="@Model.NewShift.Start" />
+        <label asp-for="@Model.Start"></label>
+        <input type="datetime-local" asp-for="@Model.Start" />
+        <span asp-validation-for="@Model.Start"></span>
     </div>
-    <span asp-validation-for="@Model.NewShift.Start"></span>
+    
+    <div class="form-group">
+        <label asp-for="@Model.Available"></label>
+        <input type="checkbox" asp-for="@Model.Available" />
+        <span asp-validation-for="@Model.Available"></span>
+    </div>
+
     <button type="submit" class="btn btn-primary mb-2">@Localizer["SearchButton"]</button>
 </form>

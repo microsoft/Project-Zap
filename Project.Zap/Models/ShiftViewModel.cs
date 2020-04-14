@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Project.Zap.Filters;
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -15,6 +16,7 @@ namespace Project.Zap.Models
         [BindProperty]
         [Required]
         [Display(Name = "Start")]
+        [DateLessThan("End")]
         [DisplayFormat(DataFormatString = "{yyyy-MM-ddTHH:mm}")]
         public DateTime Start { get; set; } = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
 
@@ -31,11 +33,13 @@ namespace Project.Zap.Models
 
         [BindProperty]
         [Required]   
+        [Range(1, 200)]
         [Display(Name = "Quantity")]
         public int Quantity { get; set; }
 
         [BindProperty]
         [Required]
+        [Range(0, 200)]
         [Display(Name = "Available")]
         public int Available { get; set; }
 
