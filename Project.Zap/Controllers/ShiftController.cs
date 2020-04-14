@@ -21,21 +21,15 @@ namespace Project.Zap.Controllers
         private readonly IRepository<Shift> shiftRepository;
         private readonly IRepository<Organization> organizationRepository;
         private readonly Microsoft.Graph.IGraphServiceClient graphServiceClient;
-        private readonly IStringLocalizer<ShiftController> stringLocalizer;
-        private readonly IRepository<Employee> employeeRepository;
 
         public ShiftController(
             IRepository<Shift> shiftRepository, 
             IRepository<Organization> organizationRepository, 
-            Microsoft.Graph.IGraphServiceClient graphServiceClient, 
-            IStringLocalizer<ShiftController> stringLocalizer,
-            IRepository<Employee> employeeRepository)
+            Microsoft.Graph.IGraphServiceClient graphServiceClient)
         {
             this.shiftRepository = shiftRepository;
             this.organizationRepository = organizationRepository;
             this.graphServiceClient = graphServiceClient;
-            this.stringLocalizer = stringLocalizer;
-            this.employeeRepository = employeeRepository;
         }
 
         public async Task<IActionResult> Index()
