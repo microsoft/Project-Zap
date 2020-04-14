@@ -22,13 +22,20 @@ namespace Project.Zap.Controllers
         private readonly IRepository<Organization> organizationRepository;
         private readonly Microsoft.Graph.IGraphServiceClient graphServiceClient;
         private readonly IStringLocalizer<ShiftController> stringLocalizer;
+        private readonly IRepository<Employee> employeeRepository;
 
-        public ShiftController(IRepository<Shift> shiftRepository, IRepository<Organization> organizationRepository, Microsoft.Graph.IGraphServiceClient graphServiceClient, IStringLocalizer<ShiftController> stringLocalizer)
+        public ShiftController(
+            IRepository<Shift> shiftRepository, 
+            IRepository<Organization> organizationRepository, 
+            Microsoft.Graph.IGraphServiceClient graphServiceClient, 
+            IStringLocalizer<ShiftController> stringLocalizer,
+            IRepository<Employee> employeeRepository)
         {
             this.shiftRepository = shiftRepository;
             this.organizationRepository = organizationRepository;
             this.graphServiceClient = graphServiceClient;
             this.stringLocalizer = stringLocalizer;
+            this.employeeRepository = employeeRepository;
         }
 
         public async Task<IActionResult> Index()
@@ -147,6 +154,13 @@ namespace Project.Zap.Controllers
             if (id == null)
             {
                 throw new ArgumentException("http://schemas.microsoft.com/identity/claims/objectidentifier claim is required ");
+            }
+
+            IEnumerable<Shift> bookedShifts = this.shiftRepository.Get(x => x.EmployeeId == id.Value);
+            if(bookedShifts?.Where(x => x.Start.DayOfYear == viewModel.Start.DayOfYear && x.Start.Year == viewModel.Start.Year).FirstOrDefault() != null)
+            {
+                ViewData["ValidationError"] = "You are already booked to work on this day.";
+                return await this.Index();
             }
 
             Shift storeShift = this.shiftRepository.Get(x => x.StoreName == viewModel.StoreName && x.Start == viewModel.Start && x.End == viewModel.End && x.WorkType == viewModel.WorkType && x.Allocated == false).FirstOrDefault();
