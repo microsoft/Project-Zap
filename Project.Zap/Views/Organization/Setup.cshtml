@@ -1,8 +1,14 @@
-﻿@model Project.Zap.Models.OrganizationViewModel
+﻿@{
+    @using Microsoft.AspNetCore.Mvc.Localization
+
+    @inject IViewLocalizer Localizer
+}
+
+@model Project.Zap.Models.OrganizationViewModel
 
 <div class="text-center">
-    <h1 class="display-4">Setup Organization</h1>
-    <h3>First time setup</h3>
+    <h1 class="display-4">@Localizer["SetupTitle"]</h1>
+    <h3>@Localizer["SubTitle"]</h3>
 
     <form asp-controller="Organization" asp-action="Setup" method="post">
         <div class="form-group">
@@ -11,6 +17,6 @@
             <span asp-validation-for="@Model.Name"></span>
         </div>
 
-        <button type="submit" class="btn btn-primary mb-2">Add</button>
+        <button type="submit" class="btn btn-primary mb-2">@Localizer["AddButton"]</button>
     </form>
 </div>

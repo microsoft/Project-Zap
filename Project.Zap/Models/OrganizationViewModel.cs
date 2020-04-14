@@ -13,6 +13,7 @@ namespace Project.Zap.Models
 
         [BindProperty]
         [Required, StringLength(30)]
+        [Display(Name = "Name")]
         public string Name { get; set; }
 
         public StoreTypes StoreType { get; set; }

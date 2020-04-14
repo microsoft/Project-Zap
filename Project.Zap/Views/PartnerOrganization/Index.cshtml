@@ -1,10 +1,16 @@
-﻿@model IEnumerable<Project.Zap.Models.PartnerOrganizationViewModel>
+﻿@{
+    @using Microsoft.AspNetCore.Mvc.Localization
+
+    @inject IViewLocalizer Localizer
+}
+
+@model IEnumerable<Project.Zap.Models.PartnerOrganizationViewModel>
 
 <div id="accordion">
     <div class="card">
         <div class="card-header" id="partnerHeader">
             <h3>
-                <button class="btn" data-toggle="collapse" data-target="#partners" aria-expanded="true" aria-controls="partners">Partners</button>
+                <button class="btn" data-toggle="collapse" data-target="#partners" aria-expanded="true" aria-controls="partners">@Localizer["Title"]</button>
             </h3>
         </div>
 
@@ -12,9 +18,9 @@
             <div class="card-body">
                 <table class="table">
                     <tr>
-                        <th>Name</th>
-                        <th>Registration Code</th>
-                        <th>Delete</th>
+                        <th>@Localizer["TableName"]</th>
+                        <th>@Localizer["TableRegCode"]</th>
+                        <th>@Localizer["TableDelete"]</th>
                     </tr>
 
                     @if (Model != null && Model.Any())
@@ -24,7 +30,7 @@
                             <tr>
                                 <td>@org.Name</td>
                                 <td>@org.RegistrationCode</td>
-                                <th><a asp-controller="PartnerOrganization" asp-action="DeletePartner" asp-route-id="@org.Name">Delete</a></th>
+                                <th><a asp-controller="PartnerOrganization" asp-action="DeletePartner" asp-route-id="@org.Name">@Localizer["DeleteButton"]</a></th>
                             </tr>
                         }
                     }
@@ -36,7 +42,7 @@
     <div class="card">
         <div class="card-header" id="newPartnerHeader">
             <h3>
-                <button class="btn" data-toggle="collapse" data-target="#newPartner" aria-expanded="false" aria-controls="newPartner">New Partner</button>
+                <button class="btn" data-toggle="collapse" data-target="#newPartner" aria-expanded="false" aria-controls="newPartner">@Localizer["NewTitle"]</button>
             </h3>
         </div>
 

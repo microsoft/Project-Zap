@@ -1,74 +1,79 @@
 ﻿@{
     @using Microsoft.AspNetCore.Authorization
+    @using Microsoft.AspNetCore.Mvc.Localization
+
+    @inject IViewLocalizer Localizer
     @inject IAuthorizationService AuthorizationService
 }
 
+
 @model Project.Zap.Models.SearchShiftViewModel
 
-<h1>Book a Shift</h1>
+<h1>@Localizer["Title"]</h1>
 
 @if (ViewData.ContainsKey("ValidationError"))
 {
     <div class="alert alert-danger">
-        <strong>Error</strong> @ViewData["ValidationError"]
+        <strong>@Localizer["ErrorTitle"]</strong> @ViewData["ValidationError"]
     </div>
 }
 
 @if (ViewData.ContainsKey("SuccessMessage"))
 {
     <div class="alert alert-success">
-        <strong>Success</strong> @ViewData["SuccessMessage"]
+        <strong>@Localizer["SuccessTitle"]</strong> @ViewData["SuccessMessage"]
     </div>
 }
 
 <partial name="Search" model="new Project.Zap.Models.SearchShiftViewModel { StoreNames = Model.StoreNames, NewShift = new Project.Zap.Models.ShiftViewModel() }" />
 
-<h3>Results</h3>
+<h3>@Localizer["ResultsTitle"]</h3>
 <table class="table">
     <thead>
         <tr>
-            <th>Store</th>
-            <th>Start Time</th>
-            <th>End Time</th>
-            <th>Work Type</th>
-            <th>Quantity</th>
-            <th>Available</th>
+            <th>@Localizer["TableStore"]</th>
+            <th>@Localizer["TableStart"]</th>
+            <th>@Localizer["TableEnd"]</th>
+            <th>@Localizer["TableWorkType"]</th>
+            <th>@Localizer["TableQuantity"]</th>
+            <th>@Localizer["TableAvailable"]</th>
             @if ((await AuthorizationService.AuthorizeAsync(User, "OrgAManager")).Succeeded)
             {
-                <th>View</th>
-                <th>Delete</th>
+        <th>@Localizer["TableView"]</th>
+        <th>@Localizer["TableDelete"]</th>
             }
             @if ((await AuthorizationService.AuthorizeAsync(User, "OrgBEmployee")).Succeeded)
             {
-                <th>Book</th>
+        <th>@Localizer["TableBook"]</th>
             }
         </tr>
     </thead>
     <tbody>
         @foreach (var shift in Model.Result)
         {
-        <tr>
-            <td>@shift.StoreName</td>
-            <td>@shift.Start</td>
-            <td>@shift.End</td>
-            <td>@shift.WorkType</td>
-            <td>@shift.Quantity</td>
-            <td>@shift.Available</td>
+            <tr>
+                <td>@shift.StoreName</td>
+                <td>@shift.Start</td>
+                <td>@shift.End</td>
+                <td>@shift.WorkType</td>
+                <td>@shift.Quantity</td>
+                <td>@shift.Available</td>
 
-            @if ((await AuthorizationService.AuthorizeAsync(User, "OrgAManager")).Succeeded)
-            {
-                <td><a asp-controller="Shift" asp-action="ViewShift" asp-route-StoreName="@shift.StoreName" asp-route-Start="@shift.Start.ToString("yyyy-MM-ddTHH:mm")" asp-route-End="@shift.End.ToString("yyyy-MM-ddTHH:mm")" asp-route-WorkType="@shift.WorkType">View</a></td>                
-                <td><a asp-controller="Shift" asp-action="Delete" asp-route-StoreName="@shift.StoreName" asp-route-Start="@shift.Start.ToString("yyyy-MM-ddTHH:mm")" asp-route-End="@shift.End.ToString("yyyy-MM-ddTHH:mm")" asp-route-WorkType="@shift.WorkType">Delete</a></td>
-            }
-            @if ((await AuthorizationService.AuthorizeAsync(User, "OrgBEmployee")).Succeeded)
-            {
-                <td>
-                    <a asp-controller="Shift" asp-action="Book" asp-route-StoreName="@shift.StoreName" asp-route-Start="@shift.Start.ToString("yyyy-MM-ddTHH:mm")" asp-route-End="@shift.End.ToString("yyyy-MM-ddTHH:mm")" asp-route-WorkType="@shift.WorkType">Book</a>
-                </td>
+                @if ((await AuthorizationService.AuthorizeAsync(User, "OrgAManager")).Succeeded)
+                {
+                    <td><a asp-controller="Shift" asp-action="ViewShift" asp-route-StoreName="@shift.StoreName" asp-route-Start="@shift.Start.ToString("yyyy-MM-ddTHH:mm")" asp-route-End="@shift.End.ToString("yyyy-MM-ddTHH:mm")" asp-route-WorkType="@shift.WorkType">@Localizer["LinkView"]</a></td>
 
-            }
+                    <td><a asp-controller="Shift" asp-action="Delete" asp-route-StoreName="@shift.StoreName" asp-route-Start="@shift.Start.ToString("yyyy-MM-ddTHH:mm")" asp-route-End="@shift.End.ToString("yyyy-MM-ddTHH:mm")" asp-route-WorkType="@shift.WorkType">@Localizer["LinkDelete"]</a></td>
+                }
+                @if ((await AuthorizationService.AuthorizeAsync(User, "OrgBEmployee")).Succeeded)
+                {
+                    <td>
+                        <a asp-controller="Shift" asp-action="Book" asp-route-StoreName="@shift.StoreName" asp-route-Start="@shift.Start.ToString("yyyy-MM-ddTHH:mm")" asp-route-End="@shift.End.ToString("yyyy-MM-ddTHH:mm")" asp-route-WorkType="@shift.WorkType">@Localizer["LinkBook"]</a>
+                    </td>
 
-        </tr>
+                }
+
+            </tr>
         }
     </tbody>
 </table>

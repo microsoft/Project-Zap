@@ -1,11 +1,18 @@
-﻿@model Project.Zap.Models.PartnerOrganizationViewModel
+﻿@{
+    @using Microsoft.AspNetCore.Mvc.Localization
 
-<h3>New Partner Org</h3>
+    @inject IViewLocalizer Localizer
+}
+
+
+@model Project.Zap.Models.PartnerOrganizationViewModel
+
+<h3>@Localizer["Title"]</h3>
 <form asp-controller="PartnerOrganization" asp-action="AddPartner" method="Post">
     <div class="form-group">
         <label asp-for="@Model.Name"></label>
         <input type="text" asp-for="@Model.Name" class="form-control" />
         <span asp-validation-for="@Model.Name"></span>
     </div>
-    <button type="submit" class="btn btn-primary mb-2">Add</button>
+    <button type="submit" class="btn btn-primary mb-2">@Localizer["AddButton"]</button>
 </form>

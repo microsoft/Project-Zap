@@ -1,12 +1,18 @@
-﻿@model Project.Zap.Models.FileUploadViewModel
+﻿@{
+    @using Microsoft.AspNetCore.Mvc.Localization
 
-<h3>Upload shifts</h3>
+    @inject IViewLocalizer Localizer
+}
+
+@model Project.Zap.Models.FileUploadViewModel
+
+<h3>@Localizer["Title"]</h3>
 
 <form enctype="multipart/form-data" method="post" asp-controller="Shift" asp-action="UploadShifts">
     <div class="form-group">
         <label asp-for="@Model.StoreName"></label>
         <select asp-for="@Model.StoreName" asp-items="@Model.StoreNames">
-            <option>Select Store</option>
+            <option>@Localizer["SelectStore"]</option>
         </select>
         <span asp-validation-for="@Model.StoreName"></span>
     </div>
@@ -16,6 +22,6 @@
         <span asp-validation-for="@Model.FormFile"></span>
     </div>
     <div class="form-group">
-        <input class="btn btn-primary mb-2" type="submit" value="Upload" />
+        <button type="submit" class="btn btn-primary mb-2">@Localizer["UploadButton"]</button>
     </div>
 </form>

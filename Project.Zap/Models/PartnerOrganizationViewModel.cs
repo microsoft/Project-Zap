@@ -7,9 +7,11 @@ namespace Project.Zap.Models
     {
         [BindProperty]
         [Required, StringLength(30, MinimumLength = 5)]
+        [Display(Name = "Name")]
         public string Name { get; set; }
 
-        [BindProperty]        
+        [BindProperty]   
+        [Display(Name = "RegistrationCode")]
         public string RegistrationCode { get; set; }
     }
 }

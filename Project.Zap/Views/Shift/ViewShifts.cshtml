@@ -1,27 +1,33 @@
-﻿@model IEnumerable<Project.Zap.Models.ShiftViewModel>
+﻿@{
+    @using Microsoft.AspNetCore.Mvc.Localization
 
-@{
-    ViewData["Title"] = "Upcoming shifts";
+    @inject IViewLocalizer Localizer
 }
 
-<h1>Upcoming shifts</h1>
+@model IEnumerable<Project.Zap.Models.ShiftViewModel>
+
+@{
+    ViewData["Title"] = @Localizer["Title"];
+}
+
+<h1>@Localizer["Title"]</h1>
 
 
 @if (ViewData.ContainsKey("NoShifts"))
 {
     <div class="alert alert-info">
-        <strong>No shifts.</strong> @ViewData["NoShifts"]
+        <strong>@Localizer["ErrorTitle"]</strong> @ViewData["NoShifts"]
     </div>
 }
 
 <table class="table">
     <thead>
         <tr>
-            <th>Store Name</th>
-            <th>Start Time</th>
-            <th>End Time</th>
-            <th>Work Type</th>
-            <th>Cancel</th>
+            <th>@Localizer["TableStoreName"]</th>
+            <th>@Localizer["TableStart"]</th>
+            <th>@Localizer["TableEnd"]</th>
+            <th>@Localizer["TableWorkType"]</th>
+            <th>@Localizer["TableCancel"]</th>
         </tr>
     </thead>
     <tbody>
@@ -34,7 +40,7 @@
                 <td>@shift.End</td>
                 <td>@shift.WorkType</td>
                 <td>
-                    <a asp-controller="Shift" asp-action="CancelShift" asp-route-StoreName="@shift.StoreName" asp-route-Start="@shift.Start.ToString("yyyy-MM-ddTHH:mm")" asp-route-End="@shift.End.ToString("yyyy-MM-ddTHH:mm")">Cancel</a>
+                    <a asp-controller="Shift" asp-action="CancelShift" asp-route-StoreName="@shift.StoreName" asp-route-Start="@shift.Start.ToString("yyyy-MM-ddTHH:mm")" asp-route-End="@shift.End.ToString("yyyy-MM-ddTHH:mm")" asp-route-WorkType="@shift.WorkType">@Localizer["CancelButton"]</a>
                 </td>
             </tr>
         }

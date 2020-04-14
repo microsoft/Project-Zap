@@ -1,12 +1,14 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    @using Microsoft.AspNetCore.Mvc.Localization
+
+    @inject IViewLocalizer Localizer
 }
 
 <div class="text-center">
-    <h1 class="display-4">Project ZAP</h1>
-    <h2>The emergency shift management system</h2>
+    <h1 class="display-4">@Localizer["ProjectZap"]</h1>
+    <h2>@Localizer["SubTitle"]</h2>
 
     <p>
-        To get started Sign up using "123456" as the Registration Code to become a new Manager at Contoso!
+        @Localizer["DemoMessage"]
     </p>
 </div>
