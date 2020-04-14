@@ -33,7 +33,7 @@ namespace Project.Zap.Controllers
 
         public async Task<IActionResult> Index()
         {
-            IEnumerable<Shift> shifts = await this.shiftRepository.Get();
+            IEnumerable<Shift> shifts = this.shiftRepository.Get(x => x.Start > DateTime.Now);
             SearchShiftViewModel viewModel = new SearchShiftViewModel
             {
                 StoreNames = await this.GetStoreNames(),
