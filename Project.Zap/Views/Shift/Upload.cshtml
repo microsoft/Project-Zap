@@ -12,7 +12,6 @@
     <div class="form-group">
         <label asp-for="@Model.StoreName"></label>
         <select asp-for="@Model.StoreName" asp-items="@Model.StoreNames">
-            <option>@Localizer["SelectStore"]</option>
         </select>
         <span asp-validation-for="@Model.StoreName"></span>
     </div>
