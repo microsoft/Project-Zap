@@ -15,20 +15,9 @@
 <ul class="navbar-nav">
     @if (User.Identity.IsAuthenticated)
     {
-        @if (!string.IsNullOrEmpty(options.EditProfilePolicyId))
-        {
-            <li class="nav-item">
-                <a class="nav-link text-dark" asp-area="AzureADB2C" asp-controller="Account" asp-action="EditProfile">
-                    <span class="text-dark">@Localizer["WelcomeText"] @User.Identity.Name!</span>
-                </a>
-            </li>
-        }
-        else
-        {
-            <li class="nav-item">
-                <span class="navbar-text text-dark">@Localizer["WelcomeText"] @User.Identity.Name!</span>
-            </li>
-        }
+        <li class="nav-item">
+            <span class="navbar-text text-dark">@Localizer["WelcomeText"] @User.Identity.Name!</span>
+        </li>
         <li class="nav-item">
             <a class="nav-link text-dark" asp-area="AzureADB2C" asp-controller="Account" asp-action="SignOut">@Localizer["SignOut"]</a>
         </li>

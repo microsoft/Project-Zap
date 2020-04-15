@@ -1,49 +1,43 @@
 ﻿@{
-    @using Microsoft.AspNetCore.Mvc.Localization
+                @using Microsoft.AspNetCore.Mvc.Localization
 
-    @inject IViewLocalizer Localizer
+                            @inject IViewLocalizer Localizer
 }
 
 @model IEnumerable<Project.Zap.Models.ShiftViewModel>
 
-@{
-    ViewData["Title"] = @Localizer["Title"];
-}
+@{ ViewData["Title"] = @Localizer["Title"]; }
 
 <h1>@Localizer["Title"]</h1>
 
 
 @if (ViewData.ContainsKey("NoShifts"))
 {
-    <div class="alert alert-info">
-        <strong>@Localizer["ErrorTitle"]</strong> @ViewData["NoShifts"]
+<div class="alert alert-info">
+    <strong>@Localizer["ErrorTitle"]</strong> @ViewData["NoShifts"]
+</div>}
+
+<div class="container">
+    <div class="row">
+        <div class="d-none d-xs-block d-sm-block col-md-4 font-weight-bold">@Localizer["TableStoreName"]</div>
+        <div class="d-none d-xs-block d-sm-block col-md-4 font-weight-bold">@Localizer["TableStart"] - @Localizer["TableEnd"]</div>
+        <div class="d-none d-xs-block d-sm-block col-md-2 font-weight-bold">@Localizer["TableWorkType"]</div>
+        <div class="d-none d-xs-block d-sm-block col-md-2 font-weight-bold">@Localizer["TableCancel"]</div>
     </div>
-}
+    @foreach (var shift in Model)
+    {
+<div class="row">
+    <div class="d-block d-xs-none d-sm-none col-xs-6 col-sm-6 font-weight-bold">@Localizer["TableStoreName"]</div>
+    <div class="col-xs-6 col-sm-6 col-md-4">@shift.StoreName</div>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>@Localizer["TableStoreName"]</th>
-            <th>@Localizer["TableStart"]</th>
-            <th>@Localizer["TableEnd"]</th>
-            <th>@Localizer["TableWorkType"]</th>
-            <th>@Localizer["TableCancel"]</th>
-        </tr>
-    </thead>
-    <tbody>
+    <div class="d-block d-xs-none d-sm-none col-xs-6 col-sm-6 font-weight-bold">@Localizer["TableStart"]</div>
+    <div class="col-xs-6 col-sm-6 col-md-4">@shift.Start.ToString("yyyy-MM-ddTHH:MM") - @shift.End.ToString("yyyy-MM-ddTHH:MM")</div>
 
-        @foreach (var shift in Model)
-        {
-            <tr>
-                <td>@shift.StoreName</td>
-                <td>@shift.Start</td>
-                <td>@shift.End</td>
-                <td>@shift.WorkType</td>
-                <td>
-                    <a asp-controller="Shift" asp-action="CancelShift" asp-route-StoreName="@shift.StoreName" asp-route-Start="@shift.Start.ToString("yyyy-MM-ddTHH:mm")" asp-route-End="@shift.End.ToString("yyyy-MM-ddTHH:mm")" asp-route-WorkType="@shift.WorkType">@Localizer["CancelButton"]</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+    <div class="d-block d-xs-none d-sm-none col-xs-6 col-sm-6 font-weight-bold">@Localizer["TableWorkType"]</div>
+    <div class="col-xs-6 col-sm-6 col-md-2">@shift.WorkType</div>
 
+    <a class="btn btn-danger col-xs-6 col-sm-6 col-md-2" asp-controller="Shift" asp-action="CancelShift" asp-route-StoreName="@shift.StoreName" asp-route-Start="@shift.Start.ToString("yyyy-MM-ddTHH:mm")" asp-route-End="@shift.End.ToString("yyyy-MM-ddTHH:mm")" asp-route-WorkType="@shift.WorkType">@Localizer["CancelButton"]</a>
+    
+</div>
+    }
+</div>
