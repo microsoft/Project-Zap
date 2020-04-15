@@ -34,6 +34,12 @@ namespace Project.Zap.Controllers
 
         public async Task<IActionResult> Index()
         {
+            Organization organization = (await this.organizationRepository.Get()).FirstOrDefault();
+            if(organization.Stores == null || !organization.Stores.Any())
+            {
+                return Redirect("/Organization");
+            }
+
             IEnumerable<Shift> shifts = this.shiftRepository.Get(x => x.Start > DateTime.Now);
             SearchShiftViewModel viewModel = new SearchShiftViewModel
             {

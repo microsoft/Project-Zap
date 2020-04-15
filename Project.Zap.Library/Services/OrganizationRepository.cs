@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace Project.Zap.Library.Services
@@ -11,9 +12,14 @@ namespace Project.Zap.Library.Services
     public class OrganizationRepository : IRepository<Organization>
     {
         private Container cosmosContainer;
-        public OrganizationRepository(Database cosmosDatabase)
+        public OrganizationRepository(Database cosmosDatabase, string organizationName)
         {
             this.cosmosContainer = cosmosDatabase.CreateContainerIfNotExistsAsync("organization", "/Name").Result;
+            Organization organization = this.Get(x => x.Name == organizationName).FirstOrDefault();
+            if(organization == null)
+            {
+                Task.WaitAll(this.Add(new Organization { Name = organizationName }));
+            }
         }
 
         public async Task Add(Organization item)
@@ -38,7 +44,7 @@ namespace Project.Zap.Library.Services
 
         public IEnumerable<Organization> Get(Expression<Func<Organization, bool>> query)
         {
-            throw new NotImplementedException();
+            return this.cosmosContainer.GetItemLinqQueryable<Organization>(true).Where(query).AsEnumerable();
         }
 
         public async Task<Organization> Update(Organization item)
