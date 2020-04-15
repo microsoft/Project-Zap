@@ -26,10 +26,6 @@ namespace Project.Zap.Controllers
 
         public IActionResult Index()
         {           
-            if(this.organization == null)
-            {
-                return View("Setup");
-            }
             return View("Index", this.organization.Map());
         }
 
@@ -92,36 +88,6 @@ namespace Project.Zap.Controllers
             await this.organizationRepository.Update(this.organization);
 
             return View("Index", this.organization.Map());
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Setup(OrganizationViewModel viewModel)
-        {
-            if(this.organization != null)
-            {
-                return new NotFoundResult();
-            }
-
-            Claim email = HttpContext.User.Claims.Where(x => x.Type == "emails").FirstOrDefault();
-            if (email == null)
-            {
-                throw new ArgumentException("Email claim must be present");
-            }
-
-            var organization = new Organization
-            {
-                Name = viewModel.Name,
-                StoreType = Library.Models.StoreTypes.Open,
-                ManagerEmails = new List<string>
-                {
-                    email.Value
-                }
-            };
-
-            await this.organizationRepository.Add(organization);
-
-            return Redirect("/Home");
         }
     }
 }

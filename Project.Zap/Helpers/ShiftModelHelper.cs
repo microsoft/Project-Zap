@@ -10,6 +10,10 @@ namespace Project.Zap.Helpers
     {
         public static IEnumerable<ShiftViewModel> Map(this IEnumerable<Shift> shifts)
         {
+            if(!shifts.Any())
+            {
+                return null;
+            }
             var viewModels = new List<ShiftViewModel>();
 
             var grouped = shifts.GroupBy(x => new { Start = x.Start, End = x.End, WorkType = x.WorkType });
