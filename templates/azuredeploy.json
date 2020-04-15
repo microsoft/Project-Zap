@@ -10,7 +10,7 @@
         },
         "repoUrl": {
             "type": "string",
-            "defaultValue": "https://github.com/dwrightmsft/zap.git"
+            "defaultValue": "https://github.com/microsoft/Project-Zap.git"
         },
         "b2cInstance": {
             "type": "string",
