@@ -6,6 +6,8 @@
 
 @model Project.Zap.Models.StoreViewModel
 
+<h3>@Localizer["NewStoreTitle"]</h3>
+
 <form asp-controller="Organization" asp-action="AddStore" method="Post">
     <div class="form-group">
         <label asp-for="@Model.Name"></label>

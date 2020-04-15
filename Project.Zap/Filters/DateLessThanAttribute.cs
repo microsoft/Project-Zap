@@ -29,7 +29,7 @@ namespace Project.Zap.Filters
 
             DateTime comparisonValue = (DateTime)property.GetValue(validationContext.ObjectInstance);
 
-            if (currentValue < comparisonValue)
+            if (currentValue > comparisonValue)
             {
                 return new ValidationResult(ErrorMessage);
             }                

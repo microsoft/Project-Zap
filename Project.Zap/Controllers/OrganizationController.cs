@@ -30,7 +30,13 @@ namespace Project.Zap.Controllers
             {
                 return View("Setup");
             }
-            return View(this.organization.Map());
+            return View("Index", this.organization.Map());
+        }
+
+        [HttpGet]
+        public IActionResult Add()
+        {
+            return View();
         }
 
         [HttpPost]
@@ -49,7 +55,7 @@ namespace Project.Zap.Controllers
             this.organization.Stores.Add(store);
             await this.organizationRepository.Update(this.organization);
 
-            return Redirect($"/Shift");
+            return View("Index", this.organization.Map());
         }
 
         [HttpGet]
