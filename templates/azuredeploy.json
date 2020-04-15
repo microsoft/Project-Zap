@@ -4,7 +4,6 @@
     "parameters": {
         "orgName": {
             "type": "string",
-            "defaultValue": "contoso",
             "metadata": {
                 "description": "Customer name to be used for resource naming"
             }
@@ -63,12 +62,6 @@
             "type": "string",
             "metadata": {
                 "description": "Application ID for B2C extensions app"
-            }
-        },
-        "appClientId": {
-            "type": "string",
-            "metadata": {
-                "description": "Application ID for B2C directory app"
             }
         },
         "tenantId": {
@@ -218,7 +211,7 @@
                         },
                         {
                             "Name": "ClientId",
-                            "Value": "[parameters('appClientId')]"
+                            "Value": "[parameters('b2cClientId')]"
                         }, 
                         {
                             "Name": "TenantId",
@@ -229,8 +222,8 @@
                             "Value": "[parameters('appRegistrationClientSecret')]"
                         },
                         {
-                            "name": "ASPNETCORE_ENVIRONMENT",
-                            "value": "Development"
+                            "name": "OrganizationName",
+                            "value": "[parameters('orgName')]"
                         }          
                     ]
                 }
