@@ -14,7 +14,8 @@ namespace Project.Zap.Models
         [BindProperty]
         [Required]
         [Display(Name = "Start")]
-        public DateTime Start { get; set; } = DateTime.Now;
+        [DisplayFormat(DataFormatString = "{yyyy-MM-ddTHH:mm}")]
+        public DateTime Start { get; set; } = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
 
         public ShiftViewModel NewShift { get; set; }
 
