@@ -21,15 +21,19 @@ namespace Project.Zap.Controllers
         private readonly IRepository<Shift> shiftRepository;
         private readonly IRepository<Organization> organizationRepository;
         private readonly Microsoft.Graph.IGraphServiceClient graphServiceClient;
+        private readonly IStringLocalizer<ShiftController> stringLocalizer;
+
 
         public ShiftController(
             IRepository<Shift> shiftRepository, 
             IRepository<Organization> organizationRepository, 
-            Microsoft.Graph.IGraphServiceClient graphServiceClient)
+            Microsoft.Graph.IGraphServiceClient graphServiceClient, 
+            IStringLocalizer<ShiftController> stringLocalizer)
         {
             this.shiftRepository = shiftRepository;
             this.organizationRepository = organizationRepository;
             this.graphServiceClient = graphServiceClient;
+            this.stringLocalizer = stringLocalizer;
         }
 
         public async Task<IActionResult> Index()
@@ -70,7 +74,7 @@ namespace Project.Zap.Controllers
             SearchShiftViewModel viewModel = new SearchShiftViewModel
             {
                 StoreNames = await this.GetStoreNames(),
-                Result = shifts.Where(x => x.Start.DayOfYear == search.Start.DayOfYear)
+                Result = shifts.Where(x => x.Start.DayOfYear >= search.Start.DayOfYear)
                                 .Map()
                                 .Where(x => search.Available ? x.Available > 0 : true)
             };
@@ -100,7 +104,7 @@ namespace Project.Zap.Controllers
             IEnumerable<Shift> shifts = this.shiftRepository.Get(x => x.EmployeeId == id.Value && x.Start > DateTime.Now).AsEnumerable();
             if (shifts?.Any() == false)
             {
-                ViewData["NoShifts"] = "You have no shifts booked.";
+                ViewData["NoShifts"] = this.stringLocalizer["NoShifts"];
             }
             return View("ViewShifts", shifts.Map());
         }
@@ -115,7 +119,7 @@ namespace Project.Zap.Controllers
 
             if (shifts.Count() == 0)
             {
-                ViewData["NoEmployees"] = "No employees are booked for this shift.";
+                ViewData["NoEmployees"] = this.stringLocalizer["NoEmployees"];
             }
 
             foreach (var shift in shifts)

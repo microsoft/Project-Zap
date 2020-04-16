@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Localization;
 using NSubstitute;
 using Project.Zap.Controllers;
 using Project.Zap.Library.Models;
@@ -21,9 +22,10 @@ namespace Project.Zap.Tests
             IRepository<Shift> shiftRepository = Substitute.For<IRepository<Shift>>();
             IRepository<Organization> organizationRepository = Substitute.For<IRepository<Organization>>();
             Microsoft.Graph.IGraphServiceClient graphServiceClient = Substitute.For<Microsoft.Graph.IGraphServiceClient>();
+            IStringLocalizer<ShiftController> stringLocalizer = Substitute.For<IStringLocalizer<ShiftController>>();
 
 
-            ShiftController controller = new ShiftController(shiftRepository, organizationRepository, graphServiceClient);
+            ShiftController controller = new ShiftController(shiftRepository, organizationRepository, graphServiceClient, stringLocalizer);
             FileUploadViewModel viewModel = new FileUploadViewModel { StoreName = "Contoso" };
             string content = "Start, End, Type\n2020-04-10T09:00,2020-04-10T17:00,Shelf Stacker\n2020-04-10T10:00,2020-04-10T18:00,Tills";
             byte[] contentBytes = Encoding.UTF8.GetBytes(content);
