@@ -43,20 +43,14 @@ namespace Project.Zap.Middleware
                     {
                         IRepository<PartnerOrganization> partnerRepository = app.ApplicationServices.GetService<IRepository<PartnerOrganization>>();
 
-                        PartnerOrganization partner = partnerRepository.Get(x => x.RegistrationCode == registrationCode.Value).FirstOrDefault();
+                        PartnerOrganization partner = (await partnerRepository.Get(
+                            "SELECT * FROM c WHERE c.RegistrationCode == @registrationCode",
+                            new Dictionary<string, object> { { "@registrationCode", registrationCode.Value } })).FirstOrDefault();
 
                         if (partner == null)
                         {
                             await graphClient.Users[id.Value].Request().DeleteAsync();
                             throw new ArgumentException("No Partner organization found");
-                        }
-
-                        IRepository<Employee> employeeRepository = app.ApplicationServices.GetService<IRepository<Employee>>();
-
-                        Employee employee = employeeRepository.Get(x => x.EmployeeId == id.Value).FirstOrDefault();
-                        if (employee == null)
-                        {
-                            await employeeRepository.Add(new Employee { EmployeeId = id.Value, PartnerOrgId = partner.id });
                         }
 
                         context.User = await UpdateUserRole(context.User, "org_b_employee", id.Value, extensionId, graphClient);

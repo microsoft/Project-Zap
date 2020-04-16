@@ -4,7 +4,7 @@
     @inject IViewLocalizer Localizer
 }
 
-@model Project.Zap.Models.OrganizationViewModel
+@model IEnumerable<Project.Zap.Models.LocationViewModel>
 
     <h3>@Localizer["StoresTitle"]</h3>
     <table class="table">
@@ -15,13 +15,13 @@
             <th>@Localizer["ColumnTitleEdit"]</th>
             <th>@Localizer["ColumnTitleDelete"]</th>
         </tr>
-        @foreach (var store in Model.Stores)
+        @foreach (var location in Model)
         {
     <tr>
-        <td>@store.Name</td>
-        <td>@store.Address.City</td>
-        <td>@store.Address.ZipOrPostCode</td>
-        <th><a asp-controller="Organization" asp-action="EditStore" asp-route-id="@store.Name">@Localizer["Edit"]</a></th>
-        <th><a asp-controller="Organization" asp-action="DeleteStore" asp-route-id="@store.Name">@Localizer["Delete"]</a></th>
+        <td>@location.Name</td>
+        <td>@location.Address.City</td>
+        <td>@location.Address.ZipOrPostCode</td>
+        <th><a asp-controller="Locations" asp-action="Edit" asp-route-id="@location.Name">@Localizer["Edit"]</a></th>
+        <th><a asp-controller="Locations" asp-action="Delete" asp-route-id="@location.Name">@Localizer["Delete"]</a></th>
     </tr>}
     </table>

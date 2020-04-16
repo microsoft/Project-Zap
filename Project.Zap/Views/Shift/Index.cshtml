@@ -25,7 +25,7 @@
     </div>
 }
 
-<partial name="Search" model="new Project.Zap.Models.SearchShiftViewModel { StoreNames = Model.StoreNames, NewShift = new Project.Zap.Models.ShiftViewModel() }" />
+<partial name="Search" model="new Project.Zap.Models.SearchShiftViewModel { LocationNames = Model.LocationNames, NewShift = new Project.Zap.Models.ShiftViewModel() }" />
 
 <h3>@Localizer["ResultsTitle"]</h3>
 @if(Model.Result != null)
@@ -49,7 +49,7 @@
     {
     <div class="row">
         <div class="d-block d-xs-none d-sm-none col-xs-6 col-sm-6 font-weight-bold">@Localizer["TableStore"]</div>
-        <div class="col-xs-6 col-sm-6 col-md-4">@shift.StoreName</div>
+        <div class="col-xs-6 col-sm-6 col-md-4">@shift.LocationName</div>
 
         <div class="d-block d-xs-none d-sm-none col-xs-6 col-sm-6 font-weight-bold">@Localizer["TableStart"]</div>
         <div class="col-xs-6 col-sm-6 col-md-4">@shift.Start.ToString("yyyy-MM-ddTHH:MM") - @shift.End.ToString("yyyy-MM-ddTHH:MM")</div>
@@ -61,11 +61,11 @@
         <div class="col-xs-6 col-sm-6 col-md-1">@shift.Available / @shift.Quantity</div>
         @if ((await AuthorizationService.AuthorizeAsync(User, "OrgAManager")).Succeeded)
     {
-        <a class="btn btn-primary col-xs-6 col-sm-6 col-md-1" asp-controller="Shift" asp-action="ViewShift" asp-route-StoreName="@shift.StoreName" asp-route-Start="@shift.Start.ToString("yyyy-MM-ddTHH:mm")" asp-route-End="@shift.End.ToString("yyyy-MM-ddTHH:mm")" asp-route-WorkType="@shift.WorkType" asp-route-Quantity="@shift.Quantity" asp-route-Available="@shift.Available">@Localizer["LinkView"]</a>
+        <a class="btn btn-primary col-xs-6 col-sm-6 col-md-1" asp-controller="Shift" asp-action="ViewShift" asp-route-StoreName="@shift.LocationName" asp-route-Start="@shift.Start.ToString("yyyy-MM-ddTHH:mm")" asp-route-End="@shift.End.ToString("yyyy-MM-ddTHH:mm")" asp-route-WorkType="@shift.WorkType" asp-route-Quantity="@shift.Quantity" asp-route-Available="@shift.Available">@Localizer["LinkView"]</a>
     }
         @if ((await AuthorizationService.AuthorizeAsync(User, "OrgBEmployee")).Succeeded)
     {
-        <a class="btn btn-primary col-xs-6 col-sm-6 col-md-1" asp-controller="Shift" asp-action="Book" asp-route-StoreName="@shift.StoreName" asp-route-Start="@shift.Start.ToString("yyyy-MM-ddTHH:mm")" asp-route-End="@shift.End.ToString("yyyy-MM-ddTHH:mm")" asp-route-WorkType="@shift.WorkType">@Localizer["LinkBook"]</a>
+        <a class="btn btn-primary col-xs-6 col-sm-6 col-md-1" asp-controller="Shift" asp-action="Book" asp-route-StoreName="@shift.LocationName" asp-route-Start="@shift.Start.ToString("yyyy-MM-ddTHH:mm")" asp-route-End="@shift.End.ToString("yyyy-MM-ddTHH:mm")" asp-route-WorkType="@shift.WorkType">@Localizer["LinkBook"]</a>
     }
     </div>
     }

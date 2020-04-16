@@ -31,20 +31,31 @@ namespace Project.Zap.Library.Services
             }
         }
 
-        public PartnerOrganization Get(string id)
+        public async Task<IEnumerable<PartnerOrganization>> Get()
         {
-            throw new NotImplementedException();
+            return await this.Get("SELECT * FROM c");
         }
 
-        public IEnumerable<PartnerOrganization> Get(Expression<Func<PartnerOrganization, bool>> query)
+        public async Task<IEnumerable<PartnerOrganization>> Get(string sql, IDictionary<string, object> parameters = null, string partitionKey = null)
         {
-            IEnumerable<PartnerOrganization> partners = this.cosmosContainer.GetItemLinqQueryable<PartnerOrganization>(true).Where(query);
-            return partners;
-        }
+            QueryDefinition query = new QueryDefinition(sql);
 
-        public Task<IEnumerable<PartnerOrganization>> Get()
-        {
-            return Task.FromResult(this.cosmosContainer.GetItemLinqQueryable<PartnerOrganization>(true).AsEnumerable());
+            foreach (var parameter in parameters)
+            {
+                query.WithParameter(parameter.Key, parameter.Value);
+            }
+
+            QueryRequestOptions options = new QueryRequestOptions() { MaxBufferedItemCount = 100, MaxConcurrency = 10 };
+            if (partitionKey != null) options.PartitionKey = new PartitionKey(partitionKey);
+
+            List<PartnerOrganization> results = new List<PartnerOrganization>();
+            FeedIterator<PartnerOrganization> iterator = this.cosmosContainer.GetItemQueryIterator<PartnerOrganization>(query, requestOptions: options);
+            while (iterator.HasMoreResults)
+            {
+                FeedResponse<PartnerOrganization> response = await iterator.ReadNextAsync();
+                results.AddRange(response);
+            }
+            return results;
         }
 
         public Task<PartnerOrganization> Update(PartnerOrganization item)

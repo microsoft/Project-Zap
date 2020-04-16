@@ -4,11 +4,11 @@
     @inject IViewLocalizer Localizer
 }
 
-@model Project.Zap.Models.StoreViewModel
+@model Project.Zap.Models.LocationViewModel
 
 <h3>@Localizer["Title"]</h3>
 
-<form asp-controller="Organization" asp-action="EditStore" method="Post">
+<form asp-controller="Locations" asp-action="EditLocation" method="Post">
     <div class="form-group">
         <label asp-for="@Model.Name"></label>
         <input type="text" asp-for="@Model.Name" class="form-control" />

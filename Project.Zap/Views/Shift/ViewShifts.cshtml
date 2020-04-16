@@ -31,7 +31,7 @@
     {
 <div class="row">
     <div class="d-block d-xs-none d-sm-none col-xs-6 col-sm-6 font-weight-bold">@Localizer["TableStoreName"]</div>
-    <div class="col-xs-6 col-sm-6 col-md-4">@shift.StoreName</div>
+    <div class="col-xs-6 col-sm-6 col-md-4">@shift.LocationName</div>
 
     <div class="d-block d-xs-none d-sm-none col-xs-6 col-sm-6 font-weight-bold">@Localizer["TableStart"]</div>
     <div class="col-xs-6 col-sm-6 col-md-4">@shift.Start.ToString("yyyy-MM-ddTHH:MM") - @shift.End.ToString("yyyy-MM-ddTHH:MM")</div>
@@ -39,7 +39,7 @@
     <div class="d-block d-xs-none d-sm-none col-xs-6 col-sm-6 font-weight-bold">@Localizer["TableWorkType"]</div>
     <div class="col-xs-6 col-sm-6 col-md-2">@shift.WorkType</div>
 
-    <a class="btn btn-danger col-xs-6 col-sm-6 col-md-2" asp-controller="Shift" asp-action="CancelShift" asp-route-StoreName="@shift.StoreName" asp-route-Start="@shift.Start.ToString("yyyy-MM-ddTHH:mm")" asp-route-End="@shift.End.ToString("yyyy-MM-ddTHH:mm")" asp-route-WorkType="@shift.WorkType">@Localizer["CancelButton"]</a>
+    <a class="btn btn-danger col-xs-6 col-sm-6 col-md-2" asp-controller="Shift" asp-action="CancelShift" asp-route-StoreName="@shift.LocationName" asp-route-Start="@shift.Start.ToString("yyyy-MM-ddTHH:mm")" asp-route-End="@shift.End.ToString("yyyy-MM-ddTHH:mm")" asp-route-WorkType="@shift.WorkType">@Localizer["CancelButton"]</a>
 
 </div>}
 </div>

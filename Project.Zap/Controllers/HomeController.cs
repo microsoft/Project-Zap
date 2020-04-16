@@ -9,12 +9,6 @@ namespace Project.Zap.Controllers
 {
     public class HomeController : Controller
     {
-
-        public HomeController()
-        {
-            
-        }
-
         [AllowAnonymous]
         public IActionResult Index()
         {

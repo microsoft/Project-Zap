@@ -73,10 +73,9 @@ namespace Project.Zap
 
             services.AddTransient<Database>(x => this.GetCosmosDatabase().Result);
             
-            services.AddSingleton<IRepository<Library.Models.Organization>>(x => new OrganizationRepository(x.GetService<Database>(), this.Configuration["OrganizationName"]));
+            services.AddSingleton<IRepository<Library.Models.Location>, LocationRepository>();
             services.AddSingleton<IRepository<Library.Models.Shift>, ShiftRepository>();
             services.AddSingleton<IRepository<PartnerOrganization>, PartnerRepository>();
-            services.AddSingleton<IRepository<Employee>, EmployeeRepository>();
 
             services.AddTransient<IConfidentialClientApplication>(x => ConfidentialClientApplicationBuilder
                 .Create(this.Configuration["ClientId"])

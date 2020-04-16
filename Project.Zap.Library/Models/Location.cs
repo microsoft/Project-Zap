@@ -3,13 +3,15 @@ using System.Text.Json.Serialization;
 
 namespace Project.Zap.Library.Models
 {
-    public class Employee
+    public class Location
     {
         [JsonPropertyName("id")]
         public string id { get; set; } = Guid.NewGuid().ToString();
-        public string EmployeeId { get; set; }
 
-        public string PartnerOrgId { get; set; }
+        public string Name { get; set; }
+
+        public Address Address { get; set; }
+
     }
 
 }

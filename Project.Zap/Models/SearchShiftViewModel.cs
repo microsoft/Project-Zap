@@ -9,12 +9,17 @@ namespace Project.Zap.Models
     public class SearchShiftViewModel
     {
         [Display(Name = "StoreNames")]
-        public SelectList StoreNames { get; set; }
+        public SelectList LocationNames { get; set; }
 
         [BindProperty]
         [Required]
         [Display(Name = "Start")]
         public DateTime Start { get; set; } = DateTime.Now;
+
+        [BindProperty]
+        [Required]
+        [Display(Name = "Location")]
+        public string Location { get; set; }
 
         public ShiftViewModel NewShift { get; set; }
 

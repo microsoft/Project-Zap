@@ -10,10 +10,10 @@
 
 <form asp-controller="Shift" asp-action="AddShift" method="Post">
     <div class="form-group">
-        <label asp-for="@Model.NewShift.StoreName"></label>
-        <select asp-for="@Model.NewShift.StoreName" asp-items="@Model.StoreNames">
+        <label asp-for="@Model.NewShift.LocationName"></label>
+        <select asp-for="@Model.NewShift.LocationName" asp-items="@Model.LocationNames">
         </select>
-        <span asp-validation-for="@Model.NewShift.StoreName"></span>
+        <span asp-validation-for="@Model.NewShift.LocationName"></span>
     </div>
     <div class="form-group">
         <label asp-for="@Model.NewShift.Start"></label>

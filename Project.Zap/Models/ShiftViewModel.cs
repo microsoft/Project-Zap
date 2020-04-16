@@ -11,7 +11,7 @@ namespace Project.Zap.Models
         [BindProperty]
         [Required]
         [Display(Name = "StoreName")]
-        public string StoreName { get; set; }
+        public string LocationName { get; set; }
         
         [BindProperty]
         [Required]
