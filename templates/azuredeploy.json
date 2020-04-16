@@ -80,7 +80,7 @@
     "variables": {
         "appName": "zap",
         "resgpguid": "[substring(replace(guid(resourceGroup().id), '-', ''), 0, 4)]",
-        "resourceName": "[concat(parameters('orgName'), '-', variables('appName'), '-', variables('resgpguid'))]",
+        "resourceName": "[concat(toLower(parameters('orgName')), '-', toLower(variables('appName')))]",
         "callbackPath": "/signin-oidc"
     },
     "resources": [
