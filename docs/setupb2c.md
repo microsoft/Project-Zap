@@ -31,7 +31,7 @@
 
 1. In Azure AD B2C click **App registrations (Preview)** then the **All applications** header
 1. Select the **b2c-extensions-app** item
-1. Copy the Application ID, you will need this for the application deployment. ***Note: remove the "-" characters from this string for later use***
+1. Copy the Application ID, you will need this for the application deployment.
 
 # Create User Flows
 

@@ -81,7 +81,8 @@
         "appName": "zap",
         "resgpguid": "[substring(replace(guid(resourceGroup().id), '-', ''), 0, 4)]",
         "resourceName": "[concat(toLower(parameters('orgName')), '-', toLower(variables('appName')))]",
-        "callbackPath": "/signin-oidc"
+        "callbackPath": "/signin-oidc",
+        "extensionClientId": "[replace(parameters('extensionClientId'), '-', '')]"
     },
     "resources": [
         {
@@ -207,7 +208,7 @@
                         },
                         {
                             "Name": "ExtensionId",
-                            "Value": "[parameters('extensionClientId')]"
+                            "Value": "[variables('extensionClientId')]"
                         },
                         {
                             "Name": "ClientId",
