@@ -114,3 +114,11 @@ td.highlight a {
     width: 100%;
     height: 100%;
 }
+
+.search {
+    display:block;
+}
+
+.hidden {
+    visibility:hidden;
+}

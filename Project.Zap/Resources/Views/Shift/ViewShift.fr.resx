@@ -117,31 +117,34 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Delete" xml:space="preserve">
-    <value>Delete</value>
+  <data name="CancelButton" xml:space="preserve">
+    <value>Annuler</value>
+  </data>
+  <data name="ErrorTitle" xml:space="preserve">
+    <value>Pas de créneaux disponibles</value>
   </data>
   <data name="TableAvailable" xml:space="preserve">
-    <value>Available</value>
+    <value>Disponible</value>
   </data>
-  <data name="TableEmployee" xml:space="preserve">
-    <value>Employee</value>
+  <data name="TableCancel" xml:space="preserve">
+    <value>Annuler</value>
   </data>
   <data name="TableEnd" xml:space="preserve">
-    <value>End</value>
+    <value>Heure de fin</value>
   </data>
   <data name="TableQuantity" xml:space="preserve">
-    <value>Quantity</value>
+    <value>Nombre</value>
   </data>
   <data name="TableStart" xml:space="preserve">
-    <value>Start</value>
+    <value>Heure de début</value>
   </data>
   <data name="TableStoreName" xml:space="preserve">
-    <value>Store</value>
+    <value>Nom du magasin</value>
   </data>
   <data name="TableWorkType" xml:space="preserve">
-    <value>Work Type</value>
+    <value>Type de travail</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>Shift details</value>
+    <value>Prochain créneau réservé</value>
   </data>
 </root>

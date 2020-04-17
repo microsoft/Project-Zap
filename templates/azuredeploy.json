@@ -4,14 +4,13 @@
     "parameters": {
         "orgName": {
             "type": "string",
-            "defaultValue": "contoso",
             "metadata": {
                 "description": "Customer name to be used for resource naming"
             }
         },
         "repoUrl": {
             "type": "string",
-            "defaultValue": "https://github.com/dwrightmsft/zap.git"
+            "defaultValue": "https://github.com/microsoft/Project-Zap.git"
         },
         "b2cInstance": {
             "type": "string",
@@ -65,12 +64,6 @@
                 "description": "Application ID for B2C extensions app"
             }
         },
-        "appClientId": {
-            "type": "string",
-            "metadata": {
-                "description": "Application ID for B2C directory app"
-            }
-        },
         "tenantId": {
             "type": "string",
             "metadata": {
@@ -87,8 +80,9 @@
     "variables": {
         "appName": "zap",
         "resgpguid": "[substring(replace(guid(resourceGroup().id), '-', ''), 0, 4)]",
-        "resourceName": "[concat(parameters('orgName'), '-', variables('appName'), '-', variables('resgpguid'))]",
-        "callbackPath": "/signin-oidc"
+        "resourceName": "[concat(toLower(parameters('orgName')), '-', toLower(variables('appName')))]",
+        "callbackPath": "/signin-oidc",
+        "extensionClientId": "[replace(parameters('extensionClientId'), '-', '')]"
     },
     "resources": [
         {
@@ -214,11 +208,11 @@
                         },
                         {
                             "Name": "ExtensionId",
-                            "Value": "[parameters('extensionClientId')]"
+                            "Value": "[variables('extensionClientId')]"
                         },
                         {
                             "Name": "ClientId",
-                            "Value": "[parameters('appClientId')]"
+                            "Value": "[parameters('b2cClientId')]"
                         }, 
                         {
                             "Name": "TenantId",
@@ -229,8 +223,8 @@
                             "Value": "[parameters('appRegistrationClientSecret')]"
                         },
                         {
-                            "name": "ASPNETCORE_ENVIRONMENT",
-                            "value": "Development"
+                            "name": "OrganizationName",
+                            "value": "[parameters('orgName')]"
                         }          
                     ]
                 }
