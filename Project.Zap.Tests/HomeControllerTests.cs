@@ -43,7 +43,7 @@ namespace Project.Zap.Tests
 
             // Assert
             RedirectResult redirectResult = Assert.IsType<RedirectResult>(result);
-            Assert.Equal("/Shift", redirectResult.Url);
+            Assert.Equal("/Shifts", redirectResult.Url);
 
         }
 
@@ -61,7 +61,7 @@ namespace Project.Zap.Tests
 
             // Assert
             RedirectResult redirectResult = Assert.IsType<RedirectResult>(result);
-            Assert.Equal("/Shift/ViewShifts", redirectResult.Url);
+            Assert.Equal("/Shifts/ViewShifts", redirectResult.Url);
 
         }
 

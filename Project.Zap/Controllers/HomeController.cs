@@ -21,12 +21,12 @@ namespace Project.Zap.Controllers
 
             if(zapRole.Value == "org_a_manager")
             {
-                return Redirect("/Shift");
+                return Redirect("/Shifts");
             }
 
             if(zapRole.Value == "org_b_employee")
             {
-                return Redirect("/Shift/ViewShifts");
+                return Redirect("/Shifts/ViewShifts");
             }
 
             return View();
