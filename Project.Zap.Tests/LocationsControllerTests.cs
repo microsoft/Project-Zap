@@ -21,7 +21,7 @@ namespace Project.Zap.Tests
         public void Controller_Auth_ManagerPolicy()
         {
             AuthorizeAttribute attribute = typeof(LocationsController).GetCustomAttribute<AuthorizeAttribute>();
-            attribute.Policy = "OrgAManager";
+            Assert.Equal("OrgAManager", attribute.Policy);
         }
 
         [Fact]

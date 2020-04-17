@@ -39,15 +39,15 @@ namespace Project.Zap.Helpers
             };
         }
 
-        public static IEnumerable<Shift> Map(this ShiftViewModel viewModel)
+        public static IEnumerable<Shift> Map(this ShiftViewModel viewModel, string locationId)
         {
             IList<Shift> shifts = new List<Shift>();
-            int allocated = viewModel.Quantity - viewModel.Available;
+
             for(int i = 0; i < viewModel.Quantity; i++)
             {
                 shifts.Add(new Shift
                 {
-                    LocationId = viewModel.LocationName,
+                    LocationId = locationId,
                     Start = viewModel.Start,
                     End = viewModel.End,
                     WorkType = viewModel.WorkType

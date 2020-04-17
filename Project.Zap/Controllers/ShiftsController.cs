@@ -126,19 +126,19 @@ namespace Project.Zap.Controllers
                 },
                 location.id);
 
-            List<Microsoft.Graph.User> list = new List<Microsoft.Graph.User>();
-
             if (shifts.Count() == 0)
             {
                 ViewData["NoEmployees"] = "No employees are booked for this shift.";
             }
 
+            List<string> employees = new List<string>();
             foreach (var shift in shifts)
             {
-                list.Add(graphServiceClient.Users[shift.EmployeeId].Request().GetAsync().Result);
+                Microsoft.Graph.User user = await graphServiceClient.Users[shift.EmployeeId].Request().GetAsync();
+                employees.Add($"{user.GivenName} {user.Surname}");
             }
 
-            ViewData["Employees"] = list;
+            ViewData["Employees"] = employees;
 
             return View(viewModel);
 
@@ -149,22 +149,23 @@ namespace Project.Zap.Controllers
         public async Task<IActionResult> CancelShift(ShiftViewModel viewModel)
         {
             Claim id = HttpContext.User.Claims.Where(x => x.Type == "http://schemas.microsoft.com/identity/claims/objectidentifier").FirstOrDefault();
-
+            
             if (id == null)
             {
-                throw new ArgumentException("http://schemas.microsoft.com/identity/claims/objectidentifier claim is required ");
+                throw new ArgumentException("http://schemas.microsoft.com/identity/claims/objectidentifier claim is required");
             }
 
             Location location = await this.GetLocation(viewModel.LocationName);
 
             Shift shift = (await this.shiftRepository.Get(
-                "SELECT * FROM c WHERE c.LocationId == @locationId AND c.Start == @start AND c.End == @end AND c.WorkType == @workType AND c.Allocated == true",
+                "SELECT * FROM c WHERE c.LocationId == @locationId AND c.Start == @start AND c.End == @end AND c.WorkType == @workType AND c.Allocated == true AND c.EmployeeId == @employeeId",
                 new Dictionary<string, object>
                 {
                     { "@locationId", location.id },
                     { "@start", viewModel.Start },
                     { "@end", viewModel.End },
-                    { "@workType", viewModel.WorkType }
+                    { "@workType", viewModel.WorkType },
+                    { "@employeeId", id.Value }
                 },
                 location.id)).FirstOrDefault();
 
@@ -174,8 +175,6 @@ namespace Project.Zap.Controllers
             await this.shiftRepository.Update(shift);
 
             return await this.Index();
-
-
         }
 
         [HttpGet]
@@ -186,7 +185,7 @@ namespace Project.Zap.Controllers
 
             if (id == null)
             {
-                throw new ArgumentException("http://schemas.microsoft.com/identity/claims/objectidentifier claim is required ");
+                throw new ArgumentException("http://schemas.microsoft.com/identity/claims/objectidentifier claim is required");
             }
 
             IEnumerable<Shift> bookedShifts = await this.shiftRepository.Get("SELECT * FROM c WHERE c.EmployeeId == @employeeId", new Dictionary<string, object> { { "@employeeId", id.Value } });
@@ -245,7 +244,8 @@ namespace Project.Zap.Controllers
                 return View("Add", viewModel);
             }
 
-            List<Shift> shifts = viewModel.NewShift.Map().ToList();
+            Location location = await this.GetLocation(viewModel.Location);
+            List<Shift> shifts = viewModel.NewShift.Map(location.id).ToList();
 
             shifts.ForEach(async x => await this.shiftRepository.Add(x));
 

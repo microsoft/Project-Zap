@@ -5,7 +5,7 @@
 }
 
 @{
-    var employees = ViewData["Employees"] as List<Microsoft.Graph.User>;
+    var employees = ViewData["Employees"] as List<string>;
 }
 
 
@@ -45,7 +45,7 @@
             {
                 @foreach (var employee in employees)
                 {
-                    <li>@employee.GivenName @employee.Surname</li>
+                    <li>@employee</li>
                 }
             }
         </ul>
