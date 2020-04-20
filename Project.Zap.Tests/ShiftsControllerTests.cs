@@ -61,7 +61,7 @@ namespace Project.Zap.Tests
 
             // Assert
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            shiftRepository.Received(1).Get("SELECT * FROM c WHERE c.Start > @start", Arg.Is<Dictionary<string, object>>(x => x.ContainsKey("@start")));
+            shiftRepository.Received(1).Get("SELECT * FROM c WHERE c.StartDateTime > @start", Arg.Is<Dictionary<string, object>>(x => x.ContainsKey("@start")));
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
         }
 
@@ -285,7 +285,7 @@ namespace Project.Zap.Tests
             // Assert
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             shiftRepository.Received(1).Get(
-                "SELECT * FROM c WHERE c.EmployeeId = @employeeId AND c.Start > @start", 
+                "SELECT * FROM c WHERE c.EmployeeId = @employeeId AND c.StartDateTime > @start", 
                 Arg.Is<Dictionary<string, object>>(x => x.ContainsKey("@employeeId") && x.ContainsKey("@start")));
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
         }
@@ -407,7 +407,7 @@ namespace Project.Zap.Tests
             // Assert
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             shiftRepository.Received(1).Get(
-                "SELECT * FROM c WHERE c.LocationId = @locationId AND c.Start = @start AND c.End = @end AND c.WorkType = @workType AND IS_NULL(c.EmployeeId)", 
+                "SELECT * FROM c WHERE c.LocationId = @locationId AND c.StartDateTime = @start AND c.EndDateTime = @end AND c.WorkType = @workType", 
                 Arg.Any<Dictionary<string, object>>(),
                 Arg.Any<string>());
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
@@ -502,7 +502,7 @@ namespace Project.Zap.Tests
             // Assert
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             shiftRepository.Received(1).Get(
-                Arg.Is<string>("SELECT * FROM c WHERE c.LocationId = @locationId AND c.Start = @start AND c.End = @end AND c.WorkType = @workType AND c.Allocated = true AND c.EmployeeId = @employeeId"), 
+                Arg.Is<string>("SELECT * FROM c WHERE c.LocationId = @locationId AND c.StartDateTime = @start AND c.EndDateTime = @end AND c.WorkType = @workType AND c.Allocated = true AND c.EmployeeId = @employeeId"), 
                 Arg.Any<Dictionary<string, object>>(), 
                 Arg.Any<string>());
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
@@ -607,7 +607,7 @@ namespace Project.Zap.Tests
             IRepository<Library.Models.Shift> shiftRepository = Substitute.For<IRepository<Library.Models.Shift>>();
             DateTime now = DateTime.Now;
             shiftRepository.Get(
-                "SELECT * FROM c WHERE c.LocationId = @locationId AND c.Start = @start AND c.End = @end AND c.WorkType = @workType AND c.Allocated = false", 
+                "SELECT * FROM c WHERE c.LocationId = @locationId AND c.StartDateTime = @start AND c.EndDateTime = @end AND c.WorkType = @workType AND c.Allocated = false", 
                 Arg.Any<IDictionary<string, object>>(), Arg.Any<string>()).Returns(new[]
             {
                 new Library.Models.Shift { StartDateTime = now.AddDays(1), LocationId = "1", Allocated = true, EmployeeId = "xyz" }
