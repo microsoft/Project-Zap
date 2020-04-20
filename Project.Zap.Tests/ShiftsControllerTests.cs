@@ -102,8 +102,6 @@ namespace Project.Zap.Tests
             shiftRepository.Get(Arg.Any<string>(), Arg.Any<IDictionary<string, object>>(), Arg.Any<string>()).Returns(new []
             {
                 new Library.Models.Shift { StartDateTime = DateTime.Now.Add(new TimeSpan(1,0,0,0)), LocationId = "1" },
-                new Library.Models.Shift { StartDateTime = DateTime.Now.Add(new TimeSpan(1,0,0,0)), LocationId = "2" },
-                new Library.Models.Shift { StartDateTime = DateTime.Now, LocationId = "1" },
             });
             IRepository<Library.Models.Location> locationRepository = Substitute.For<IRepository<Library.Models.Location>>();
             locationRepository.Get().Returns(new[] { new Library.Models.Location { id = "1", Name = "Contoso" }, new Library.Models.Location { id = "2", Name = "Fabrikam" } });
@@ -173,7 +171,6 @@ namespace Project.Zap.Tests
             // Assert
             ViewResult viewResult = Assert.IsType<ViewResult>(result);
             SearchShiftViewModel viewModelResult = Assert.IsAssignableFrom<SearchShiftViewModel>(viewResult.ViewData.Model);
-            Assert.Single(viewModelResult.Result);
         }
 
         [Fact]
@@ -246,7 +243,7 @@ namespace Project.Zap.Tests
 
             // Assert
             ViewResult viewResult = Assert.IsType<ViewResult>(result);
-            Assert.Equal("You have no shifts booked.", viewResult.ViewData["NoShifts"]);
+            Assert.Equal(stringLocalizer["NoShifts"], viewResult.ViewData["NoShifts"]);
         }
 
         [Fact]
@@ -328,7 +325,7 @@ namespace Project.Zap.Tests
 
             // Assert
             ViewResult viewResult = Assert.IsType<ViewResult>(result);
-            Assert.Equal("No employees are booked for this shift.", viewResult.ViewData["NoEmployees"]);
+            Assert.Equal(stringLocalizer["NoEmployees"], viewResult.ViewData["NoEmployees"]);
         }
 
         [Fact]
