@@ -126,13 +126,15 @@ namespace Project.Zap.Controllers
                 },
                 location.id);
 
-            if (shifts.Count() == 0)
+            IEnumerable<Shift> bookedShifts = shifts.Where(x => x.EmployeeId != null);
+
+            if (bookedShifts.Count() == 0)
             {
                 ViewData["NoEmployees"] = "No employees are booked for this shift.";
             }
 
             List<string> employees = new List<string>();
-            foreach (var shift in shifts)
+            foreach (var shift in bookedShifts)
             {
                 Microsoft.Graph.User user = await graphServiceClient.Users[shift.EmployeeId].Request().GetAsync();
                 employees.Add($"{user.GivenName} {user.Surname}");
