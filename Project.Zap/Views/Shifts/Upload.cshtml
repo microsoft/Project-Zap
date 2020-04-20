@@ -8,7 +8,7 @@
 
 <h3>@Localizer["Title"]</h3>
 
-<form enctype="multipart/form-data" method="post" asp-controller="Shift" asp-action="UploadShifts">
+<form enctype="multipart/form-data" method="post" asp-controller="Shifts" asp-action="UploadShifts">
     <div class="form-group">
         <label asp-for="@Model.LocationName"></label>
         <select asp-for="@Model.LocationName" asp-items="@Model.LocationNames">

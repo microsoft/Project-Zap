@@ -39,9 +39,12 @@ namespace Project.Zap.Library.Services
         {
             QueryDefinition query = new QueryDefinition(sql);
 
-            foreach(var parameter in parameters)
+            if (parameters != null)
             {
-                query.WithParameter(parameter.Key, parameter.Value);
+                foreach (var parameter in parameters)
+                {
+                    query.WithParameter(parameter.Key, parameter.Value);
+                }
             }
 
             QueryRequestOptions options = new QueryRequestOptions() { MaxBufferedItemCount = 100, MaxConcurrency = 10 };

@@ -57,7 +57,7 @@ namespace Project.Zap.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
-            Location location = (await this.repository.Get("SELECT * FROM c WHERE c.Name == @name", new Dictionary<string, object> { {"@name", id } })).FirstOrDefault();
+            Location location = (await this.repository.Get("SELECT * FROM c WHERE c.Name = @name", new Dictionary<string, object> { {"@name", id } })).FirstOrDefault();
             return View(location.Map());
         }
 

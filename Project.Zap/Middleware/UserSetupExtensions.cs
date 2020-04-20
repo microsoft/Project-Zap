@@ -44,7 +44,7 @@ namespace Project.Zap.Middleware
                         IRepository<PartnerOrganization> partnerRepository = app.ApplicationServices.GetService<IRepository<PartnerOrganization>>();
 
                         PartnerOrganization partner = (await partnerRepository.Get(
-                            "SELECT * FROM c WHERE c.RegistrationCode == @registrationCode",
+                            "SELECT * FROM c WHERE c.RegistrationCode = @registrationCode",
                             new Dictionary<string, object> { { "@registrationCode", registrationCode.Value } })).FirstOrDefault();
 
                         if (partner == null)

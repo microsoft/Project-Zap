@@ -407,7 +407,7 @@ namespace Project.Zap.Tests
             // Assert
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             shiftRepository.Received(1).Get(
-                "SELECT * FROM c WHERE c.LocationId == @locationId AND c.Start == @start AND c.End == @end AND c.WorkType == @workType AND c.EmployeeId != null", 
+                "SELECT * FROM c WHERE c.LocationId = @locationId AND c.Start = @start AND c.End = @end AND c.WorkType = @workType AND IS_NULL(c.EmployeeId)", 
                 Arg.Any<Dictionary<string, object>>(),
                 Arg.Any<string>());
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
@@ -502,7 +502,7 @@ namespace Project.Zap.Tests
             // Assert
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             shiftRepository.Received(1).Get(
-                Arg.Is<string>("SELECT * FROM c WHERE c.LocationId == @locationId AND c.Start == @start AND c.End == @end AND c.WorkType == @workType AND c.Allocated == true AND c.EmployeeId == @employeeId"), 
+                Arg.Is<string>("SELECT * FROM c WHERE c.LocationId = @locationId AND c.Start = @start AND c.End = @end AND c.WorkType = @workType AND c.Allocated = true AND c.EmployeeId = @employeeId"), 
                 Arg.Any<Dictionary<string, object>>(), 
                 Arg.Any<string>());
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
@@ -563,7 +563,7 @@ namespace Project.Zap.Tests
             // Assert
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             shiftRepository.Received(1).Get(
-                "SELECT * FROM c WHERE c.EmployeeId == @employeeId",
+                "SELECT * FROM c WHERE c.EmployeeId = @employeeId",
                 Arg.Any<Dictionary<string, object>>());
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
         }
@@ -607,7 +607,7 @@ namespace Project.Zap.Tests
             IRepository<Library.Models.Shift> shiftRepository = Substitute.For<IRepository<Library.Models.Shift>>();
             DateTime now = DateTime.Now;
             shiftRepository.Get(
-                "SELECT * FROM c WHERE c.LocationId == @locationId AND c.Start == @start AND c.End == @end AND c.WorkType == @workType AND c.Allocated == false", 
+                "SELECT * FROM c WHERE c.LocationId = @locationId AND c.Start = @start AND c.End = @end AND c.WorkType = @workType AND c.Allocated = false", 
                 Arg.Any<IDictionary<string, object>>(), Arg.Any<string>()).Returns(new[]
             {
                 new Library.Models.Shift { Start = now.AddDays(1), LocationId = "1", Allocated = true, EmployeeId = "xyz" }
@@ -699,7 +699,7 @@ namespace Project.Zap.Tests
 
             // Assert
             ViewResult viewResult = Assert.IsType<ViewResult>(result);
-            Assert.IsType<SearchShiftViewModel>(viewResult.Model);
+            Assert.IsType<AddShiftViewModel>(viewResult.Model);
         }
 
         [Fact]
@@ -720,14 +720,14 @@ namespace Project.Zap.Tests
 
             IGraphServiceClient graphClient = Substitute.For<IGraphServiceClient>();
             ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient);
-            SearchShiftViewModel viewModel = new SearchShiftViewModel
+            AddShiftViewModel viewModel = new AddShiftViewModel
             {
-                Location = "Contoso",
                 NewShift = new ShiftViewModel
                 {
                     Start = DateTime.Now,
                     Quantity = 2,
-                    WorkType = "Till"
+                    WorkType = "Till",
+                    LocationName = "Contoso",
                 }
             };
 

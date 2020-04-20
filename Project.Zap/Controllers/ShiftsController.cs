@@ -62,7 +62,7 @@ namespace Project.Zap.Controllers
             string locationId = locations.Where(x => x.Name == search.Location).Select(x => x.id).FirstOrDefault();
 
             IEnumerable<Shift> shifts = await this.shiftRepository.Get(
-                "SELECT * FROM c WHERE c.LocationId == @locationId",
+                "SELECT * FROM c WHERE c.LocationId = @locationId",
                 new Dictionary<string, object> { { "@locationId", locationId } },
                 locationId);
 
@@ -86,7 +86,7 @@ namespace Project.Zap.Controllers
             return await this.Index();
         }
 
-        private async Task<Location> GetLocation(string name) => (await this.locationRepository.Get("SELECT * FROM c WHERE c.Name == @name", new Dictionary<string, object> { { "@name", name } })).FirstOrDefault();
+        private async Task<Location> GetLocation(string name) => (await this.locationRepository.Get("SELECT * FROM c WHERE c.Name = @name", new Dictionary<string, object> { { "@name", name } })).FirstOrDefault();
 
         [HttpGet]
         [Authorize(Policy = "OrgBEmployee")]
@@ -116,7 +116,7 @@ namespace Project.Zap.Controllers
         {
             Location location = await this.GetLocation(viewModel.LocationName);
             IEnumerable<Shift> shifts = await this.shiftRepository.Get(
-                "SELECT * FROM c WHERE c.LocationId == @locationId AND c.Start == @start AND c.End == @end AND c.WorkType == @workType AND c.EmployeeId != null",
+                "SELECT * FROM c WHERE c.LocationId = @locationId AND c.Start = @start AND c.End = @end AND c.WorkType = @workType AND IS_NULL(c.EmployeeId)",
                 new Dictionary<string, object>
                 {
                     { "@locationId", location.id },
@@ -158,7 +158,7 @@ namespace Project.Zap.Controllers
             Location location = await this.GetLocation(viewModel.LocationName);
 
             Shift shift = (await this.shiftRepository.Get(
-                "SELECT * FROM c WHERE c.LocationId == @locationId AND c.Start == @start AND c.End == @end AND c.WorkType == @workType AND c.Allocated == true AND c.EmployeeId == @employeeId",
+                "SELECT * FROM c WHERE c.LocationId = @locationId AND c.Start = @start AND c.End = @end AND c.WorkType = @workType AND c.Allocated = true AND c.EmployeeId = @employeeId",
                 new Dictionary<string, object>
                 {
                     { "@locationId", location.id },
@@ -188,7 +188,7 @@ namespace Project.Zap.Controllers
                 throw new ArgumentException("http://schemas.microsoft.com/identity/claims/objectidentifier claim is required");
             }
 
-            IEnumerable<Shift> bookedShifts = await this.shiftRepository.Get("SELECT * FROM c WHERE c.EmployeeId == @employeeId", new Dictionary<string, object> { { "@employeeId", id.Value } });
+            IEnumerable<Shift> bookedShifts = await this.shiftRepository.Get("SELECT * FROM c WHERE c.EmployeeId = @employeeId", new Dictionary<string, object> { { "@employeeId", id.Value } });
             if(bookedShifts?.Where(x => x.Start.DayOfYear == viewModel.Start.DayOfYear && x.Start.Year == viewModel.Start.Year).FirstOrDefault() != null)
             {
                 ViewData["ValidationError"] = "You are already booked to work on this day.";
@@ -197,7 +197,7 @@ namespace Project.Zap.Controllers
 
             Location location = await this.GetLocation(viewModel.LocationName);
             Shift shift = (await this.shiftRepository.Get(
-                "SELECT * FROM c WHERE c.LocationId == @locationId AND c.Start == @start AND c.End == @end AND c.WorkType == @workType AND c.Allocated == false",
+                "SELECT * FROM c WHERE c.LocationId = @locationId AND c.Start = @start AND c.End = @end AND c.WorkType = @workType AND c.Allocated = false",
                 new Dictionary<string, object>
                 {
                     { "@locationId", location.id },
@@ -225,7 +225,7 @@ namespace Project.Zap.Controllers
         [Authorize(Policy = "OrgAManager")]
         public async Task<IActionResult> Add()
         {
-            SearchShiftViewModel viewModel = new SearchShiftViewModel
+            AddShiftViewModel viewModel = new AddShiftViewModel
             {
                 LocationNames = this.GetLocationNames(await this.locationRepository.Get()),
                 NewShift = new ShiftViewModel()
@@ -237,14 +237,14 @@ namespace Project.Zap.Controllers
         [HttpPost]
         [Authorize(Policy = "OrgAManager")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddShift(SearchShiftViewModel viewModel)
+        public async Task<IActionResult> AddShift(AddShiftViewModel viewModel)
         {
             if(!ModelState.IsValid)
             {
                 return View("Add", viewModel);
             }
 
-            Location location = await this.GetLocation(viewModel.Location);
+            Location location = await this.GetLocation(viewModel.NewShift.LocationName);
             List<Shift> shifts = viewModel.NewShift.Map(location.id).ToList();
 
             shifts.ForEach(async x => await this.shiftRepository.Add(x));

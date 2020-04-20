@@ -22,8 +22,6 @@ namespace Project.Zap.Models
         [Display(Name = "Location")]
         public string Location { get; set; }
 
-        public ShiftViewModel NewShift { get; set; }
-
         public IEnumerable<ShiftViewModel> Result { get; set; }
 
         [Display(Name = "Available")]

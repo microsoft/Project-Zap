@@ -7,7 +7,7 @@
 
 @model Project.Zap.Models.SearchShiftViewModel
 
-<form asp-controller="Shift" asp-action="Search" method="post">
+<form asp-controller="Shifts" asp-action="Search" method="post">
     <div class="form-group">
         <label asp-for="@Model.Location" class="search"></label>
         <select asp-for="@Model.Location" asp-items="@Model.LocationNames" class="col-md-4">

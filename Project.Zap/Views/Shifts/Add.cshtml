@@ -4,11 +4,11 @@
                             @inject IViewLocalizer Localizer
 }
 
-@model Project.Zap.Models.SearchShiftViewModel
+@model Project.Zap.Models.AddShiftViewModel
 
 <h3>@Localizer["Title"]</h3>
 
-<form asp-controller="Shift" asp-action="AddShift" method="Post">
+<form asp-controller="Shifts" asp-action="AddShift" method="Post">
     <div class="form-group">
         <label asp-for="@Model.NewShift.LocationName"></label>
         <select asp-for="@Model.NewShift.LocationName" asp-items="@Model.LocationNames">
