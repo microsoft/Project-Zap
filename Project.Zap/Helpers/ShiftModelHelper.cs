@@ -15,7 +15,7 @@ namespace Project.Zap.Helpers
             }
             var viewModels = new List<ShiftViewModel>();
 
-            var grouped = shifts.GroupBy(x => new { Start = x.Start, End = x.End, WorkType = x.WorkType, StoreId = x.LocationId });
+            var grouped = shifts.GroupBy(x => new { Start = x.StartDateTime, End = x.EndDateTime, WorkType = x.WorkType, StoreId = x.LocationId });
 
             foreach(var shift in grouped)
             {
@@ -33,8 +33,8 @@ namespace Project.Zap.Helpers
             return new ShiftViewModel
             {
                 LocationName = storeName,
-                Start = shift.Start,
-                End = shift.End,
+                Start = shift.StartDateTime,
+                End = shift.EndDateTime,
                 WorkType = shift.WorkType,
             };
         }
@@ -48,8 +48,8 @@ namespace Project.Zap.Helpers
                 shifts.Add(new Shift
                 {
                     LocationId = locationId,
-                    Start = viewModel.Start,
-                    End = viewModel.End,
+                    StartDateTime = viewModel.Start,
+                    EndDateTime = viewModel.End,
                     WorkType = viewModel.WorkType
                 });
             }

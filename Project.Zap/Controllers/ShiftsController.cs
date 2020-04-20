@@ -39,7 +39,7 @@ namespace Project.Zap.Controllers
                 return Redirect("/Locations");
             }
 
-            IEnumerable<Shift> shifts = await this.shiftRepository.Get("SELECT * FROM c WHERE c.Start > @start", new Dictionary<string, object> { { "@start", DateTime.Now } });
+            IEnumerable<Shift> shifts = await this.shiftRepository.Get("SELECT * FROM c WHERE c.StartDateTime > @start", new Dictionary<string, object> { { "@start", DateTime.Now } });
             SearchShiftViewModel viewModel = new SearchShiftViewModel
             {
                 LocationNames = this.GetLocationNames(locations),
@@ -69,7 +69,7 @@ namespace Project.Zap.Controllers
             SearchShiftViewModel viewModel = new SearchShiftViewModel
             {
                 LocationNames = this.GetLocationNames(locations),
-                Result = shifts.Where(x => x.Start.DayOfYear == search.Start.DayOfYear)
+                Result = shifts.Where(x => x.StartDateTime.DayOfYear == search.Start.DayOfYear)
                                 .Map(locations)
                                 .Where(x => search.Available ? x.Available > 0 : true)
             };
@@ -82,7 +82,7 @@ namespace Project.Zap.Controllers
         public async Task<IActionResult> Delete(ShiftViewModel viewModel)
         {
             Location location = await this.GetLocation(viewModel.LocationName);
-            await this.shiftRepository.Delete(x => x.LocationId == location.id && x.Start == viewModel.Start && x.End == viewModel.End && x.WorkType == viewModel.WorkType);
+            await this.shiftRepository.Delete(x => x.LocationId == location.id && x.StartDateTime == viewModel.Start && x.EndDateTime == viewModel.End && x.WorkType == viewModel.WorkType);
             return await this.Index();
         }
 
@@ -100,7 +100,7 @@ namespace Project.Zap.Controllers
             }
 
             IEnumerable<Shift> shifts = await this.shiftRepository.Get(
-               "SELECT * FROM c WHERE c.EmployeeId = @employeeId AND c.Start > @start",
+               "SELECT * FROM c WHERE c.EmployeeId = @employeeId AND c.StartDateTime > @start",
                new Dictionary<string, object> { { "@employeeId", id.Value }, { "@start", DateTime.Now } });
 
             if (shifts?.Any() == false)
@@ -116,7 +116,7 @@ namespace Project.Zap.Controllers
         {
             Location location = await this.GetLocation(viewModel.LocationName);
             IEnumerable<Shift> shifts = await this.shiftRepository.Get(
-                "SELECT * FROM c WHERE c.LocationId = @locationId AND c.Start = @start AND c.End = @end AND c.WorkType = @workType AND IS_NULL(c.EmployeeId)",
+                "SELECT * FROM c WHERE c.LocationId = @locationId AND c.StartDateTime = @start AND c.EndDateTime = @end AND c.WorkType = @workType",
                 new Dictionary<string, object>
                 {
                     { "@locationId", location.id },
@@ -158,7 +158,7 @@ namespace Project.Zap.Controllers
             Location location = await this.GetLocation(viewModel.LocationName);
 
             Shift shift = (await this.shiftRepository.Get(
-                "SELECT * FROM c WHERE c.LocationId = @locationId AND c.Start = @start AND c.End = @end AND c.WorkType = @workType AND c.Allocated = true AND c.EmployeeId = @employeeId",
+                "SELECT * FROM c WHERE c.LocationId = @locationId AND c.StartDateTime = @start AND c.EndDateTime = @end AND c.WorkType = @workType AND c.Allocated = true AND c.EmployeeId = @employeeId",
                 new Dictionary<string, object>
                 {
                     { "@locationId", location.id },
@@ -189,7 +189,7 @@ namespace Project.Zap.Controllers
             }
 
             IEnumerable<Shift> bookedShifts = await this.shiftRepository.Get("SELECT * FROM c WHERE c.EmployeeId = @employeeId", new Dictionary<string, object> { { "@employeeId", id.Value } });
-            if(bookedShifts?.Where(x => x.Start.DayOfYear == viewModel.Start.DayOfYear && x.Start.Year == viewModel.Start.Year).FirstOrDefault() != null)
+            if(bookedShifts?.Where(x => x.StartDateTime.DayOfYear == viewModel.Start.DayOfYear && x.StartDateTime.Year == viewModel.Start.Year).FirstOrDefault() != null)
             {
                 ViewData["ValidationError"] = "You are already booked to work on this day.";
                 return await this.Index();
@@ -197,7 +197,7 @@ namespace Project.Zap.Controllers
 
             Location location = await this.GetLocation(viewModel.LocationName);
             Shift shift = (await this.shiftRepository.Get(
-                "SELECT * FROM c WHERE c.LocationId = @locationId AND c.Start = @start AND c.End = @end AND c.WorkType = @workType AND c.Allocated = false",
+                "SELECT * FROM c WHERE c.LocationId = @locationId AND c.StartDateTime = @start AND c.EndDateTime = @end AND c.WorkType = @workType AND c.Allocated = false",
                 new Dictionary<string, object>
                 {
                     { "@locationId", location.id },
@@ -282,8 +282,8 @@ namespace Project.Zap.Controllers
                     await this.shiftRepository.Add(new Shift
                     {
                         LocationId = location.id,
-                        Start = DateTime.Parse(parts[0]),
-                        End = DateTime.Parse(parts[1]),
+                        StartDateTime = DateTime.Parse(parts[0]),
+                        EndDateTime = DateTime.Parse(parts[1]),
                         WorkType = parts[2],
                         Allocated = false
                     });

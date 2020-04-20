@@ -72,9 +72,9 @@ namespace Project.Zap.Tests
             IRepository<Library.Models.Shift> shiftRepository = Substitute.For<IRepository<Library.Models.Shift>>();
             shiftRepository.Get(Arg.Any<string>(), Arg.Any<IDictionary<string, object>>(), Arg.Any<string>()).Returns(new[]
             {
-                new Library.Models.Shift { Start = DateTime.Now.Add(new TimeSpan(1,0,0,0)), LocationId = "1" },
-                new Library.Models.Shift { Start = DateTime.Now.Add(new TimeSpan(1,0,0,0)), LocationId = "2" },
-                new Library.Models.Shift { Start = DateTime.Now, LocationId = "1" },
+                new Library.Models.Shift { StartDateTime = DateTime.Now.Add(new TimeSpan(1,0,0,0)), LocationId = "1" },
+                new Library.Models.Shift { StartDateTime = DateTime.Now.Add(new TimeSpan(1,0,0,0)), LocationId = "2" },
+                new Library.Models.Shift { StartDateTime = DateTime.Now, LocationId = "1" },
             });
             IRepository<Library.Models.Location> locationRepository = Substitute.For<IRepository<Library.Models.Location>>();
             locationRepository.Get().Returns(new[] { new Library.Models.Location { id = "1", Name = "Contoso" }, new Library.Models.Location { id = "2", Name = "Fabrikam" } });
@@ -98,9 +98,9 @@ namespace Project.Zap.Tests
             IRepository<Library.Models.Shift> shiftRepository = Substitute.For<IRepository<Library.Models.Shift>>();
             shiftRepository.Get(Arg.Any<string>(), Arg.Any<IDictionary<string, object>>(), Arg.Any<string>()).Returns(new []
             {
-                new Library.Models.Shift { Start = DateTime.Now.Add(new TimeSpan(1,0,0,0)), LocationId = "1" },
-                new Library.Models.Shift { Start = DateTime.Now.Add(new TimeSpan(1,0,0,0)), LocationId = "2" },
-                new Library.Models.Shift { Start = DateTime.Now, LocationId = "1" },
+                new Library.Models.Shift { StartDateTime = DateTime.Now.Add(new TimeSpan(1,0,0,0)), LocationId = "1" },
+                new Library.Models.Shift { StartDateTime = DateTime.Now.Add(new TimeSpan(1,0,0,0)), LocationId = "2" },
+                new Library.Models.Shift { StartDateTime = DateTime.Now, LocationId = "1" },
             });
             IRepository<Library.Models.Location> locationRepository = Substitute.For<IRepository<Library.Models.Location>>();
             locationRepository.Get().Returns(new[] { new Library.Models.Location { id = "1", Name = "Contoso" }, new Library.Models.Location { id = "2", Name = "Fabrikam" } });
@@ -125,8 +125,8 @@ namespace Project.Zap.Tests
             IRepository<Library.Models.Shift> shiftRepository = Substitute.For<IRepository<Library.Models.Shift>>();
             shiftRepository.Get(Arg.Any<string>(), Arg.Any<IDictionary<string, object>>(), Arg.Any<string>()).Returns(new[]
             {
-                new Library.Models.Shift { Start = DateTime.Now.Add(new TimeSpan(1,0,0,0)), LocationId = "1", Allocated = true },
-                new Library.Models.Shift { Start = DateTime.Now.Add(new TimeSpan(1,0,0,0)), LocationId = "1", Allocated = false }
+                new Library.Models.Shift { StartDateTime = DateTime.Now.Add(new TimeSpan(1,0,0,0)), LocationId = "1", Allocated = true },
+                new Library.Models.Shift { StartDateTime = DateTime.Now.Add(new TimeSpan(1,0,0,0)), LocationId = "1", Allocated = false }
                 
             });
             IRepository<Library.Models.Location> locationRepository = Substitute.For<IRepository<Library.Models.Location>>();
@@ -151,8 +151,8 @@ namespace Project.Zap.Tests
             IRepository<Library.Models.Shift> shiftRepository = Substitute.For<IRepository<Library.Models.Shift>>();
             shiftRepository.Get(Arg.Any<string>(), Arg.Any<IDictionary<string, object>>(), Arg.Any<string>()).Returns(new[]
             {
-                new Library.Models.Shift { Start = DateTime.Now, LocationId = "1", Allocated = false },
-                new Library.Models.Shift { Start = DateTime.Now.Add(new TimeSpan(1,0,0,0)), LocationId = "1", Allocated = false }
+                new Library.Models.Shift { StartDateTime = DateTime.Now, LocationId = "1", Allocated = false },
+                new Library.Models.Shift { StartDateTime = DateTime.Now.Add(new TimeSpan(1,0,0,0)), LocationId = "1", Allocated = false }
 
             });
             IRepository<Library.Models.Location> locationRepository = Substitute.For<IRepository<Library.Models.Location>>();
@@ -247,8 +247,8 @@ namespace Project.Zap.Tests
             IRepository<Library.Models.Shift> shiftRepository = Substitute.For<IRepository<Library.Models.Shift>>();
             shiftRepository.Get(Arg.Any<string>(), Arg.Any<IDictionary<string, object>>()).Returns(new[]
             {
-                new Library.Models.Shift { Start = DateTime.Now, LocationId = "1", Allocated = false },
-                new Library.Models.Shift { Start = DateTime.Now.Add(new TimeSpan(1,0,0,0)), LocationId = "1", Allocated = false }
+                new Library.Models.Shift { StartDateTime = DateTime.Now, LocationId = "1", Allocated = false },
+                new Library.Models.Shift { StartDateTime = DateTime.Now.Add(new TimeSpan(1,0,0,0)), LocationId = "1", Allocated = false }
 
             });
             IRepository<Library.Models.Location> locationRepository = Substitute.For<IRepository<Library.Models.Location>>();
@@ -327,8 +327,8 @@ namespace Project.Zap.Tests
             DateTime now = DateTime.Now;
             shiftRepository.Get(Arg.Any<string>(), Arg.Any<IDictionary<string, object>>(), Arg.Any<string>()).Returns(new[]
             {
-                new Library.Models.Shift { Start = now, LocationId = "1", Allocated = true, EmployeeId = "abc" },
-                new Library.Models.Shift { Start = now.Add(new TimeSpan(1,0,0,0)), LocationId = "1", Allocated = true, EmployeeId = "xyz" }
+                new Library.Models.Shift { StartDateTime = now, LocationId = "1", Allocated = true, EmployeeId = "abc" },
+                new Library.Models.Shift { StartDateTime = now.Add(new TimeSpan(1,0,0,0)), LocationId = "1", Allocated = true, EmployeeId = "xyz" }
 
             });
             IRepository<Library.Models.Location> locationRepository = Substitute.For<IRepository<Library.Models.Location>>();
@@ -358,8 +358,8 @@ namespace Project.Zap.Tests
             DateTime now = DateTime.Now;
             shiftRepository.Get(Arg.Any<string>(), Arg.Any<IDictionary<string, object>>(), Arg.Any<string>()).Returns(new[]
             {
-                new Library.Models.Shift { Start = now, LocationId = "1", Allocated = true, EmployeeId = "abc" },
-                new Library.Models.Shift { Start = now.Add(new TimeSpan(1,0,0,0)), LocationId = "1", Allocated = true, EmployeeId = "xyz" }
+                new Library.Models.Shift { StartDateTime = now, LocationId = "1", Allocated = true, EmployeeId = "abc" },
+                new Library.Models.Shift { StartDateTime = now.Add(new TimeSpan(1,0,0,0)), LocationId = "1", Allocated = true, EmployeeId = "xyz" }
 
             });
             IRepository<Library.Models.Location> locationRepository = Substitute.For<IRepository<Library.Models.Location>>();
@@ -388,8 +388,8 @@ namespace Project.Zap.Tests
             DateTime now = DateTime.Now;
             shiftRepository.Get(Arg.Any<string>(), Arg.Any<IDictionary<string, object>>(), Arg.Any<string>()).Returns(new[]
             {
-                new Library.Models.Shift { Start = now, LocationId = "1", Allocated = true, EmployeeId = "abc" },
-                new Library.Models.Shift { Start = now.Add(new TimeSpan(1,0,0,0)), LocationId = "1", Allocated = true, EmployeeId = "xyz" }
+                new Library.Models.Shift { StartDateTime = now, LocationId = "1", Allocated = true, EmployeeId = "abc" },
+                new Library.Models.Shift { StartDateTime = now.Add(new TimeSpan(1,0,0,0)), LocationId = "1", Allocated = true, EmployeeId = "xyz" }
 
             });
             IRepository<Library.Models.Location> locationRepository = Substitute.For<IRepository<Library.Models.Location>>();
@@ -447,8 +447,8 @@ namespace Project.Zap.Tests
             IRepository<Library.Models.Shift> shiftRepository = Substitute.For<IRepository<Library.Models.Shift>>();
             shiftRepository.Get(Arg.Any<string>(), Arg.Any<IDictionary<string, object>>(), Arg.Any<string>()).Returns(new[]
             {
-                new Library.Models.Shift { Start = now, LocationId = "1", Allocated = true, EmployeeId = "abc" },
-                new Library.Models.Shift { Start = now.Add(new TimeSpan(1,0,0,0)), LocationId = "1", Allocated = true, EmployeeId = "xyz" }
+                new Library.Models.Shift { StartDateTime = now, LocationId = "1", Allocated = true, EmployeeId = "abc" },
+                new Library.Models.Shift { StartDateTime = now.Add(new TimeSpan(1,0,0,0)), LocationId = "1", Allocated = true, EmployeeId = "xyz" }
 
             });
 
@@ -480,8 +480,8 @@ namespace Project.Zap.Tests
             IRepository<Library.Models.Shift> shiftRepository = Substitute.For<IRepository<Library.Models.Shift>>();
             shiftRepository.Get(Arg.Any<string>(), Arg.Any<IDictionary<string, object>>(), Arg.Any<string>()).Returns(new[]
             {
-                new Library.Models.Shift { Start = now, LocationId = "1", Allocated = true, EmployeeId = "abc" },
-                new Library.Models.Shift { Start = now.Add(new TimeSpan(1,0,0,0)), LocationId = "1", Allocated = true, EmployeeId = "xyz" }
+                new Library.Models.Shift { StartDateTime = now, LocationId = "1", Allocated = true, EmployeeId = "abc" },
+                new Library.Models.Shift { StartDateTime = now.Add(new TimeSpan(1,0,0,0)), LocationId = "1", Allocated = true, EmployeeId = "xyz" }
 
             });
 
@@ -542,8 +542,8 @@ namespace Project.Zap.Tests
             DateTime now = DateTime.Now;
             shiftRepository.Get(Arg.Any<string>(), Arg.Any<IDictionary<string, object>>(), Arg.Any<string>()).Returns(new[]
             {
-                new Library.Models.Shift { Start = now, LocationId = "1", Allocated = true, EmployeeId = "abc" },
-                new Library.Models.Shift { Start = now.Add(new TimeSpan(1,0,0,0)), LocationId = "1", Allocated = true, EmployeeId = "xyz" }
+                new Library.Models.Shift { StartDateTime = now, LocationId = "1", Allocated = true, EmployeeId = "abc" },
+                new Library.Models.Shift { StartDateTime = now.Add(new TimeSpan(1,0,0,0)), LocationId = "1", Allocated = true, EmployeeId = "xyz" }
 
             });
             IRepository<Library.Models.Location> locationRepository = Substitute.For<IRepository<Library.Models.Location>>();
@@ -576,8 +576,8 @@ namespace Project.Zap.Tests
             DateTime now = DateTime.Now;
             shiftRepository.Get(Arg.Any<string>(), Arg.Any<IDictionary<string, object>>(), Arg.Any<string>()).Returns(new[]
             {
-                new Library.Models.Shift { Start = now, LocationId = "1", Allocated = true, EmployeeId = "abc" },
-                new Library.Models.Shift { Start = now.Add(new TimeSpan(1,0,0,0)), LocationId = "1", Allocated = true, EmployeeId = "xyz" }
+                new Library.Models.Shift { StartDateTime = now, LocationId = "1", Allocated = true, EmployeeId = "abc" },
+                new Library.Models.Shift { StartDateTime = now.Add(new TimeSpan(1,0,0,0)), LocationId = "1", Allocated = true, EmployeeId = "xyz" }
 
             });
             IRepository<Library.Models.Location> locationRepository = Substitute.For<IRepository<Library.Models.Location>>();
@@ -610,7 +610,7 @@ namespace Project.Zap.Tests
                 "SELECT * FROM c WHERE c.LocationId = @locationId AND c.Start = @start AND c.End = @end AND c.WorkType = @workType AND c.Allocated = false", 
                 Arg.Any<IDictionary<string, object>>(), Arg.Any<string>()).Returns(new[]
             {
-                new Library.Models.Shift { Start = now.AddDays(1), LocationId = "1", Allocated = true, EmployeeId = "xyz" }
+                new Library.Models.Shift { StartDateTime = now.AddDays(1), LocationId = "1", Allocated = true, EmployeeId = "xyz" }
 
             });
             IRepository<Library.Models.Location> locationRepository = Substitute.For<IRepository<Library.Models.Location>>();

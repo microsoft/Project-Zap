@@ -66,8 +66,8 @@ namespace Project.Zap.Library.Services
 
             current.EmployeeId = item.EmployeeId;
             current.Allocated = item.Allocated;
-            current.Start = item.Start;
-            current.End = item.End;
+            current.StartDateTime = item.StartDateTime;
+            current.EndDateTime = item.EndDateTime;
             current.WorkType = item.WorkType;            
 
             return await this.cosmosContainer.ReplaceItemAsync<Shift>(current, current.id, new PartitionKey(current.LocationId));

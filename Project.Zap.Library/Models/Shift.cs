@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 namespace Project.Zap.Library.Models
@@ -11,9 +10,9 @@ namespace Project.Zap.Library.Models
         
         public string LocationId { get; set; }
 
-        public DateTime Start { get; set; }
+        public DateTime StartDateTime { get; set; }
 
-        public DateTime End { get; set; }
+        public DateTime EndDateTime { get; set; }
 
         public string WorkType { get; set; }
 
