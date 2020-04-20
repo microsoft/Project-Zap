@@ -11,7 +11,7 @@ namespace Project.Zap.Helpers
         {
             if(!shifts.Any())
             {
-                return null;
+                return new List<ShiftViewModel>();
             }
             var viewModels = new List<ShiftViewModel>();
 

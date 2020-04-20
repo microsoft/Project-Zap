@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Localization;
 using Project.Zap.Helpers;
 using Project.Zap.Library.Models;
 using Project.Zap.Library.Services;
@@ -20,15 +21,19 @@ namespace Project.Zap.Controllers
         private readonly IRepository<Shift> shiftRepository;
         private readonly IRepository<Location> locationRepository;
         private readonly Microsoft.Graph.IGraphServiceClient graphServiceClient;
+        private readonly IStringLocalizer<ShiftsController> stringLocalizer;
+
 
         public ShiftsController(
             IRepository<Shift> shiftRepository, 
             IRepository<Location> locationRepository, 
-            Microsoft.Graph.IGraphServiceClient graphServiceClient)
+            Microsoft.Graph.IGraphServiceClient graphServiceClient,
+            IStringLocalizer<ShiftsController> stringLocalizer)
         {
             this.shiftRepository = shiftRepository;
             this.locationRepository = locationRepository;
             this.graphServiceClient = graphServiceClient;
+            this.stringLocalizer = stringLocalizer;
         }
 
         public async Task<IActionResult> Index()
@@ -66,10 +71,10 @@ namespace Project.Zap.Controllers
                 new Dictionary<string, object> { { "@locationId", locationId } },
                 locationId);
 
-            SearchShiftViewModel viewModel = new SearchShiftViewModel
+             SearchShiftViewModel viewModel = new SearchShiftViewModel
             {
                 LocationNames = this.GetLocationNames(locations),
-                Result = shifts.Where(x => x.StartDateTime.DayOfYear == search.Start.DayOfYear)
+                Result = shifts.Where(x => x.StartDateTime.DayOfYear >= search.Start.DayOfYear)
                                 .Map(locations)
                                 .Where(x => search.Available ? x.Available > 0 : true)
             };
@@ -105,7 +110,7 @@ namespace Project.Zap.Controllers
 
             if (shifts?.Any() == false)
             {
-                ViewData["NoShifts"] = "You have no shifts booked.";
+                ViewData["NoShifts"] = this.stringLocalizer["NoShifts"];
             }
             return View("ViewShifts", shifts.Map(await this.locationRepository.Get()));
         }
@@ -130,7 +135,7 @@ namespace Project.Zap.Controllers
 
             if (bookedShifts.Count() == 0)
             {
-                ViewData["NoEmployees"] = "No employees are booked for this shift.";
+                ViewData["NoEmployees"] = this.stringLocalizer["NoEmployees"];
             }
 
             List<string> employees = new List<string>();

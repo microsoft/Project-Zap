@@ -44,7 +44,7 @@
                 }
                 @if ((await AuthorizationService.AuthorizeAsync(User, "OrgBEmployee")).Succeeded)
                 {
-                    <div class="d-none d-xs-block d-sm-block col-md-1 font-weight-bold mt-2 invisible" style="visibility:hidden" >@Localizer["TableBook"]</div>
+                    <div class="d-none d-xs-block d-sm-block col-md-1 font-weight-bold mt-2 invisible" >@Localizer["TableBook"]</div>
                 }
             </div>
             @foreach (var shift in Model.Result)
