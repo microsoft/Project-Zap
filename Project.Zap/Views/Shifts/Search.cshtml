@@ -7,25 +7,25 @@
 
 @model Project.Zap.Models.SearchShiftViewModel
 
-<form asp-controller="Shifts" asp-action="Search" method="post">
-    <div class="form-group">
+<form asp-controller="Shifts" asp-action="Search" method="post" class="form-inline">
+    <div class="form-group col-md-2">
         <label asp-for="@Model.Locations" class="search"></label>
-        <select asp-for="@Model.Locations" asp-items="@Model.LocationNames" class="col-md-4" multiple="multiple">
+        <select asp-for="@Model.Locations" asp-items="@Model.LocationNames" multiple="multiple">
         </select>
         <span asp-validation-for="@Model.Locations"></span>
     </div>
 
-    <div class="form-group">
+    <div class="form-group col-md-3">
         <label asp-for="@Model.Start" class="search"></label>
-        <input type="datetime-local" asp-for="@Model.Start" class="col-md-4" />
+        <input type="datetime-local" asp-for="@Model.Start" />
         <span asp-validation-for="@Model.Start"></span>
     </div>
     
-    <div class="form-group">
+    <div class="form-group col-md-3">
         <label asp-for="@Model.Available"></label>
-        <input type="checkbox" asp-for="@Model.Available" />
+        <input type="checkbox" asp-for="@Model.Available" class="pl-5" />
         <span asp-validation-for="@Model.Available"></span>
     </div>
 
-    <button type="submit" class="btn btn-primary mb-2 col-md-1">@Localizer["SearchButton"]</button>
+    <button type="submit" class="btn btn-primary mb-2 col-md-2">@Localizer["SearchButton"]</button>
 </form>

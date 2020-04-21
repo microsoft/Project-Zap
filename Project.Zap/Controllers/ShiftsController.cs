@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Localization;
 using Project.Zap.Helpers;
 using Project.Zap.Library.Models;
@@ -22,17 +23,20 @@ namespace Project.Zap.Controllers
         private readonly IRepository<Location> locationRepository;
         private readonly Microsoft.Graph.IGraphServiceClient graphServiceClient;
         private readonly IStringLocalizer<ShiftsController> stringLocalizer;
+        private readonly IConfiguration configuration;
 
         public ShiftsController(
             IRepository<Shift> shiftRepository, 
             IRepository<Location> locationRepository, 
             Microsoft.Graph.IGraphServiceClient graphServiceClient,
-            IStringLocalizer<ShiftsController> stringLocalizer)
+            IStringLocalizer<ShiftsController> stringLocalizer,
+            IConfiguration configuration)
         {
             this.shiftRepository = shiftRepository;
             this.locationRepository = locationRepository;
             this.graphServiceClient = graphServiceClient;
             this.stringLocalizer = stringLocalizer;
+            this.configuration = configuration;
         }
 
         public async Task<IActionResult> Index()
@@ -50,6 +54,7 @@ namespace Project.Zap.Controllers
                 Result = shifts.Map(locations)
             };
 
+            ViewData["AzureMapsKey"] = this.configuration["AzureMapsSubscriptionKey"];
             return View("Index", viewModel);
         }
 
@@ -77,6 +82,7 @@ namespace Project.Zap.Controllers
                                 .Where(x => search.Available ? x.Available > 0 : true)
             };
 
+            ViewData["AzureMapsKey"] = this.configuration["AzureMapsSubscriptionKey"];
             return View("Index", viewModel);
         }
 
