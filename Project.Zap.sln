@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Project.Zap.Library", "Proj
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Project.Zap.Tests", "Project.Zap.Tests\Project.Zap.Tests.csproj", "{D6C5C72B-5AE7-43AB-8C59-62EE983ADE7C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project.Zap.Shifts.ChangeFeed", "Project.Zap.Shifts.ChangeFeed\Project.Zap.Shifts.ChangeFeed.csproj", "{5A6686E7-1E51-494B-96FC-49485119138E}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,10 +27,6 @@ Global
 		{D6C5C72B-5AE7-43AB-8C59-62EE983ADE7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D6C5C72B-5AE7-43AB-8C59-62EE983ADE7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D6C5C72B-5AE7-43AB-8C59-62EE983ADE7C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5A6686E7-1E51-494B-96FC-49485119138E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5A6686E7-1E51-494B-96FC-49485119138E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5A6686E7-1E51-494B-96FC-49485119138E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5A6686E7-1E51-494B-96FC-49485119138E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
