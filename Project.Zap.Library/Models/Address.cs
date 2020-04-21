@@ -4,13 +4,15 @@
     {
         public string Text { get; set; }
         public string ZipOrPostcode { get; set; }
+
+        public Point Point { get; set; }
     }
 
-    public class Coordinates
+    public class Point
     {
-        public double Latitude { get; set; }
+        public string type { get; set; } = "Point";
 
-        public double Longitude { get; set; }
+        public double[] coordinates { get; set; }
     }
 
 }

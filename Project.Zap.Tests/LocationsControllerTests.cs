@@ -29,7 +29,8 @@ namespace Project.Zap.Tests
         {
             // Arrange
             IRepository<Location> repository = Substitute.For<IRepository<Location>>();
-            LocationsController controller = new LocationsController(repository);
+            IMapService mapService = Substitute.For<IMapService>();
+            LocationsController controller = new LocationsController(repository, mapService);
 
             // Act
             await controller.Index();
@@ -45,7 +46,8 @@ namespace Project.Zap.Tests
         {
             // Arrange
             IRepository<Location> repository = Substitute.For<IRepository<Location>>();
-            LocationsController controller = new LocationsController(repository);
+            IMapService mapService = Substitute.For<IMapService>();
+            LocationsController controller = new LocationsController(repository, mapService);
 
             // Act
             IActionResult result = await controller.Index();
@@ -60,8 +62,8 @@ namespace Project.Zap.Tests
         {
             // Arrange
             IRepository<Location> repository = Substitute.For<IRepository<Location>>();
-            LocationsController controller = new LocationsController(repository);
-
+            IMapService mapService = Substitute.For<IMapService>();
+            LocationsController controller = new LocationsController(repository, mapService);
             // Act
             IActionResult result = controller.Add();
 
@@ -74,7 +76,8 @@ namespace Project.Zap.Tests
         {
             // Arrange
             IRepository<Location> repository = Substitute.For<IRepository<Location>>();
-            LocationsController controller = new LocationsController(repository);
+            IMapService mapService = Substitute.For<IMapService>();
+            LocationsController controller = new LocationsController(repository, mapService);
             controller.ModelState.AddModelError("Name", "Required");
             AddLocationViewModel viewModel = new AddLocationViewModel();
 
@@ -90,7 +93,8 @@ namespace Project.Zap.Tests
         {
             // Arrange
             IRepository<Location> repository = Substitute.For<IRepository<Location>>();
-            LocationsController controller = new LocationsController(repository);
+            IMapService mapService = Substitute.For<IMapService>();
+            LocationsController controller = new LocationsController(repository, mapService);
             AddLocationViewModel viewModel = new AddLocationViewModel { Name = "Contoso", Address =  "Seattle", ZipOrPostcode = "54321" };
 
             // Act
@@ -108,7 +112,8 @@ namespace Project.Zap.Tests
         {
             // Arrange
             IRepository<Location> repository = Substitute.For<IRepository<Location>>();
-            LocationsController controller = new LocationsController(repository);
+            IMapService mapService = Substitute.For<IMapService>();
+            LocationsController controller = new LocationsController(repository, mapService);
             string id = "Contoso";
 
             // Act
@@ -126,7 +131,9 @@ namespace Project.Zap.Tests
             // Arrange
             IRepository<Location> repository = Substitute.For<IRepository<Location>>();
             repository.Get(Arg.Any<string>(), Arg.Any<IDictionary<string, object>>()).Returns(new[] { new Location { Name = "Contoso", Address = new Address { Text = "Seattle", ZipOrPostcode = "54321" } } });
-            LocationsController controller = new LocationsController(repository);
+
+            IMapService mapService = Substitute.For<IMapService>();
+            LocationsController controller = new LocationsController(repository, mapService);
             string id = "Contoso";
 
             // Act
@@ -144,7 +151,8 @@ namespace Project.Zap.Tests
         {
             // Arrange
             IRepository<Location> repository = Substitute.For<IRepository<Location>>();
-            LocationsController controller = new LocationsController(repository);
+            IMapService mapService = Substitute.For<IMapService>();
+            LocationsController controller = new LocationsController(repository, mapService);
             AddLocationViewModel viewModel = new AddLocationViewModel { Name = "Contoso", Address =  "Seattle", ZipOrPostcode = "54321" };
 
             // Act

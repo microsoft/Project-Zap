@@ -18,9 +18,14 @@ namespace Project.Zap.Models
         public DateTime Start { get; set; } = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
 
         [BindProperty]
-        [Required]
         [Display(Name = "Location")]
         public List<string> Locations { get; set; }
+
+        [BindProperty]
+        public string ZipOrPostcode { get; set; }
+
+        [BindProperty]
+        public string DistanceInMeters { get; set; }
 
         public IEnumerable<ShiftViewModel> Result { get; set; }
 

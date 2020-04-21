@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Formatters;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Project.Zap.Helpers;
 using Project.Zap.Library.Models;
 using Project.Zap.Library.Services;
@@ -16,10 +14,12 @@ namespace Project.Zap.Controllers
     public class LocationsController : Controller
     {
         private readonly IRepository<Location> repository;
+        private readonly IMapService mapService;
 
-        public LocationsController(IRepository<Location> repository)
+        public LocationsController(IRepository<Location> repository, IMapService mapService)
         {
             this.repository = repository;
+            this.mapService = mapService;
         }
 
         public async Task<IActionResult> Index()
@@ -43,13 +43,8 @@ namespace Project.Zap.Controllers
                 return BadRequest(ModelState);
             }
 
-            if(string.IsNullOrEmpty(viewModel.Address))
-            {
-                viewModel.Addresses = new SelectList(new List<string> { "a", "b", "c" }.Select(x => new { Value = x, Text = x }), "Value", "Text");
-                return View("Add", viewModel);
-            }
-
             Location location = viewModel.Map();
+            location.Address.Point = await this.mapService.GetCoordinates(location.Address);
 
             await this.repository.Add(location);
             return await this.Index();
