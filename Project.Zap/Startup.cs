@@ -21,6 +21,7 @@ using Project.Zap.Library.Services;
 using Project.Zap.Middleware;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Project.Zap
@@ -96,6 +97,17 @@ namespace Project.Zap
                 options.DefaultRequestCulture = new RequestCulture("en-US");
                 options.SupportedCultures = supportedCultures;
                 options.SupportedUICultures = supportedCultures;
+            });
+
+            string azureMapsUri = this.Configuration["AzureMapsUri"];
+            string azureMapsKey = this.Configuration["AzureMapsSubscriptionKey"];
+
+            services.AddHttpClient("azureMaps", x => x.BaseAddress = new System.Uri(azureMapsUri));
+
+            services.AddTransient<IMapService>(x => 
+            {
+                HttpClient httpClient = x.GetService<IHttpClientFactory>().CreateClient("azureMaps");
+                return new AzureMapsService(httpClient, azureMapsKey);
             });
 
         }
