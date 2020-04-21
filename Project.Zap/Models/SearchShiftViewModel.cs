@@ -20,7 +20,7 @@ namespace Project.Zap.Models
         [BindProperty]
         [Required]
         [Display(Name = "Location")]
-        public string Location { get; set; }
+        public List<string> Locations { get; set; }
 
         public IEnumerable<ShiftViewModel> Result { get; set; }
 

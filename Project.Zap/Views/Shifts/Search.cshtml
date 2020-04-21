@@ -9,10 +9,10 @@
 
 <form asp-controller="Shifts" asp-action="Search" method="post">
     <div class="form-group">
-        <label asp-for="@Model.Location" class="search"></label>
-        <select asp-for="@Model.Location" asp-items="@Model.LocationNames" class="col-md-4">
+        <label asp-for="@Model.Locations" class="search"></label>
+        <select asp-for="@Model.Locations" asp-items="@Model.LocationNames" class="col-md-4" multiple="multiple">
         </select>
-        <span asp-validation-for="@Model.Location"></span>
+        <span asp-validation-for="@Model.Locations"></span>
     </div>
 
     <div class="form-group">

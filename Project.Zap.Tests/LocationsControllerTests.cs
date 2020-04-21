@@ -52,7 +52,7 @@ namespace Project.Zap.Tests
 
             // Assert
             ViewResult viewResult = Assert.IsType<ViewResult>(result);
-            Assert.IsAssignableFrom<IEnumerable<AddLocationViewModel>>(viewResult.ViewData.Model);
+            Assert.IsAssignableFrom<IEnumerable<LocationViewModel>>(viewResult.ViewData.Model);
         }
 
         [Fact]

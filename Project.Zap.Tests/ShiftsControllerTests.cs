@@ -83,7 +83,7 @@ namespace Project.Zap.Tests
             IGraphServiceClient graphClient = Substitute.For<IGraphServiceClient>();
             IStringLocalizer<ShiftsController> stringLocalizer = Substitute.For<IStringLocalizer<ShiftsController>>();
             ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer);
-            SearchShiftViewModel viewModel = new SearchShiftViewModel { Location = "Contoso", Start = DateTime.Now };
+            SearchShiftViewModel viewModel = new SearchShiftViewModel { Locations = new List<string> { "Contoso" }, Start = DateTime.Now };
 
             // Act
             await controller.Search(viewModel);
@@ -108,7 +108,7 @@ namespace Project.Zap.Tests
             IGraphServiceClient graphClient = Substitute.For<IGraphServiceClient>();
             IStringLocalizer<ShiftsController> stringLocalizer = Substitute.For<IStringLocalizer<ShiftsController>>();
             ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer);
-            SearchShiftViewModel viewModel = new SearchShiftViewModel { Location = "Contoso", Start = DateTime.Now };
+            SearchShiftViewModel viewModel = new SearchShiftViewModel { Locations = new List<string> { "Contoso" }, Start = DateTime.Now };
 
             // Act
             IActionResult result = await controller.Search(viewModel);
@@ -136,7 +136,7 @@ namespace Project.Zap.Tests
             IGraphServiceClient graphClient = Substitute.For<IGraphServiceClient>();
             IStringLocalizer<ShiftsController> stringLocalizer = Substitute.For<IStringLocalizer<ShiftsController>>();
             ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer);
-            SearchShiftViewModel viewModel = new SearchShiftViewModel { Location = "Contoso", Start = DateTime.Now.Add(new TimeSpan(1, 0, 0, 0)) };
+            SearchShiftViewModel viewModel = new SearchShiftViewModel { Locations = new List<string> { "Contoso" }, Start = DateTime.Now.Add(new TimeSpan(1, 0, 0, 0)) };
 
             // Act
             IActionResult result = await controller.Search(viewModel);
@@ -163,7 +163,7 @@ namespace Project.Zap.Tests
             IGraphServiceClient graphClient = Substitute.For<IGraphServiceClient>();
             IStringLocalizer<ShiftsController> stringLocalizer = Substitute.For<IStringLocalizer<ShiftsController>>();
             ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer);
-            SearchShiftViewModel viewModel = new SearchShiftViewModel { Location = "Contoso", Start = DateTime.Now };
+            SearchShiftViewModel viewModel = new SearchShiftViewModel { Locations = new List<string> { "Contoso" }, Start = DateTime.Now };
 
             // Act
             IActionResult result = await controller.Search(viewModel);

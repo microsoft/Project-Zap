@@ -63,12 +63,11 @@ namespace Project.Zap.Controllers
         public async Task<IActionResult> Search(SearchShiftViewModel search)
         {
             IEnumerable<Location> locations = await this.locationRepository.Get();
-            string locationId = locations.Where(x => x.Name == search.Location).Select(x => x.id).FirstOrDefault();
+            IEnumerable<string> locationIds = locations.Where(x => search.Locations.Contains(x.Name)).Select(x => x.id);
 
             IEnumerable<Shift> shifts = await this.shiftRepository.Get(
-                "SELECT * FROM c WHERE c.LocationId = @locationId",
-                new Dictionary<string, object> { { "@locationId", locationId } },
-                locationId);
+                "SELECT * FROM c WHERE ARRAY_CONTAINS(@locationIds, c.LocationId)",
+                new Dictionary<string, object> { { "@locationIds", locationIds } });
 
              SearchShiftViewModel viewModel = new SearchShiftViewModel
             {
