@@ -15,8 +15,8 @@ namespace Project.Zap.Tests
             // Arrange
             IEnumerable<Location> locations = new List<Location>
             {
-                new Location { Name = "Contoso", Address = new Address { City = "Seattle", ZipOrPostCode = "54321" } },
-                new Location { Name = "Fabrikam", Address = new Address { City = "London", ZipOrPostCode = "12345" } }
+                new Location { Name = "Contoso", Address = new Address { Text = "Seattle", ZipOrPostcode = "54321" } },
+                new Location { Name = "Fabrikam", Address = new Address { Text = "London", ZipOrPostcode = "12345" } }
             };
 
             // Act
@@ -25,40 +25,40 @@ namespace Project.Zap.Tests
             // Assert
             Assert.Equal("Contoso", viewModels[0].Name);
             Assert.Equal("Fabrikam", viewModels[1].Name);
-            Assert.Equal("Seattle", viewModels[0].Address.City);
-            Assert.Equal("London", viewModels[1].Address.City);
-            Assert.Equal("54321", viewModels[0].Address.ZipOrPostCode);
-            Assert.Equal("12345", viewModels[1].Address.ZipOrPostCode);
+            Assert.Equal("Seattle", viewModels[0].Address);
+            Assert.Equal("London", viewModels[1].Address);
+            Assert.Equal("54321", viewModels[0].ZipOrPostcode);
+            Assert.Equal("12345", viewModels[1].ZipOrPostcode);
         }
 
         [Fact]
         public void Map_Location_LocationViewModel()
         {
             // Arrange
-            Location location = new Location { Name = "Contoso", Address = new Address { City = "Seattle", ZipOrPostCode = "54321" } };
+            Location location = new Location { Name = "Contoso", Address = new Address { Text = "Seattle", ZipOrPostcode = "54321" } };
             
             // Act
             LocationViewModel viewModel = location.Map();
 
             // Assert
             Assert.Equal("Contoso", viewModel.Name);
-            Assert.Equal("Seattle", viewModel.Address.City);
-            Assert.Equal("54321", viewModel.Address.ZipOrPostCode);
+            Assert.Equal("Seattle", viewModel.Address);
+            Assert.Equal("54321", viewModel.ZipOrPostcode);
         }
 
         [Fact]
         public void Map_LocationViewModel_Location()
         {
             // Arrange
-            LocationViewModel viewModel = new LocationViewModel { Name = "Contoso", Address = new AddressViewModel { City = "Seattle", ZipOrPostCode = "54321" } };
+            AddLocationViewModel viewModel = new AddLocationViewModel { Name = "Contoso", Address =  "Seattle", ZipOrPostcode = "54321"  };
 
             // Act
             Location location = viewModel.Map();
 
             // Assert
             Assert.Equal("Contoso", location.Name);
-            Assert.Equal("Seattle", location.Address.City);
-            Assert.Equal("54321", location.Address.ZipOrPostCode);
+            Assert.Equal("Seattle", location.Address.Text);
+            Assert.Equal("54321", location.Address.ZipOrPostcode);
         }
     }
 }

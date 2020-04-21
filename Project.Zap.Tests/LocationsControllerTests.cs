@@ -52,7 +52,7 @@ namespace Project.Zap.Tests
 
             // Assert
             ViewResult viewResult = Assert.IsType<ViewResult>(result);
-            Assert.IsAssignableFrom<IEnumerable<LocationViewModel>>(viewResult.ViewData.Model);
+            Assert.IsAssignableFrom<IEnumerable<AddLocationViewModel>>(viewResult.ViewData.Model);
         }
 
         [Fact]
@@ -76,7 +76,7 @@ namespace Project.Zap.Tests
             IRepository<Location> repository = Substitute.For<IRepository<Location>>();
             LocationsController controller = new LocationsController(repository);
             controller.ModelState.AddModelError("Name", "Required");
-            LocationViewModel viewModel = new LocationViewModel();
+            AddLocationViewModel viewModel = new AddLocationViewModel();
 
             // Act
             IActionResult result = await controller.AddLocation(viewModel);
@@ -91,7 +91,7 @@ namespace Project.Zap.Tests
             // Arrange
             IRepository<Location> repository = Substitute.For<IRepository<Location>>();
             LocationsController controller = new LocationsController(repository);
-            LocationViewModel viewModel = new LocationViewModel { Name = "Contoso", Address = new AddressViewModel { City = "Seattle", ZipOrPostCode = "54321" } };
+            AddLocationViewModel viewModel = new AddLocationViewModel { Name = "Contoso", Address =  "Seattle", ZipOrPostcode = "54321" };
 
             // Act
             IActionResult result = await controller.AddLocation(viewModel);
@@ -125,7 +125,7 @@ namespace Project.Zap.Tests
         {
             // Arrange
             IRepository<Location> repository = Substitute.For<IRepository<Location>>();
-            repository.Get(Arg.Any<string>(), Arg.Any<IDictionary<string, object>>()).Returns(new[] { new Location { Name = "Contoso", Address = new Address { City = "Seattle", ZipOrPostCode = "54321" } } });
+            repository.Get(Arg.Any<string>(), Arg.Any<IDictionary<string, object>>()).Returns(new[] { new Location { Name = "Contoso", Address = new Address { Text = "Seattle", ZipOrPostcode = "54321" } } });
             LocationsController controller = new LocationsController(repository);
             string id = "Contoso";
 
@@ -145,7 +145,7 @@ namespace Project.Zap.Tests
             // Arrange
             IRepository<Location> repository = Substitute.For<IRepository<Location>>();
             LocationsController controller = new LocationsController(repository);
-            LocationViewModel viewModel = new LocationViewModel { Name = "Contoso", Address = new AddressViewModel { City = "Seattle", ZipOrPostCode = "54321" } };
+            AddLocationViewModel viewModel = new AddLocationViewModel { Name = "Contoso", Address =  "Seattle", ZipOrPostcode = "54321" };
 
             // Act
             IActionResult result = await controller.EditLocation(viewModel);

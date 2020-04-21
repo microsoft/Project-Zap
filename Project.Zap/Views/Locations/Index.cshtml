@@ -19,8 +19,8 @@
         {
     <tr>
         <td>@location.Name</td>
-        <td>@location.Address.City</td>
-        <td>@location.Address.ZipOrPostCode</td>
+        <td>@location.Address</td>
+        <td>@location.ZipOrPostcode</td>
         <th><a asp-controller="Locations" asp-action="Edit" asp-route-id="@location.Name">@Localizer["Edit"]</a></th>
         <th><a asp-controller="Locations" asp-action="Delete" asp-route-id="@location.Name">@Localizer["Delete"]</a></th>
     </tr>}

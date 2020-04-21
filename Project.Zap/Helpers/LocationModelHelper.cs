@@ -23,8 +23,21 @@ namespace Project.Zap.Helpers
                 Name = viewModel.Name,
                 Address = new Address
                 {
-                    City = viewModel?.Address?.City,
-                    ZipOrPostCode = viewModel?.Address?.ZipOrPostCode
+                    Text = viewModel?.Address,
+                    ZipOrPostcode = viewModel?.ZipOrPostcode
+                }
+            };
+        }
+
+        public static Location Map(this AddLocationViewModel viewModel)
+        {
+            return new Location
+            {
+                Name = viewModel.Name,
+                Address = new Address
+                {
+                    Text = viewModel?.Address,
+                    ZipOrPostcode = viewModel?.ZipOrPostcode
                 }
             };
         }
@@ -34,11 +47,8 @@ namespace Project.Zap.Helpers
             return new LocationViewModel
             {
                 Name = location.Name,
-                Address = new AddressViewModel
-                {
-                    City = location?.Address?.City,
-                    ZipOrPostCode = location?.Address?.ZipOrPostCode
-                }
+                Address = location?.Address?.Text,
+                ZipOrPostcode = location?.Address?.ZipOrPostcode
             };
         }
     }

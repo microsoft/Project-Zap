@@ -4,7 +4,7 @@
     @inject IViewLocalizer Localizer
 }
 
-@model Project.Zap.Models.LocationViewModel
+@model Project.Zap.Models.AddLocationViewModel
 
 <h3>@Localizer["NewStoreTitle"]</h3>
 
@@ -16,15 +16,29 @@
     </div>
     <h5>Address</h5>
     <div class="form-group">
-        <label asp-for="@Model.Address.City"></label>
-        <input type="text" asp-for="@Model.Address.City" class="form-control" />
-        <span asp-validation-for="@Model.Address.City"></span>
+        <label asp-for="@Model.ZipOrPostcode"></label>
+        <input type="text" asp-for="@Model.ZipOrPostcode" class="form-control" />
+        <span asp-validation-for="@Model.ZipOrPostcode"></span>
     </div>
-    <div class="form-group">
-        <label asp-for="@Model.Address.ZipOrPostCode"></label>
-        <input type="text" asp-for="@Model.Address.ZipOrPostCode" class="form-control" />
-        <span asp-validation-for="@Model.Address.ZipOrPostCode"></span>
-    </div>
+    @if (Model?.Addresses != null)
+    {
+        <div class="form-group">
+            <label asp-for="@Model.Address"></label>
+            <select asp-for="@Model.Address" asp-items="@Model.Addresses">
+            </select>
+            <span asp-validation-for="@Model.Address"></span>
+        </div>
+    }
 
-    <button type="submit" class="btn btn-primary mb-2">@Localizer["Add"]</button>
+<button type="submit" class="btn btn-primary mb-2">
+
+    @if (Model?.Addresses != null)
+    {
+        @Localizer["Add"]
+    }
+    else
+    {
+        <span>Lookup</span>
+    }
+    </button>
 </form>

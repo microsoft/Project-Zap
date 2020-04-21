@@ -22,20 +22,17 @@ namespace Project.Zap.Controllers
         private readonly IRepository<Location> locationRepository;
         private readonly Microsoft.Graph.IGraphServiceClient graphServiceClient;
         private readonly IStringLocalizer<ShiftsController> stringLocalizer;
-        private readonly IMapService mapService;
 
         public ShiftsController(
             IRepository<Shift> shiftRepository, 
             IRepository<Location> locationRepository, 
             Microsoft.Graph.IGraphServiceClient graphServiceClient,
-            IStringLocalizer<ShiftsController> stringLocalizer,
-            IMapService mapService)
+            IStringLocalizer<ShiftsController> stringLocalizer)
         {
             this.shiftRepository = shiftRepository;
             this.locationRepository = locationRepository;
             this.graphServiceClient = graphServiceClient;
             this.stringLocalizer = stringLocalizer;
-            this.mapService = mapService;
         }
 
         public async Task<IActionResult> Index()

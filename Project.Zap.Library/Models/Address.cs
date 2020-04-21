@@ -2,8 +2,8 @@
 {
     public class Address
     {
-        public string City { get; set; }
-        public string ZipOrPostCode { get; set; }
+        public string Text { get; set; }
+        public string ZipOrPostcode { get; set; }
     }
 
     public class Coordinates

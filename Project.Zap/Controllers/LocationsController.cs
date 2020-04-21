@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Project.Zap.Helpers;
 using Project.Zap.Library.Models;
 using Project.Zap.Library.Services;
@@ -34,11 +36,17 @@ namespace Project.Zap.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddLocation(LocationViewModel viewModel)
+        public async Task<IActionResult> AddLocation(AddLocationViewModel viewModel)
         {
             if(!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
+            }
+
+            if(string.IsNullOrEmpty(viewModel.Address))
+            {
+                viewModel.Addresses = new SelectList(new List<string> { "a", "b", "c" }.Select(x => new { Value = x, Text = x }), "Value", "Text");
+                return View("Add", viewModel);
             }
 
             Location location = viewModel.Map();
@@ -63,7 +71,7 @@ namespace Project.Zap.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditLocation(LocationViewModel viewModel)
+        public async Task<IActionResult> EditLocation(AddLocationViewModel viewModel)
         {
             Location location = viewModel.Map();
 
