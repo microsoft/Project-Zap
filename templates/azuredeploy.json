@@ -15,7 +15,7 @@
         "b2cInstance": {
             "type": "string",
             "metadata": {
-                "description": "AAD B2C endpoint e.g. https://{b2ctenantname}.onmicrosoft.com/tfp/"
+                "description": "AAD B2C endpoint e.g. https://{b2ctenantname}.b2clogin.com/tfp/"
             }
         },
         "b2cClientId": {
@@ -74,7 +74,7 @@
             "type": "securestring",
             "metadata": {
                 "description": "Client secret for app registration"
-            }            
+            }
         }
     },
     "variables": {
@@ -82,7 +82,8 @@
         "resgpguid": "[substring(replace(guid(resourceGroup().id), '-', ''), 0, 4)]",
         "resourceName": "[concat(toLower(parameters('orgName')), '-', toLower(variables('appName')))]",
         "callbackPath": "/signin-oidc",
-        "extensionClientId": "[replace(parameters('extensionClientId'), '-', '')]"
+        "extensionClientId": "[replace(parameters('extensionClientId'), '-', '')]",
+        "azureMapsUri": "https://atlas.microsoft.com"
     },
     "resources": [
         {
@@ -105,7 +106,8 @@
                         "isZoneRedundant": false
                     }
                 ],
-                "capabilities": []
+                "capabilities": [
+                ]
             }
         },
         {
@@ -113,7 +115,8 @@
             "apiVersion": "2018-02-01",
             "name": "[concat(variables('appName'), '-plan')]",
             "dependsOn": [
-                "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('resourceName'))]"
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('resourceName'))]",
+                "[resourceId('Microsoft.Maps/accounts', variables('resourceName'))]"
             ],
             "location": "[resourceGroup().location]",
             "sku": {
@@ -177,7 +180,7 @@
                         {
                             "Name": "AzureAdB2C__Instance",
                             "Value": "[parameters('b2cInstance')]"
-                        },     
+                        },
                         {
                             "Name": "AzureAdB2C__ClientId",
                             "Value": "[parameters('b2cClientId')]"
@@ -213,11 +216,11 @@
                         {
                             "Name": "ClientId",
                             "Value": "[parameters('b2cClientId')]"
-                        }, 
+                        },
                         {
                             "Name": "TenantId",
                             "Value": "[parameters('tenantId')]"
-                        }, 
+                        },
                         {
                             "Name": "ClientSecret",
                             "Value": "[parameters('appRegistrationClientSecret')]"
@@ -225,7 +228,15 @@
                         {
                             "name": "OrganizationName",
                             "value": "[parameters('orgName')]"
-                        }          
+                        },
+                        {
+                            "name": "AzureMapsUri",
+                            "value": "[variables('azureMapsUri')]"
+                        },
+                        {
+                            "name": "AzureMapsSubscriptionKey",
+                            "value": "[listKeys(resourceId('Microsoft.Maps/accounts', variables('resourceName')), providers('Microsoft.Maps', 'accounts').apiVersions[0]).primaryKey]"
+                        }
                     ]
                 }
             },
@@ -290,7 +301,8 @@
                 ],
                 "loadBalancing": "LeastRequests",
                 "experiments": {
-                    "rampUpRules": []
+                    "rampUpRules": [
+                    ]
                 },
                 "autoHealEnabled": false,
                 "localMySqlEnabled": false,
@@ -330,6 +342,17 @@
             "properties": {
                 "siteName": "projectzap",
                 "hostNameType": "Verified"
+            }
+        },
+        {
+            "name": "[variables('resourceName')]",
+            "type": "Microsoft.Maps/accounts",
+            "apiVersion": "2018-05-01",
+            "location": "Global",
+            "tags": {
+            },
+            "sku": {
+                "name": "s0"
             }
         }
     ]
