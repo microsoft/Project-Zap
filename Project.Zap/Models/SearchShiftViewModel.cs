@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
@@ -23,13 +24,15 @@ namespace Project.Zap.Models
         [Display(Name = "Location")]
         public List<string> Locations { get; set; }
 
+        [Display(Name = "ZipOrPostcode")]
         [BindProperty]
         public string ZipOrPostcode { get; set; }
 
+        [Display(Name = "Distance")]
         [BindProperty]
         public string DistanceInMeters { get; set; }
 
-        public SelectList Distances { get; set; } = new SelectList(new[] { new SelectListItem { Text = "10km", Value = "10000" }, new SelectListItem { Text = "30km", Value = "30000" }}, "Value", "Text");
+        public SelectList Distances { get; set; } = new SelectList(new[] { new SelectListItem { Text = "10 Miles", Value = "16093" }, new SelectListItem { Text = "30 Miles", Value = "48280" }}, "Value", "Text");
 
         public IEnumerable<ShiftViewModel> Result { get; set; }
 

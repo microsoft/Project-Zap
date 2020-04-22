@@ -126,4 +126,7 @@
   <data name="StoreNames" xml:space="preserve">
     <value>Noms des magasins</value>
   </data>
+  <data name="ZipOrPostcode" xml:space="preserve">
+    <value>Code postal</value>
+  </data>
 </root>
