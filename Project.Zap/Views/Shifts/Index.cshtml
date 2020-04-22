@@ -9,110 +9,169 @@
 
 @model Project.Zap.Models.SearchShiftViewModel
 
-    <link rel="stylesheet" href="https://atlas.microsoft.com/sdk/javascript/mapcontrol/2/atlas.min.css" type="text/css">
 
-    <h1 class="mb-3">@Localizer["Title"]</h1>
+<link rel="stylesheet" href="https://atlas.microsoft.com/sdk/javascript/mapcontrol/2/atlas.min.css" type="text/css" />
 
-    @if (ViewData.ContainsKey("ValidationError"))
-    {
-        <div class="alert alert-danger">
-            <strong>@Localizer["ErrorTitle"]</strong> @ViewData["ValidationError"]
-        </div>
-    }
+<h1 class="mb-3">@Localizer["Title"]</h1>
 
-    @if (ViewData.ContainsKey("SuccessMessage"))
-    {
-        <div class="alert alert-success">
-            <strong>@Localizer["SuccessTitle"]</strong> @ViewData["SuccessMessage"]
-        </div>
-    }
+@if (ViewData.ContainsKey("ValidationError"))
+{
+    <div class="alert alert-danger">
+        <strong>@Localizer["ErrorTitle"]</strong> @ViewData["ValidationError"]
+    </div>
+}
 
-    <partial name="Search" model="new Project.Zap.Models.SearchShiftViewModel { LocationNames = Model.LocationNames }" />
+@if (ViewData.ContainsKey("SuccessMessage"))
+{
+    <div class="alert alert-success">
+        <strong>@Localizer["SuccessTitle"]</strong> @ViewData["SuccessMessage"]
+    </div>
+}
 
-    <div id="results">
-        <h3 class="mt-3">@Localizer["ResultsTitle"]</h3>
-        <ul class="nav nav-tabs">
-            <li class="nav-item">
-                <a class="nav-link active" data-toggle="tab" href="#listView">List View</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#mapView">Map View</a>
-            </li>
-        </ul>
+<partial name="Search" model="new Project.Zap.Models.SearchShiftViewModel { LocationNames = Model.LocationNames }" />
 
-        <div class="container-fluid">
-            <div class="tab-content">
-                <div role="tabpanel" class="tab-pane active" id="listView">
-                    @if (Model.Result != null)
+<div id="results">
+    <h3 class="mt-3">@Localizer["ResultsTitle"]</h3>
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#listView">List View</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#mapView">Map View</a>
+        </li>
+    </ul>
+
+    <div class="container-fluid">
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="listView">
+                @if (Model.Result != null)
+                {
+                    <div class="row">
+                        <div class="d-none d-xs-block d-sm-block col-md-4 font-weight-bold mt-2">@Localizer["TableStore"]</div>
+                        <div class="d-none d-xs-block d-sm-block col-md-2 font-weight-bold mt-2">@Localizer["TableStart"]</div>
+                        <div class="d-none d-xs-block d-sm-block col-md-2 font-weight-bold mt-2">@Localizer["TableEnd"]</div>
+                        <div class="d-none d-xs-block d-sm-block col-md-2 font-weight-bold mt-2">@Localizer["TableWorkType"]</div>
+                        <div class="d-none d-xs-block d-sm-block col-md-1 font-weight-bold mt-2">@Localizer["TableAvailable"]</div>
+                        @if ((await AuthorizationService.AuthorizeAsync(User, "OrgAManager")).Succeeded)
+                        {
+                            <div class="d-none d-xs-block d-sm-block col-md-1 font-weight-bold mt-2 invisible">@Localizer["TableView"]</div>
+                        }
+                        @if ((await AuthorizationService.AuthorizeAsync(User, "OrgBEmployee")).Succeeded)
+                        {
+                            <div class="d-none d-xs-block d-sm-block col-md-1 font-weight-bold mt-2 invisible">@Localizer["TableBook"]</div>
+                        }
+                    </div>
+                    @foreach (var shift in Model.Result)
                     {
                         <div class="row">
-                            <div class="d-none d-xs-block d-sm-block col-md-4 font-weight-bold mt-2">@Localizer["TableStore"]</div>
-                            <div class="d-none d-xs-block d-sm-block col-md-2 font-weight-bold mt-2">@Localizer["TableStart"]</div>
-                            <div class="d-none d-xs-block d-sm-block col-md-2 font-weight-bold mt-2">@Localizer["TableEnd"]</div>
-                            <div class="d-none d-xs-block d-sm-block col-md-2 font-weight-bold mt-2">@Localizer["TableWorkType"]</div>
-                            <div class="d-none d-xs-block d-sm-block col-md-1 font-weight-bold mt-2">@Localizer["TableAvailable"]</div>
+                            <div class="d-block d-xs-none d-sm-none col-xs-6 col-sm-6 font-weight-bold mt-2">@Localizer["TableStore"]</div>
+                            <div class="col-xs-6 col-sm-6 col-md-4 mt-2">@shift.LocationName</div>
+
+                            <div class="d-block d-xs-none d-sm-none col-xs-6 col-sm-6 font-weight-bold mt-2">@Localizer["TableStart"]</div>
+                            <div class="col-xs-6 col-sm-6 col-md-2 mt-2">@shift.Start.ToString("MM/dd/yyyy HH:mm")</div>
+
+                            <div class="d-block d-xs-none d-sm-none col-xs-6 col-sm-6 font-weight-bold mt-2">@Localizer["TableEnd"]</div>
+                            <div class="col-xs-6 col-sm-6 col-md-2 mt-2">@shift.End.ToString("MM/dd/yyyy HH:mm")</div>
+
+
+                            <div class="d-block d-xs-none d-sm-none col-xs-6 col-sm-6 font-weight-bold mt-2">@Localizer["TableWorkType"]</div>
+                            <div class="col-xs-6 col-sm-6 col-md-2 mt-2">@shift.WorkType</div>
+
+                            <div class="d-block d-xs-none d-sm-none col-xs-6 col-sm-6 font-weight-bold mt-2">@Localizer["TableAvailable"]</div>
+                            <div class="col-xs-6 col-sm-6 col-md-1 mt-2">@shift.Available / @shift.Quantity</div>
                             @if ((await AuthorizationService.AuthorizeAsync(User, "OrgAManager")).Succeeded)
                             {
-                                <div class="d-none d-xs-block d-sm-block col-md-1 font-weight-bold mt-2 invisible">@Localizer["TableView"]</div>
+                                <a class="btn btn-primary col-xs-6 col-sm-6 col-md-1 mt-2" asp-controller="Shifts" asp-action="ViewShift" asp-route-LocationName="@shift.LocationName" asp-route-Start="@shift.Start.ToString("yyyy-MM-ddTHH:mm")" asp-route-End="@shift.End.ToString("yyyy-MM-ddTHH:mm")" asp-route-WorkType="@shift.WorkType" asp-route-Quantity="@shift.Quantity" asp-route-Available="@shift.Available">@Localizer["LinkView"]</a>
                             }
                             @if ((await AuthorizationService.AuthorizeAsync(User, "OrgBEmployee")).Succeeded)
                             {
-                                <div class="d-none d-xs-block d-sm-block col-md-1 font-weight-bold mt-2 invisible">@Localizer["TableBook"]</div>
+                                <a class="btn btn-primary col-xs-6 col-sm-6 col-md-1 mt-2" asp-controller="Shifts" asp-action="Book" asp-route-LocationName="@shift.LocationName" asp-route-Start="@shift.Start.ToString("yyyy-MM-ddTHH:mm")" asp-route-End="@shift.End.ToString("yyyy-MM-ddTHH:mm")" asp-route-WorkType="@shift.WorkType">@Localizer["LinkBook"]</a>
                             }
                         </div>
-                        @foreach (var shift in Model.Result)
-                        {
-                            <div class="row">
-                                <div class="d-block d-xs-none d-sm-none col-xs-6 col-sm-6 font-weight-bold mt-2">@Localizer["TableStore"]</div>
-                                <div class="col-xs-6 col-sm-6 col-md-4 mt-2">@shift.LocationName</div>
-
-                                <div class="d-block d-xs-none d-sm-none col-xs-6 col-sm-6 font-weight-bold mt-2">@Localizer["TableStart"]</div>
-                                <div class="col-xs-6 col-sm-6 col-md-2 mt-2">@shift.Start.ToString("MM/dd/yyyy HH:mm")</div>
-
-                                <div class="d-block d-xs-none d-sm-none col-xs-6 col-sm-6 font-weight-bold mt-2">@Localizer["TableEnd"]</div>
-                                <div class="col-xs-6 col-sm-6 col-md-2 mt-2">@shift.End.ToString("MM/dd/yyyy HH:mm")</div>
-
-
-                                <div class="d-block d-xs-none d-sm-none col-xs-6 col-sm-6 font-weight-bold mt-2">@Localizer["TableWorkType"]</div>
-                                <div class="col-xs-6 col-sm-6 col-md-2 mt-2">@shift.WorkType</div>
-
-                                <div class="d-block d-xs-none d-sm-none col-xs-6 col-sm-6 font-weight-bold mt-2">@Localizer["TableAvailable"]</div>
-                                <div class="col-xs-6 col-sm-6 col-md-1 mt-2">@shift.Available / @shift.Quantity</div>
-                                @if ((await AuthorizationService.AuthorizeAsync(User, "OrgAManager")).Succeeded)
-                                {
-                                    <a class="btn btn-primary col-xs-6 col-sm-6 col-md-1 mt-2" asp-controller="Shifts" asp-action="ViewShift" asp-route-LocationName="@shift.LocationName" asp-route-Start="@shift.Start.ToString("yyyy-MM-ddTHH:mm")" asp-route-End="@shift.End.ToString("yyyy-MM-ddTHH:mm")" asp-route-WorkType="@shift.WorkType" asp-route-Quantity="@shift.Quantity" asp-route-Available="@shift.Available">@Localizer["LinkView"]</a>
-                                }
-                                @if ((await AuthorizationService.AuthorizeAsync(User, "OrgBEmployee")).Succeeded)
-                                {
-                                    <a class="btn btn-primary col-xs-6 col-sm-6 col-md-1 mt-2" asp-controller="Shifts" asp-action="Book" asp-route-LocationName="@shift.LocationName" asp-route-Start="@shift.Start.ToString("yyyy-MM-ddTHH:mm")" asp-route-End="@shift.End.ToString("yyyy-MM-ddTHH:mm")" asp-route-WorkType="@shift.WorkType">@Localizer["LinkBook"]</a>
-                                }
-                            </div>
-                        }
                     }
-                </div>
-                <div role="tabpanel" class="tab-pane" id="mapView">
-                    <div class="row">
-                        <div id="myMap" class="mt-2 col-12"></div>
-                    </div>                    
+                }
+            </div>
+            <div role="tabpanel" class="tab-pane" id="mapView">
+                <div class="row">
+                    <div id="myMap" class="mt-2 col-12"></div>
                 </div>
             </div>
         </div>
-
-
     </div>
 
-    @section Scripts
+
+</div>
+
+@section Scripts
 {
-        <script src="https://atlas.microsoft.com/sdk/javascript/mapcontrol/2/atlas.min.js"></script>
-        <script type="text/javascript">
+    <script src="https://atlas.microsoft.com/sdk/javascript/mapcontrol/2/atlas.min.js"></script>
+    <script type="text/javascript">
             var map = new atlas.Map('myMap', {
-                center: [-122.33, 47.6],
-                zoom: 12,
+                center: [-0.18, 51.51],
+                zoom: 10,
+                view: "Auto",
                 language: 'en-US',
                 authOptions: {
                     authType: 'subscriptionKey',
                     subscriptionKey: '@ViewData["AzureMapsKey"]'
                 }
             });
-        </script>
-    }
+
+            map.events.add('ready', function () {
+                var popupTemplate = '<div><div class="name">{name}</div>{address}, {zipOrPostcode}</div>';
+
+                //Create a data source and add it to the map.
+                var dataSource = new atlas.source.DataSource();
+                map.sources.add(dataSource);
+
+            @foreach(var shift in Model.Result)
+            {
+                <text>
+                    dataSource.add(new atlas.data.Feature(new atlas.data.Point([@shift.Point.Coordinates[1],@shift.Point.Coordinates[0]]), {
+                        name: '@shift.LocationName',
+                        address: 'a',
+                        zipOrPostcode: 'b'
+                }));
+                </text>
+            }
+
+
+                //Create a layer to render point data.
+                var symbolLayer = new atlas.layer.SymbolLayer(dataSource);
+
+                //Add the polygon and line the symbol layer to the map.
+                map.layers.add(symbolLayer);
+
+                //Create a popup but leave it closed so we can update it and display it later.
+                popup = new atlas.Popup({
+                    pixelOffset: [0, -18],
+                    closeButton: true
+                });
+
+                map.events.add('click', symbolLayer, function (e) {
+                    //Make sure that the point exists.
+                    if (e.shapes && e.shapes.length > 0) {
+                        var content, coordinate;
+                        var properties = e.shapes[0].getProperties();
+                        content = popupTemplate
+                            .replace(/{name}/g, properties.name)
+                            .replace(/{address}/g, properties.address)
+                            .replace(/{zipOrPostcode}/g, properties.zipOrPostcode);
+
+                        coordinate = e.shapes[0].getCoordinates();
+
+                        popup.setOptions({
+                            //Update the content of the popup.
+                            content: content,
+
+                            //Update the popup's position with the symbol's coordinate.
+                            position: coordinate
+
+                        });
+                        //Open the popup.
+                        popup.open(map);
+                    }
+                });
+            });
+    </script>
+}

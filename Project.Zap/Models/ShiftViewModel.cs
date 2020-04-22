@@ -42,6 +42,6 @@ namespace Project.Zap.Models
         [Range(0, 200)]
         [Display(Name = "Available")]
         public int Available { get; set; }
-
+        public PointViewModel Point { get; internal set; }
     }
 }

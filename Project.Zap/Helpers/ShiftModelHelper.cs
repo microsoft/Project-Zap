@@ -19,7 +19,7 @@ namespace Project.Zap.Helpers
 
             foreach(var shift in grouped)
             {
-                ShiftViewModel viewModel = Map(shift.First(), locations.Where(x => x.id == shift.First().LocationId).Select(x => x.Name).FirstOrDefault());
+                ShiftViewModel viewModel = Map(shift.First(), locations.Where(x => x.id == shift.First().LocationId).FirstOrDefault());
                 viewModel.Quantity = shift.Count();
                 viewModel.Available = shift.Count(x => !x.Allocated);
                 viewModels.Add(viewModel);
@@ -28,14 +28,18 @@ namespace Project.Zap.Helpers
             return viewModels;
         }
 
-        private static ShiftViewModel Map(Shift shift, string storeName)
+        private static ShiftViewModel Map(Shift shift, Location location)
         {
             return new ShiftViewModel
             {
-                LocationName = storeName,
+                LocationName = location.Name,
                 Start = shift.StartDateTime,
                 End = shift.EndDateTime,
                 WorkType = shift.WorkType,
+                Point = new PointViewModel
+                {
+                    Coordinates = location.Address.Point.coordinates
+                }
             };
         }
 
