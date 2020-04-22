@@ -255,6 +255,17 @@
                     }
                 }
             ]
+        },
+        {
+            "name": "[variables('resourceName')]",
+            "type": "Microsoft.Maps/accounts",
+            "apiVersion": "2018-05-01",
+            "location": "Global",
+            "tags": {
+            },
+            "sku": {
+                "name": "s0"
+            }
         }
     ]
 }
