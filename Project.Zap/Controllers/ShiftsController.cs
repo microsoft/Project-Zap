@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Project.Zap.Controllers
@@ -24,19 +25,22 @@ namespace Project.Zap.Controllers
         private readonly Microsoft.Graph.IGraphServiceClient graphServiceClient;
         private readonly IStringLocalizer<ShiftsController> stringLocalizer;
         private readonly IConfiguration configuration;
+        private readonly IMapService mapService;
 
         public ShiftsController(
-            IRepository<Shift> shiftRepository, 
-            IRepository<Location> locationRepository, 
+            IRepository<Shift> shiftRepository,
+            IRepository<Location> locationRepository,
             Microsoft.Graph.IGraphServiceClient graphServiceClient,
             IStringLocalizer<ShiftsController> stringLocalizer,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            IMapService mapService)
         {
             this.shiftRepository = shiftRepository;
             this.locationRepository = locationRepository;
             this.graphServiceClient = graphServiceClient;
             this.stringLocalizer = stringLocalizer;
             this.configuration = configuration;
+            this.mapService = mapService;
         }
 
         public async Task<IActionResult> Index()
@@ -68,18 +72,39 @@ namespace Project.Zap.Controllers
         public async Task<IActionResult> Search(SearchShiftViewModel search)
         {
             IEnumerable<Location> locations = await this.locationRepository.Get();
-            IEnumerable<string> locationIds = locations.Where(x => search.Locations.Contains(x.Name)).Select(x => x.id);
 
-            IEnumerable<Shift> shifts = await this.shiftRepository.Get(
-                "SELECT * FROM c WHERE ARRAY_CONTAINS(@locationIds, c.LocationId)",
-                new Dictionary<string, object> { { "@locationIds", locationIds } });
+            List<string> locationIds = new List<string>();
 
-             SearchShiftViewModel viewModel = new SearchShiftViewModel
+            if (search.Locations != null && search.Locations.Any())
+            {
+                locationIds.AddRange(locations.Where(x => search.Locations.Contains(x.Name)).Select(x => x.id).ToList());
+            } 
+            if(!string.IsNullOrWhiteSpace(search.DistanceInMeters))
+            {
+                Point point = await this.mapService.GetCoordinates(new Address { ZipOrPostcode = search.ZipOrPostcode });
+                IEnumerable<Location> filteredLocations = await this.locationRepository.Get(
+                    "SELECT * FROM c WHERE ST_DISTANCE(c.Address.Point, {'type': 'Point', 'coordinates':[@lat, @lon]}) < @distance",
+                    new Dictionary<string, object>
+                    {
+                        { "@lat", point.coordinates[0] },
+                        { "@lon", point.coordinates[1] },
+                        { "@londistance", search.DistanceInMeters }
+                    });
+                locationIds.AddRange(filteredLocations.Select(x => x.id));
+            }
+
+            IEnumerable <Shift> shifts = await this.shiftRepository.Get(
+                "SELECT * FROM c WHERE c.StartDateTime >= @startDateTime AND ARRAY_CONTAINS(@locationIds, c.LocationId)",
+                new Dictionary<string, object>
+                {
+                    { "@startDateTime", search.Start },
+                    { "@locationIds", locationIds }
+                });
+
+            SearchShiftViewModel viewModel = new SearchShiftViewModel
             {
                 LocationNames = this.GetLocationNames(locations),
-                Result = shifts.Where(x => x.StartDateTime.DayOfYear >= search.Start.DayOfYear)
-                                .Map(locations)
-                                .Where(x => search.Available ? x.Available > 0 : true)
+                Result = shifts.Map(locations).Where(x => search.Available ? x.Available > 0 : true)
             };
 
             ViewData["AzureMapsKey"] = this.configuration["AzureMapsSubscriptionKey"];
@@ -100,7 +125,7 @@ namespace Project.Zap.Controllers
         [HttpGet]
         [Authorize(Policy = "OrgBEmployee")]
         public async Task<IActionResult> ViewShifts()
-       {
+        {
             Claim id = HttpContext?.User?.Claims?.Where(x => x.Type == "http://schemas.microsoft.com/identity/claims/objectidentifier").FirstOrDefault();
 
             if (id == null)
@@ -160,7 +185,7 @@ namespace Project.Zap.Controllers
         public async Task<IActionResult> CancelShift(ShiftViewModel viewModel)
         {
             Claim id = HttpContext.User.Claims.Where(x => x.Type == "http://schemas.microsoft.com/identity/claims/objectidentifier").FirstOrDefault();
-            
+
             if (id == null)
             {
                 throw new ArgumentException("http://schemas.microsoft.com/identity/claims/objectidentifier claim is required");
@@ -200,7 +225,7 @@ namespace Project.Zap.Controllers
             }
 
             IEnumerable<Shift> bookedShifts = await this.shiftRepository.Get("SELECT * FROM c WHERE c.EmployeeId = @employeeId", new Dictionary<string, object> { { "@employeeId", id.Value } });
-            if(bookedShifts?.Where(x => x.StartDateTime.DayOfYear == viewModel.Start.DayOfYear && x.StartDateTime.Year == viewModel.Start.Year).FirstOrDefault() != null)
+            if (bookedShifts?.Where(x => x.StartDateTime.DayOfYear == viewModel.Start.DayOfYear && x.StartDateTime.Year == viewModel.Start.Year).FirstOrDefault() != null)
             {
                 ViewData["ValidationError"] = "You are already booked to work on this day.";
                 return await this.Index();
@@ -250,7 +275,7 @@ namespace Project.Zap.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddShift(AddShiftViewModel viewModel)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return View("Add", viewModel);
             }

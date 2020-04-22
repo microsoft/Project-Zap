@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace Project.Zap.Models
 {
@@ -26,6 +28,8 @@ namespace Project.Zap.Models
 
         [BindProperty]
         public string DistanceInMeters { get; set; }
+
+        public SelectList Distances { get; set; } = new SelectList(new[] { new SelectListItem { Text = "10km", Value = "10000" }, new SelectListItem { Text = "30km", Value = "30000" }}, "Value", "Text");
 
         public IEnumerable<ShiftViewModel> Result { get; set; }
 

@@ -40,7 +40,8 @@ namespace Project.Zap.Tests
             IGraphServiceClient graphClient = Substitute.For<IGraphServiceClient>();
             IStringLocalizer<ShiftsController> stringLocalizer = Substitute.For<IStringLocalizer<ShiftsController>>();
             IConfiguration configuration = Substitute.For<IConfiguration>();
-            ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration);
+            IMapService mapService = Substitute.For<IMapService>();
+            ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration, mapService);
 
             // Act
             IActionResult result = await controller.Index();
@@ -60,7 +61,8 @@ namespace Project.Zap.Tests
             IGraphServiceClient graphClient = Substitute.For<IGraphServiceClient>();
             IStringLocalizer<ShiftsController> stringLocalizer = Substitute.For<IStringLocalizer<ShiftsController>>();
             IConfiguration configuration = Substitute.For<IConfiguration>();
-            ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration);
+            IMapService mapService = Substitute.For<IMapService>();
+            ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration, mapService);
             // Act
             await controller.Index();
 
@@ -86,7 +88,8 @@ namespace Project.Zap.Tests
             IGraphServiceClient graphClient = Substitute.For<IGraphServiceClient>();
             IStringLocalizer<ShiftsController> stringLocalizer = Substitute.For<IStringLocalizer<ShiftsController>>();
             IConfiguration configuration = Substitute.For<IConfiguration>();
-            ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration);
+            IMapService mapService = Substitute.For<IMapService>();
+            ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration, mapService);
             SearchShiftViewModel viewModel = new SearchShiftViewModel { Locations = new List<string> { "Contoso" }, Start = DateTime.Now };
 
             // Act
@@ -112,7 +115,8 @@ namespace Project.Zap.Tests
             IGraphServiceClient graphClient = Substitute.For<IGraphServiceClient>();
             IStringLocalizer<ShiftsController> stringLocalizer = Substitute.For<IStringLocalizer<ShiftsController>>();
             IConfiguration configuration = Substitute.For<IConfiguration>();
-            ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration);
+            IMapService mapService = Substitute.For<IMapService>();
+            ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration, mapService);
             SearchShiftViewModel viewModel = new SearchShiftViewModel { Locations = new List<string> { "Contoso" }, Start = DateTime.Now };
 
             // Act
@@ -141,7 +145,8 @@ namespace Project.Zap.Tests
             IGraphServiceClient graphClient = Substitute.For<IGraphServiceClient>();
             IStringLocalizer<ShiftsController> stringLocalizer = Substitute.For<IStringLocalizer<ShiftsController>>();
             IConfiguration configuration = Substitute.For<IConfiguration>();
-            ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration);
+            IMapService mapService = Substitute.For<IMapService>();
+            ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration, mapService);
             SearchShiftViewModel viewModel = new SearchShiftViewModel { Locations = new List<string> { "Contoso" }, Start = DateTime.Now.Add(new TimeSpan(1, 0, 0, 0)) };
 
             // Act
@@ -169,7 +174,8 @@ namespace Project.Zap.Tests
             IGraphServiceClient graphClient = Substitute.For<IGraphServiceClient>();
             IStringLocalizer<ShiftsController> stringLocalizer = Substitute.For<IStringLocalizer<ShiftsController>>();
             IConfiguration configuration = Substitute.For<IConfiguration>();
-            ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration);
+            IMapService mapService = Substitute.For<IMapService>();
+            ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration, mapService);
             SearchShiftViewModel viewModel = new SearchShiftViewModel { Locations = new List<string> { "Contoso" }, Start = DateTime.Now };
 
             // Act
@@ -197,7 +203,8 @@ namespace Project.Zap.Tests
             IGraphServiceClient graphClient = Substitute.For<IGraphServiceClient>();
             IStringLocalizer<ShiftsController> stringLocalizer = Substitute.For<IStringLocalizer<ShiftsController>>();
             IConfiguration configuration = Substitute.For<IConfiguration>();
-            ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration);
+            IMapService mapService = Substitute.For<IMapService>();
+            ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration, mapService);
 
             DateTime now = DateTime.Now;
             ShiftViewModel viewModel = new ShiftViewModel { LocationName = "Contoso", Start = now, End = now.AddHours(9), WorkType = "Till" };
@@ -227,7 +234,8 @@ namespace Project.Zap.Tests
             IGraphServiceClient graphClient = Substitute.For<IGraphServiceClient>();
             IStringLocalizer<ShiftsController> stringLocalizer = Substitute.For<IStringLocalizer<ShiftsController>>();
             IConfiguration configuration = Substitute.For<IConfiguration>();
-            ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration);
+            IMapService mapService = Substitute.For<IMapService>();
+            ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration, mapService);
 
             // Assert
             ArgumentException exception = await Assert.ThrowsAsync<ArgumentException>(() => controller.ViewShifts());
@@ -243,7 +251,8 @@ namespace Project.Zap.Tests
             IGraphServiceClient graphClient = Substitute.For<IGraphServiceClient>();
             IStringLocalizer<ShiftsController> stringLocalizer = Substitute.For<IStringLocalizer<ShiftsController>>();
             IConfiguration configuration = Substitute.For<IConfiguration>();
-            ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration);
+            IMapService mapService = Substitute.For<IMapService>();
+            ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration, mapService);
             controller.ControllerContext = new ControllerContext();
             controller.ControllerContext.HttpContext = new DefaultHttpContext();
             controller.HttpContext.User = new ClaimsPrincipal(new ClaimsIdentity(new[] { new Claim("http://schemas.microsoft.com/identity/claims/objectidentifier", "123") }));
@@ -271,7 +280,8 @@ namespace Project.Zap.Tests
             IGraphServiceClient graphClient = Substitute.For<IGraphServiceClient>();
             IStringLocalizer<ShiftsController> stringLocalizer = Substitute.For<IStringLocalizer<ShiftsController>>();
             IConfiguration configuration = Substitute.For<IConfiguration>();
-            ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration);
+            IMapService mapService = Substitute.For<IMapService>();
+            ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration, mapService);
             controller.ControllerContext = new ControllerContext();
             controller.ControllerContext.HttpContext = new DefaultHttpContext();
             controller.HttpContext.User = new ClaimsPrincipal(new ClaimsIdentity(new[] { new Claim("http://schemas.microsoft.com/identity/claims/objectidentifier", "123") }));
@@ -294,7 +304,8 @@ namespace Project.Zap.Tests
             IGraphServiceClient graphClient = Substitute.For<IGraphServiceClient>();
             IStringLocalizer<ShiftsController> stringLocalizer = Substitute.For<IStringLocalizer<ShiftsController>>();
             IConfiguration configuration = Substitute.For<IConfiguration>();
-            ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration);
+            IMapService mapService = Substitute.For<IMapService>();
+            ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration, mapService);
             controller.ControllerContext = new ControllerContext();
             controller.ControllerContext.HttpContext = new DefaultHttpContext();
             controller.HttpContext.User = new ClaimsPrincipal(new ClaimsIdentity(new[] { new Claim("http://schemas.microsoft.com/identity/claims/objectidentifier", "123") }));
@@ -330,7 +341,8 @@ namespace Project.Zap.Tests
             IGraphServiceClient graphClient = Substitute.For<IGraphServiceClient>();
             IStringLocalizer<ShiftsController> stringLocalizer = Substitute.For<IStringLocalizer<ShiftsController>>();
             IConfiguration configuration = Substitute.For<IConfiguration>();
-            ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration);
+            IMapService mapService = Substitute.For<IMapService>();
+            ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration, mapService);
             ShiftViewModel viewModel = new ShiftViewModel { LocationName = "Contoso", Start = now, End = now.AddHours(9), WorkType = "Till" };
 
             // Act
@@ -361,7 +373,8 @@ namespace Project.Zap.Tests
             graphClient.Users[Arg.Any<string>()].Request().GetAsync().Returns(new User { GivenName = "a", Surname = "b" });
             IStringLocalizer<ShiftsController> stringLocalizer = Substitute.For<IStringLocalizer<ShiftsController>>();
             IConfiguration configuration = Substitute.For<IConfiguration>();
-            ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration);
+            IMapService mapService = Substitute.For<IMapService>();
+            ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration, mapService);
             ShiftViewModel viewModel = new ShiftViewModel { LocationName = "Contoso", Start = now, End = now.AddHours(9), WorkType = "Till" };
 
             // Act
@@ -394,7 +407,8 @@ namespace Project.Zap.Tests
             graphClient.Users[Arg.Any<string>()].Request().GetAsync().Returns(new User { GivenName = "a", Surname = "b" });
             IStringLocalizer<ShiftsController> stringLocalizer = Substitute.For<IStringLocalizer<ShiftsController>>();
             IConfiguration configuration = Substitute.For<IConfiguration>();
-            ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration);
+            IMapService mapService = Substitute.For<IMapService>();
+            ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration, mapService);
             ShiftViewModel viewModel = new ShiftViewModel { LocationName = "Contoso", Start = now, End = now.AddHours(9), WorkType = "Till" };
 
             // Act
@@ -426,7 +440,8 @@ namespace Project.Zap.Tests
             graphClient.Users[Arg.Any<string>()].Request().GetAsync().Returns(new User { GivenName = "a", Surname = "b" });
             IStringLocalizer<ShiftsController> stringLocalizer = Substitute.For<IStringLocalizer<ShiftsController>>();
             IConfiguration configuration = Substitute.For<IConfiguration>();
-            ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration);
+            IMapService mapService = Substitute.For<IMapService>();
+            ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration, mapService);
             ShiftViewModel viewModel = new ShiftViewModel { LocationName = "Contoso", Start = now, End = now.AddHours(9), WorkType = "Till" };
 
             // Act
@@ -458,7 +473,8 @@ namespace Project.Zap.Tests
             IGraphServiceClient graphClient = Substitute.For<IGraphServiceClient>();
             IStringLocalizer<ShiftsController> stringLocalizer = Substitute.For<IStringLocalizer<ShiftsController>>();
             IConfiguration configuration = Substitute.For<IConfiguration>();
-            ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration);
+            IMapService mapService = Substitute.For<IMapService>();
+            ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration, mapService);
             controller.ControllerContext = new ControllerContext();
             controller.ControllerContext.HttpContext = new DefaultHttpContext();
             controller.HttpContext.User = new ClaimsPrincipal(new ClaimsIdentity());
@@ -489,7 +505,8 @@ namespace Project.Zap.Tests
             IGraphServiceClient graphClient = Substitute.For<IGraphServiceClient>();
             IStringLocalizer<ShiftsController> stringLocalizer = Substitute.For<IStringLocalizer<ShiftsController>>();
             IConfiguration configuration = Substitute.For<IConfiguration>();
-            ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration);
+            IMapService mapService = Substitute.For<IMapService>();
+            ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration, mapService);
             controller.ControllerContext = new ControllerContext();
             controller.ControllerContext.HttpContext = new DefaultHttpContext();
             controller.HttpContext.User = new ClaimsPrincipal(new ClaimsIdentity(new[] { new Claim("http://schemas.microsoft.com/identity/claims/objectidentifier", "123") }));
@@ -524,7 +541,8 @@ namespace Project.Zap.Tests
             IGraphServiceClient graphClient = Substitute.For<IGraphServiceClient>();
             IStringLocalizer<ShiftsController> stringLocalizer = Substitute.For<IStringLocalizer<ShiftsController>>();
             IConfiguration configuration = Substitute.For<IConfiguration>();
-            ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration);
+            IMapService mapService = Substitute.For<IMapService>();
+            ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration, mapService);
             controller.ControllerContext = new ControllerContext();
             controller.ControllerContext.HttpContext = new DefaultHttpContext();
             controller.HttpContext.User = new ClaimsPrincipal(new ClaimsIdentity(new[] { new Claim("http://schemas.microsoft.com/identity/claims/objectidentifier", "123") }));
@@ -559,7 +577,8 @@ namespace Project.Zap.Tests
             IGraphServiceClient graphClient = Substitute.For<IGraphServiceClient>();
             IStringLocalizer<ShiftsController> stringLocalizer = Substitute.For<IStringLocalizer<ShiftsController>>();
             IConfiguration configuration = Substitute.For<IConfiguration>();
-            ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration);
+            IMapService mapService = Substitute.For<IMapService>();
+            ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration, mapService);
             controller.ControllerContext = new ControllerContext();
             controller.ControllerContext.HttpContext = new DefaultHttpContext();
             controller.HttpContext.User = new ClaimsPrincipal(new ClaimsIdentity());
@@ -589,7 +608,8 @@ namespace Project.Zap.Tests
             IGraphServiceClient graphClient = Substitute.For<IGraphServiceClient>();
             IStringLocalizer<ShiftsController> stringLocalizer = Substitute.For<IStringLocalizer<ShiftsController>>();
             IConfiguration configuration = Substitute.For<IConfiguration>();
-            ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration);
+            IMapService mapService = Substitute.For<IMapService>();
+            ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration, mapService);
             controller.ControllerContext = new ControllerContext();
             controller.ControllerContext.HttpContext = new DefaultHttpContext();
             controller.HttpContext.User = new ClaimsPrincipal(new ClaimsIdentity(new[] { new Claim("http://schemas.microsoft.com/identity/claims/objectidentifier", "123") }));
@@ -626,7 +646,8 @@ namespace Project.Zap.Tests
             IGraphServiceClient graphClient = Substitute.For<IGraphServiceClient>();
             IStringLocalizer<ShiftsController> stringLocalizer = Substitute.For<IStringLocalizer<ShiftsController>>();
             IConfiguration configuration = Substitute.For<IConfiguration>();
-            ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration);
+            IMapService mapService = Substitute.For<IMapService>();
+            ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration, mapService);
             controller.ControllerContext = new ControllerContext();
             controller.ControllerContext.HttpContext = new DefaultHttpContext();
             controller.HttpContext.User = new ClaimsPrincipal(new ClaimsIdentity(new[] { new Claim("http://schemas.microsoft.com/identity/claims/objectidentifier", "123") }));
@@ -661,7 +682,8 @@ namespace Project.Zap.Tests
             IGraphServiceClient graphClient = Substitute.For<IGraphServiceClient>();
             IStringLocalizer<ShiftsController> stringLocalizer = Substitute.For<IStringLocalizer<ShiftsController>>();
             IConfiguration configuration = Substitute.For<IConfiguration>();
-            ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration);
+            IMapService mapService = Substitute.For<IMapService>();
+            ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration, mapService);
             controller.ControllerContext = new ControllerContext();
             controller.ControllerContext.HttpContext = new DefaultHttpContext();
             controller.HttpContext.User = new ClaimsPrincipal(new ClaimsIdentity(new[] { new Claim("http://schemas.microsoft.com/identity/claims/objectidentifier", "123") }));
@@ -691,7 +713,8 @@ namespace Project.Zap.Tests
             IStringLocalizer<ShiftsController> stringLocalizer = Substitute.For<IStringLocalizer<ShiftsController>>();
 
             IConfiguration configuration = Substitute.For<IConfiguration>();
-            ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration);
+            IMapService mapService = Substitute.For<IMapService>();
+            ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration, mapService);
             controller.ControllerContext = new ControllerContext();
             controller.ControllerContext.HttpContext = new DefaultHttpContext();
             controller.HttpContext.User = new ClaimsPrincipal(new ClaimsIdentity(new[] { new Claim("http://schemas.microsoft.com/identity/claims/objectidentifier", "123") }));
@@ -721,7 +744,8 @@ namespace Project.Zap.Tests
             IGraphServiceClient graphClient = Substitute.For<IGraphServiceClient>();
             IStringLocalizer<ShiftsController> stringLocalizer = Substitute.For<IStringLocalizer<ShiftsController>>();
             IConfiguration configuration = Substitute.For<IConfiguration>();
-            ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration);
+            IMapService mapService = Substitute.For<IMapService>();
+            ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration, mapService);
             // Act
             await controller.Add();
 
@@ -740,7 +764,8 @@ namespace Project.Zap.Tests
             IGraphServiceClient graphClient = Substitute.For<IGraphServiceClient>();
             IStringLocalizer<ShiftsController> stringLocalizer = Substitute.For<IStringLocalizer<ShiftsController>>();
             IConfiguration configuration = Substitute.For<IConfiguration>();
-            ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration);
+            IMapService mapService = Substitute.For<IMapService>();
+            ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration, mapService);
             // Act
             IActionResult result = await controller.Add();
 
@@ -768,7 +793,8 @@ namespace Project.Zap.Tests
             IGraphServiceClient graphClient = Substitute.For<IGraphServiceClient>();
             IStringLocalizer<ShiftsController> stringLocalizer = Substitute.For<IStringLocalizer<ShiftsController>>();
             IConfiguration configuration = Substitute.For<IConfiguration>();
-            ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration);
+            IMapService mapService = Substitute.For<IMapService>();
+            ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration, mapService);
             AddShiftViewModel viewModel = new AddShiftViewModel
             {
                 NewShift = new ShiftViewModel
@@ -807,7 +833,8 @@ namespace Project.Zap.Tests
             IGraphServiceClient graphClient = Substitute.For<IGraphServiceClient>();
             IStringLocalizer<ShiftsController> stringLocalizer = Substitute.For<IStringLocalizer<ShiftsController>>();
             IConfiguration configuration = Substitute.For<IConfiguration>();
-            ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration);
+            IMapService mapService = Substitute.For<IMapService>();
+            ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration, mapService);
 
             // Act
             IActionResult result = await controller.Upload();
@@ -842,7 +869,8 @@ namespace Project.Zap.Tests
             IGraphServiceClient graphClient = Substitute.For<IGraphServiceClient>();
             IStringLocalizer<ShiftsController> stringLocalizer = Substitute.For<IStringLocalizer<ShiftsController>>();
             IConfiguration configuration = Substitute.For<IConfiguration>();
-            ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration);
+            IMapService mapService = Substitute.For<IMapService>();
+            ShiftsController controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration, mapService);
             FileUploadViewModel viewModel = new FileUploadViewModel
             {
                 LocationName = "Contoso",

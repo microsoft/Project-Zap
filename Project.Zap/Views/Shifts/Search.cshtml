@@ -6,7 +6,7 @@
 
 
 @model Project.Zap.Models.SearchShiftViewModel
-<form >
+<form asp-controller="Shifts" asp-action="Search" method="post">
 <div class="row">
     <div class="d-none d-xs-block d-sm-block col-md-4 font-weight-bold mt-2">Starting from</div>
     <div class="d-none d-xs-block d-sm-block col-md-4 font-weight-bold mt-2">Location</div>
@@ -29,8 +29,16 @@
     </div>
     <div class="d-block d-xs-none d-sm-none col-xs-6 col-sm-6 font-weight-bold mt-2">@Localizer["TableZipOrPostcode"]</div>
     <div class="col-xs-6 col-sm-6 col-md-3 mt-2">
-        <input type="text" asp-for="@Model.ZipOrPostcode" class="pl-5" />
-        <span asp-validation-for="@Model.ZipOrPostcode"></span>
+        <div class="row">            
+            <input type="text" asp-for="@Model.ZipOrPostcode" class="pl-5" />
+            <span asp-validation-for="@Model.ZipOrPostcode"></span>
+        </div>
+        <div class="row">
+            <label asp-for="@Model.DistanceInMeters"></label>
+            <select asp-for="@Model.DistanceInMeters" asp-items="@Model.Distances">
+            </select>
+            <span asp-validation-for="@Model.DistanceInMeters"></span>
+        </div>
     </div>
 
     <div class="d-block d-xs-none d-sm-none col-xs-6 col-sm-6 font-weight-bold mt-2">@Localizer["TableSearch"]</div>
