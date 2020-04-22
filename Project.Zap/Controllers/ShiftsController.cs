@@ -79,17 +79,11 @@ namespace Project.Zap.Controllers
             {
                 locationIds.AddRange(locations.Where(x => search.Locations.Contains(x.Name)).Select(x => x.id).ToList());
             } 
-            if(!string.IsNullOrWhiteSpace(search.DistanceInMeters))
+            if(!string.IsNullOrWhiteSpace(search.DistanceInMeters) && !string.IsNullOrWhiteSpace(search.ZipOrPostcode))
             {
                 Point point = await this.mapService.GetCoordinates(new Address { ZipOrPostcode = search.ZipOrPostcode });
                 IEnumerable<Location> filteredLocations = await this.locationRepository.Get(
-                    "SELECT * FROM c WHERE ST_DISTANCE(c.Address.Point, {'type': 'Point', 'coordinates':[@lat, @lon]}) < @distance",
-                    new Dictionary<string, object>
-                    {
-                        { "@lat", point.coordinates[0] },
-                        { "@lon", point.coordinates[1] },
-                        { "@londistance", search.DistanceInMeters }
-                    });
+                    $"SELECT * FROM c WHERE ST_DISTANCE(c.Address.Point, {{'type': 'Point', 'coordinates':[{point.coordinates[0]}, {point.coordinates[1]}]}}) < {search.DistanceInMeters}");
                 locationIds.AddRange(filteredLocations.Select(x => x.id));
             }
 
