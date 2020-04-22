@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ColumnTitleCity" xml:space="preserve">
-    <value>City</value>
+    <value>Address</value>
   </data>
   <data name="ColumnTitleDelete" xml:space="preserve">
     <value>Delete</value>
@@ -130,7 +130,7 @@
     <value>Name</value>
   </data>
   <data name="ColumnTitleZipOrPostCode" xml:space="preserve">
-    <value>Zip or Postcode</value>
+    <value>Zip Code</value>
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
@@ -139,9 +139,9 @@
     <value>Edit</value>
   </data>
   <data name="NewStoreTitle" xml:space="preserve">
-    <value>New Store</value>
+    <value>New Location</value>
   </data>
   <data name="StoresTitle" xml:space="preserve">
-    <value>Stores</value>
+    <value>Locations</value>
   </data>
 </root>
