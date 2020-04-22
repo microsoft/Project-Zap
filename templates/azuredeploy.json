@@ -83,7 +83,8 @@
         "resourceName": "[concat(toLower(parameters('orgName')), '-', toLower(variables('appName')))]",
         "callbackPath": "/signin-oidc",
         "extensionClientId": "[replace(parameters('extensionClientId'), '-', '')]",
-        "azureMapsUri": "https://atlas.microsoft.com"
+        "azureMapsUri": "https://atlas.microsoft.com",
+        "linuxFxVersion": "DOTNETCORE|3.1"
     },
     "resources": [
         {
@@ -168,6 +169,7 @@
                 "httpsOnly": true,
                 "redundancyMode": "None",
                 "siteConfig": {
+                    "linuxFxVersion": "[variables('linuxFxVersion')]",
                     "appSettings": [
                         {
                             "Name": "CosmosEndpoint",
