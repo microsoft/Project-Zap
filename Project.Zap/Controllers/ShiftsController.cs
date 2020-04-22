@@ -100,7 +100,7 @@ namespace Project.Zap.Controllers
         [HttpGet]
         [Authorize(Policy = "OrgBEmployee")]
         public async Task<IActionResult> ViewShifts()
-        {
+       {
             Claim id = HttpContext?.User?.Claims?.Where(x => x.Type == "http://schemas.microsoft.com/identity/claims/objectidentifier").FirstOrDefault();
 
             if (id == null)

@@ -6,26 +6,36 @@
 
 
 @model Project.Zap.Models.SearchShiftViewModel
+<form >
+<div class="row">
+    <div class="d-none d-xs-block d-sm-block col-md-4 font-weight-bold mt-2">Starting from</div>
+    <div class="d-none d-xs-block d-sm-block col-md-4 font-weight-bold mt-2">Location</div>
+    <div class="d-none d-xs-block d-sm-block col-md-3 font-weight-bold mt-2">ZipOrPostcode</div>
+    <div class="d-none d-xs-block d-sm-block col-md-1 font-weight-bold mt-2 invisible">Search</div>
+</div>
 
-<form asp-controller="Shifts" asp-action="Search" method="post" class="form-inline">
-    <div class="form-group col-md-2">
-        <label asp-for="@Model.Locations" class="search"></label>
-        <select asp-for="@Model.Locations" asp-items="@Model.LocationNames" multiple="multiple">
+<div class="row">
+    <div class="d-block d-xs-none d-sm-none col-xs-6 col-sm-6 font-weight-bold mt-2">@Localizer["TableStart"]</div>
+    <div class="col-xs-6 col-sm-6 col-md-4 mt-2">
+        <input type="datetime-local" asp-for="@Model.Start" class="form-control" />
+        <span asp-validation-for="@Model.Start"></span>
+    </div>
+
+    <div class="d-block d-xs-none d-sm-none col-xs-6 col-sm-6 font-weight-bold mt-2">@Localizer["TableLocation"]</div>
+    <div class="col-xs-6 col-sm-6 col-md-4 mt-2">
+        <select class="form-control" asp-for="@Model.Locations" asp-items="@Model.LocationNames" multiple="multiple">
         </select>
         <span asp-validation-for="@Model.Locations"></span>
     </div>
-
-    <div class="form-group col-md-3">
-        <label asp-for="@Model.Start" class="search"></label>
-        <input type="datetime-local" asp-for="@Model.Start" />
-        <span asp-validation-for="@Model.Start"></span>
+    <div class="d-block d-xs-none d-sm-none col-xs-6 col-sm-6 font-weight-bold mt-2">@Localizer["TableZipOrPostcode"]</div>
+    <div class="col-xs-6 col-sm-6 col-md-3 mt-2">
+        <input type="text" asp-for="@Model.ZipOrPostcode" class="pl-5" />
+        <span asp-validation-for="@Model.ZipOrPostcode"></span>
     </div>
+
+    <div class="d-block d-xs-none d-sm-none col-xs-6 col-sm-6 font-weight-bold mt-2">@Localizer["TableSearch"]</div>
+        <button type="submit" class="btn btn-primary mb-2 col-md-2"> Search </button>
     
-    <div class="form-group col-md-3">
-        <label asp-for="@Model.Available"></label>
-        <input type="checkbox" asp-for="@Model.Available" class="pl-5" />
-        <span asp-validation-for="@Model.Available"></span>
-    </div>
 
-    <button type="submit" class="btn btn-primary mb-2 col-md-2">@Localizer["SearchButton"]</button>
-</form>
+</div>
+    </form>
