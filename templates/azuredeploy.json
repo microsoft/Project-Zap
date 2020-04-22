@@ -15,7 +15,7 @@
         "b2cInstance": {
             "type": "string",
             "metadata": {
-                "description": "AAD B2C endpoint e.g. https://{b2ctenantname}.onmicrosoft.com/tfp/"
+                "description": "AAD B2C endpoint e.g. https://{b2ctenantname}.b2clogin.com/tfp/"
             }
         },
         "b2cClientId": {
@@ -74,7 +74,7 @@
             "type": "securestring",
             "metadata": {
                 "description": "Client secret for app registration"
-            }            
+            }
         }
     },
     "variables": {
@@ -82,7 +82,9 @@
         "resgpguid": "[substring(replace(guid(resourceGroup().id), '-', ''), 0, 4)]",
         "resourceName": "[concat(toLower(parameters('orgName')), '-', toLower(variables('appName')))]",
         "callbackPath": "/signin-oidc",
-        "extensionClientId": "[replace(parameters('extensionClientId'), '-', '')]"
+        "extensionClientId": "[replace(parameters('extensionClientId'), '-', '')]",
+        "azureMapsUri": "https://atlas.microsoft.com",
+        "linuxFxVersion": "DOTNETCORE|3.1"
     },
     "resources": [
         {
@@ -105,16 +107,14 @@
                         "isZoneRedundant": false
                     }
                 ],
-                "capabilities": []
+                "capabilities": [
+                ]
             }
         },
         {
             "type": "Microsoft.Web/serverfarms",
             "apiVersion": "2018-02-01",
             "name": "[concat(variables('appName'), '-plan')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('resourceName'))]"
-            ],
             "location": "[resourceGroup().location]",
             "sku": {
                 "name": "P1v2",
@@ -135,6 +135,8 @@
             "name": "[variables('resourceName')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('resourceName'))]",
+                "[resourceId('Microsoft.Maps/accounts', variables('resourceName'))]",
                 "[resourceId('Microsoft.Web/serverfarms', concat(variables('appName'), '-plan'))]"
             ],
             "kind": "app,linux",
@@ -165,6 +167,7 @@
                 "httpsOnly": true,
                 "redundancyMode": "None",
                 "siteConfig": {
+                    "linuxFxVersion": "[variables('linuxFxVersion')]",
                     "appSettings": [
                         {
                             "Name": "CosmosEndpoint",
@@ -177,7 +180,7 @@
                         {
                             "Name": "AzureAdB2C__Instance",
                             "Value": "[parameters('b2cInstance')]"
-                        },     
+                        },
                         {
                             "Name": "AzureAdB2C__ClientId",
                             "Value": "[parameters('b2cClientId')]"
@@ -213,11 +216,11 @@
                         {
                             "Name": "ClientId",
                             "Value": "[parameters('b2cClientId')]"
-                        }, 
+                        },
                         {
                             "Name": "TenantId",
                             "Value": "[parameters('tenantId')]"
-                        }, 
+                        },
                         {
                             "Name": "ClientSecret",
                             "Value": "[parameters('appRegistrationClientSecret')]"
@@ -225,7 +228,15 @@
                         {
                             "name": "OrganizationName",
                             "value": "[parameters('orgName')]"
-                        }          
+                        },
+                        {
+                            "name": "AzureMapsUri",
+                            "value": "[variables('azureMapsUri')]"
+                        },
+                        {
+                            "name": "AzureMapsSubscriptionKey",
+                            "value": "[listKeys(resourceId('Microsoft.Maps/accounts', variables('resourceName')), providers('Microsoft.Maps', 'accounts').apiVersions[0]).primaryKey]"
+                        }
                     ]
                 }
             },
@@ -246,90 +257,14 @@
             ]
         },
         {
-            "type": "Microsoft.Web/sites/config",
-            "apiVersion": "2018-11-01",
-            "name": "[concat(variables('resourceName'), '/web')]",
-            "location": "[resourceGroup().location]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', variables('resourceName'))]"
-            ],
-            "properties": {
-                "numberOfWorkers": 1,
-                "defaultDocuments": [
-                    "Default.htm",
-                    "Default.html",
-                    "Default.asp",
-                    "index.htm",
-                    "index.html",
-                    "iisstart.htm",
-                    "default.aspx",
-                    "index.php",
-                    "hostingstart.html"
-                ],
-                "netFrameworkVersion": "v4.0",
-                "linuxFxVersion": "DOTNETCORE|3.1",
-                "requestTracingEnabled": false,
-                "remoteDebuggingEnabled": false,
-                "remoteDebuggingVersion": "VS2019",
-                "httpLoggingEnabled": false,
-                "logsDirectorySizeLimit": 35,
-                "detailedErrorLoggingEnabled": false,
-                "publishingUsername": "$projectzap",
-                "scmType": "None",
-                "use32BitWorkerProcess": true,
-                "webSocketsEnabled": false,
-                "alwaysOn": true,
-                "appCommandLine": "dotnet Project.Zap.dll",
-                "managedPipelineMode": "Integrated",
-                "virtualApplications": [
-                    {
-                        "virtualPath": "/",
-                        "physicalPath": "site\\wwwroot",
-                        "preloadEnabled": true
-                    }
-                ],
-                "loadBalancing": "LeastRequests",
-                "experiments": {
-                    "rampUpRules": []
-                },
-                "autoHealEnabled": false,
-                "localMySqlEnabled": false,
-                "ipSecurityRestrictions": [
-                    {
-                        "ipAddress": "Any",
-                        "action": "Allow",
-                        "priority": 1,
-                        "name": "Allow all",
-                        "description": "Allow all access"
-                    }
-                ],
-                "scmIpSecurityRestrictions": [
-                    {
-                        "ipAddress": "Any",
-                        "action": "Allow",
-                        "priority": 1,
-                        "name": "Allow all",
-                        "description": "Allow all access"
-                    }
-                ],
-                "scmIpSecurityRestrictionsUseMain": false,
-                "http20Enabled": false,
-                "minTlsVersion": "1.2",
-                "ftpsState": "AllAllowed",
-                "reservedInstanceCount": 0
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/hostNameBindings",
-            "apiVersion": "2018-11-01",
-            "name": "[concat(variables('resourceName'), '/', variables('resourceName'), '.azurewebsites.net')]",
-            "location": "South Central US",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', variables('resourceName'))]"
-            ],
-            "properties": {
-                "siteName": "projectzap",
-                "hostNameType": "Verified"
+            "name": "[variables('resourceName')]",
+            "type": "Microsoft.Maps/accounts",
+            "apiVersion": "2018-05-01",
+            "location": "Global",
+            "tags": {
+            },
+            "sku": {
+                "name": "s0"
             }
         }
     ]
