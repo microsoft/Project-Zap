@@ -115,10 +115,6 @@
             "type": "Microsoft.Web/serverfarms",
             "apiVersion": "2018-02-01",
             "name": "[concat(variables('appName'), '-plan')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('resourceName'))]",
-                "[resourceId('Microsoft.Maps/accounts', variables('resourceName'))]"
-            ],
             "location": "[resourceGroup().location]",
             "sku": {
                 "name": "P1v2",
@@ -139,6 +135,8 @@
             "name": "[variables('resourceName')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('resourceName'))]",
+                "[resourceId('Microsoft.Maps/accounts', variables('resourceName'))]",
                 "[resourceId('Microsoft.Web/serverfarms', concat(variables('appName'), '-plan'))]"
             ],
             "kind": "app,linux",
