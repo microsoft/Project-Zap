@@ -17,9 +17,16 @@
 <div class="row">
     <div class="d-block d-xs-none d-sm-none col-xs-6 col-sm-6 font-weight-bold mt-2">@Localizer["TableStart"]</div>
     <div class="col-xs-6 col-sm-6 col-md-4 mt-2">
-        <input type="datetime-local" asp-for="@Model.Start" class="form-control" />
-        <span asp-validation-for="@Model.Start"></span>
+        <div class="row">
+            <input type="datetime-local" asp-for="@Model.Start" class="form-control" />
+            <span asp-validation-for="@Model.Start"></span>
+        </div>
+        <div class="row">
+            <label class ="ml-3" asp-for="@Model.Available" style="font-weight:bold"></label>
+            <input class="ml-2 mt-2" type="checkbox" asp-for="@Model.Available" />
+        </div>
     </div>
+
 
     <div class="d-block d-xs-none d-sm-none col-xs-6 col-sm-6 font-weight-bold mt-2">@Localizer["TableLocation"]</div>
     <div class="col-xs-6 col-sm-6 col-md-4 mt-2">
@@ -29,7 +36,7 @@
     </div>
     <div class="d-block d-xs-none d-sm-none col-xs-6 col-sm-6 font-weight-bold mt-2">@Localizer["TableZipOrPostcode"]</div>
     <div class="col-xs-6 col-sm-6 col-md-3 mt-2">
-        <div class="row">            
+        <div class="row">
             <input type="text" asp-for="@Model.ZipOrPostcode" class="mr-2 pl-5 form-control" />
             <span asp-validation-for="@Model.ZipOrPostcode"></span>
         </div>
@@ -42,7 +49,7 @@
     </div>
 
     <div class="d-block d-xs-none d-sm-none col-xs-6 col-sm-6 font-weight-bold ">@Localizer["TableSearch"]</div>
-        <button type="submit" class="btn btn-primary mb-2 col-md-1 form-control mt-2"> Search </button>
-    
+    <button type="submit" class="btn btn-primary mb-2 col-md-1 form-control mt-2"> Search </button>
+
 </div>
     </form>
