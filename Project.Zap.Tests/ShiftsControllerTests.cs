@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
 using Microsoft.Graph;
 using NSubstitute;
 using Project.Zap.Controllers;
@@ -770,7 +771,8 @@ namespace Project.Zap.Tests
             IGraphServiceClient graphClient = null,
             IStringLocalizer<ShiftsController> stringLocalizer = null,
             IConfiguration configuration = null,
-            IMapService mapService = null)
+            IMapService mapService = null, 
+            ILogger<ShiftsController> logger = null)
         {
             shiftRepository = shiftRepository ?? Substitute.For<IRepository<Library.Models.Shift>>();
             locationRepository = locationRepository ?? Substitute.For<IRepository<Library.Models.Location>>();
@@ -778,8 +780,9 @@ namespace Project.Zap.Tests
             stringLocalizer = stringLocalizer ?? Substitute.For<IStringLocalizer<ShiftsController>>();
             configuration = configuration ?? Substitute.For<IConfiguration>();
             mapService = mapService ?? Substitute.For<IMapService>();
+            logger = logger ?? Substitute.For<ILogger<ShiftsController>>();
 
-            var controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration, mapService);
+            var controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration, mapService, logger);
             controller.ControllerContext = new ControllerContext();
             controller.ControllerContext.HttpContext = new DefaultHttpContext();
             return controller;

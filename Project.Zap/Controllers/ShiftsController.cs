@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
 using Project.Zap.Helpers;
 using Project.Zap.Library.Models;
 using Project.Zap.Library.Services;
@@ -26,6 +27,7 @@ namespace Project.Zap.Controllers
         private readonly IStringLocalizer<ShiftsController> stringLocalizer;
         private readonly IConfiguration configuration;
         private readonly IMapService mapService;
+        private readonly ILogger<ShiftsController> logger;
 
         public ShiftsController(
             IRepository<Shift> shiftRepository,
@@ -33,7 +35,8 @@ namespace Project.Zap.Controllers
             Microsoft.Graph.IGraphServiceClient graphServiceClient,
             IStringLocalizer<ShiftsController> stringLocalizer,
             IConfiguration configuration,
-            IMapService mapService)
+            IMapService mapService,
+            ILogger<ShiftsController> logger)
         {
             this.shiftRepository = shiftRepository;
             this.locationRepository = locationRepository;
@@ -41,6 +44,7 @@ namespace Project.Zap.Controllers
             this.stringLocalizer = stringLocalizer;
             this.configuration = configuration;
             this.mapService = mapService;
+            this.logger = logger;
         }
 
         public async Task<IActionResult> Index()
@@ -48,6 +52,7 @@ namespace Project.Zap.Controllers
             IEnumerable<Location> locations = await this.locationRepository.Get();
             if (locations == null || !locations.Any())
             {
+                this.logger.LogInformation("No locations, so redirecting to location view");
                 return Redirect("/Locations");
             }
 
@@ -128,7 +133,9 @@ namespace Project.Zap.Controllers
 
             if (id == null)
             {
-                throw new ArgumentException("http://schemas.microsoft.com/identity/claims/objectidentifier claim is required");
+                ArgumentException exception = new ArgumentException("http://schemas.microsoft.com/identity/claims/objectidentifier claim is required");
+                this.logger.LogError(exception, "No id claim present for user");
+                throw exception;
             }
 
             IEnumerable<Shift> shifts = await this.shiftRepository.Get(
@@ -137,6 +144,7 @@ namespace Project.Zap.Controllers
 
             if (shifts?.Any() == false)
             {
+                this.logger.LogInformation("Trying to view shifts, but shifts currently available");
                 ViewData["NoShifts"] = this.stringLocalizer["NoShifts"];
             }
             return View("ViewShifts", shifts.Map(await this.locationRepository.Get()));
@@ -162,6 +170,7 @@ namespace Project.Zap.Controllers
 
             if (bookedShifts.Count() == 0)
             {
+                this.logger.LogInformation("Trying to view shift when there are no employees");
                 ViewData["NoEmployees"] = this.stringLocalizer["NoEmployees"];
             }
 
@@ -186,7 +195,9 @@ namespace Project.Zap.Controllers
 
             if (id == null)
             {
-                throw new ArgumentException("http://schemas.microsoft.com/identity/claims/objectidentifier claim is required");
+                ArgumentException exception = new ArgumentException("http://schemas.microsoft.com/identity/claims/objectidentifier claim is required");
+                this.logger.LogError(exception, "No id claim present for user");
+                throw exception;
             }
 
             Location location = await this.GetLocation(viewModel.LocationName);
@@ -219,12 +230,15 @@ namespace Project.Zap.Controllers
 
             if (id == null)
             {
-                throw new ArgumentException("http://schemas.microsoft.com/identity/claims/objectidentifier claim is required");
+                ArgumentException exception = new ArgumentException("http://schemas.microsoft.com/identity/claims/objectidentifier claim is required");
+                this.logger.LogError(exception, "No id claim present for user");
+                throw exception;
             }
 
             IEnumerable<Shift> bookedShifts = await this.shiftRepository.Get("SELECT * FROM c WHERE c.EmployeeId = @employeeId", new Dictionary<string, object> { { "@employeeId", id.Value } });
             if (bookedShifts?.Where(x => x.StartDateTime.DayOfYear == viewModel.Start.DayOfYear && x.StartDateTime.Year == viewModel.Start.Year).FirstOrDefault() != null)
             {
+                this.logger.LogInformation("Trying to book on a shift when user is already booked out for this day");
                 ViewData["ValidationError"] = "You are already booked to work on this day.";
                 return await this.Index();
             }
@@ -243,6 +257,7 @@ namespace Project.Zap.Controllers
 
             if (shift == null)
             {
+                this.logger.LogInformation("Trying to book shift for a time when no shifts are available");
                 ViewData["ValidationError"] = "No available shifts at this time.";
                 return await this.Index();
             }
@@ -275,6 +290,7 @@ namespace Project.Zap.Controllers
         {
             if (!ModelState.IsValid)
             {
+                this.logger.LogError("Add shift view model is not valid");
                 return View("Add", viewModel);
             }
 
