@@ -21,6 +21,7 @@ using Project.Zap.Library.Services;
 using Project.Zap.Middleware;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Project.Zap
@@ -65,6 +66,9 @@ namespace Project.Zap
             });
 
             services.AddLocalization(options => options.ResourcesPath = "Resources");
+
+            services.AddApplicationInsightsTelemetry();
+
             services.AddControllers().AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
                .AddDataAnnotationsLocalization();
             services.AddRazorPages();
@@ -73,10 +77,9 @@ namespace Project.Zap
 
             services.AddTransient<Database>(x => this.GetCosmosDatabase().Result);
             
-            services.AddSingleton<IRepository<Library.Models.Organization>>(x => new OrganizationRepository(x.GetService<Database>(), this.Configuration["OrganizationName"]));
+            services.AddSingleton<IRepository<Library.Models.Location>, LocationRepository>();
             services.AddSingleton<IRepository<Library.Models.Shift>, ShiftRepository>();
             services.AddSingleton<IRepository<PartnerOrganization>, PartnerRepository>();
-            services.AddSingleton<IRepository<Employee>, EmployeeRepository>();
 
             services.AddTransient<IConfidentialClientApplication>(x => ConfidentialClientApplicationBuilder
                 .Create(this.Configuration["ClientId"])
@@ -97,6 +100,17 @@ namespace Project.Zap
                 options.DefaultRequestCulture = new RequestCulture("en-US");
                 options.SupportedCultures = supportedCultures;
                 options.SupportedUICultures = supportedCultures;
+            });
+
+            string azureMapsUri = this.Configuration["AzureMapsUri"];
+            string azureMapsKey = this.Configuration["AzureMapsSubscriptionKey"];
+
+            services.AddHttpClient("azureMaps", x => x.BaseAddress = new System.Uri(azureMapsUri));
+
+            services.AddTransient<IMapService>(x => 
+            {
+                HttpClient httpClient = x.GetService<IHttpClientFactory>().CreateClient("azureMaps");
+                return new AzureMapsService(httpClient, azureMapsKey);
             });
 
         }

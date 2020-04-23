@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Project.Zap", "Project.Zap\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Project.Zap.Library", "Project.Zap.Library\Project.Zap.Library.csproj", "{718B2509-DBF0-47B8-A7B1-503319992F34}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project.Zap.Tests", "Project.Zap.Tests\Project.Zap.Tests.csproj", "{D6C5C72B-5AE7-43AB-8C59-62EE983ADE7C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Project.Zap.Tests", "Project.Zap.Tests\Project.Zap.Tests.csproj", "{D6C5C72B-5AE7-43AB-8C59-62EE983ADE7C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

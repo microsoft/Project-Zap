@@ -7,9 +7,7 @@ namespace Project.Zap.Library.Services
 {
     public interface IRepository<T>
     {
-        T Get(string id);
-
-        IEnumerable<T> Get(Expression<Func<T, bool>> query);
+        Task<IEnumerable<T>> Get(string sql, IDictionary<string, object> parameters = null, string partitionKey = null);
 
         Task<IEnumerable<T>> Get();
 

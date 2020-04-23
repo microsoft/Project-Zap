@@ -1,0 +1,27 @@
+﻿@{
+    @using Microsoft.AspNetCore.Mvc.Localization
+
+    @inject IViewLocalizer Localizer
+}
+
+@model IEnumerable<Project.Zap.Models.LocationViewModel>
+
+    <h3>@Localizer["StoresTitle"]</h3>
+    <table class="table">
+        <tr>
+            <th>@Localizer["ColumnTitleName"]</th>
+            <th>@Localizer["ColumnTitleCity"]</th>
+            <th>@Localizer["ColumnTitleZipOrPostCode"]</th>
+            <th>@Localizer["ColumnTitleEdit"]</th>
+            <th>@Localizer["ColumnTitleDelete"]</th>
+        </tr>
+        @foreach (var location in Model)
+        {
+    <tr>
+        <td>@location.Name</td>
+        <td>@location.Address</td>
+        <td>@location.ZipOrPostcode</td>
+        <th><a asp-controller="Locations" asp-action="Edit" asp-route-id="@location.Name">@Localizer["Edit"]</a></th>
+        <th><a asp-controller="Locations" asp-action="Delete" asp-route-id="@location.Name">@Localizer["Delete"]</a></th>
+    </tr>}
+    </table>

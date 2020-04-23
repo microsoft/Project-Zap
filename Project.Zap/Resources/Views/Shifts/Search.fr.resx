@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -117,16 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Available" xml:space="preserve">
-    <value>Available</value>
+  <data name="Location" xml:space="preserve">
+    <value>Localisation</value>
+  </data>
+  <data name="SearchButton" xml:space="preserve">
+    <value>Rechercher</value>
   </data>
   <data name="Start" xml:space="preserve">
-    <value>Start</value>
-  </data>
-  <data name="StoreNames" xml:space="preserve">
-    <value>Store Names</value>
+    <value>Heure de début</value>
   </data>
   <data name="ZipOrPostcode" xml:space="preserve">
-    <value>Zip</value>
+    <value>Code postal</value>
   </data>
 </root>

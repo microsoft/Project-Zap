@@ -14,11 +14,11 @@ namespace Project.Zap.Library.Services
 
         public ShiftRepository(Database cosmosDatabase)
         {
-            this.cosmosContainer = cosmosDatabase.CreateContainerIfNotExistsAsync("shifts", "/StoreName").Result;
+            this.cosmosContainer = cosmosDatabase.CreateContainerIfNotExistsAsync("shifts", "/LocationId").Result;
         }
         public async Task Add(Shift item)
         {
-            await this.cosmosContainer.CreateItemAsync<Shift>(item, new PartitionKey(item.StoreName));
+            await this.cosmosContainer.CreateItemAsync<Shift>(item, new PartitionKey(item.LocationId));
         }
 
         public async Task Delete(Expression<Func<Shift, bool>> query)
@@ -26,49 +26,51 @@ namespace Project.Zap.Library.Services
             IEnumerable<Shift> shifts = this.cosmosContainer.GetItemLinqQueryable<Shift>(true).Where(query);
             foreach (Shift item in shifts)
             {
-                await this.cosmosContainer.DeleteItemAsync<Shift>(item.id, new PartitionKey(item.StoreName));
+                await this.cosmosContainer.DeleteItemAsync<Shift>(item.id, new PartitionKey(item.LocationId));
             }            
-        }
-
-        public Shift Get(string id)
-        {
-            throw new System.NotImplementedException();
         }
 
         public async Task<IEnumerable<Shift>> Get()
         {
-            var query = this.cosmosContainer.GetItemQueryIterator<Shift>(new QueryDefinition("SELECT * FROM c")); 
-            List<Shift> results = new List<Shift>(); 
-            while (query.HasMoreResults) 
-            { 
-                var response = await query.ReadNextAsync(); 
-                results.AddRange(response.ToList());
-            }
-
-            return results;            
+            return await this.Get("SELECT * FROM c");
         }
 
-        public IEnumerable<Shift> Get(Expression<Func<Shift, bool>> query)
+        public async Task<IEnumerable<Shift>> Get(string sql, IDictionary<string, object> parameters = null, string partitionKey = null)
         {
-            IEnumerable<Shift> storeShifts = this.cosmosContainer.GetItemLinqQueryable<Shift>(true).Where(query);
+            QueryDefinition query = new QueryDefinition(sql);
 
-            return storeShifts;
+            if (parameters != null)
+            {
+                foreach (var parameter in parameters)
+                {
+                    query.WithParameter(parameter.Key, parameter.Value);
+                }
+            }
+
+            QueryRequestOptions options = new QueryRequestOptions() { MaxBufferedItemCount = 100, MaxConcurrency = 10 };
+            if (partitionKey != null) options.PartitionKey = new PartitionKey(partitionKey);
+
+            List<Shift> results = new List<Shift>();
+            FeedIterator<Shift> iterator = this.cosmosContainer.GetItemQueryIterator<Shift>(query, requestOptions: options);
+            while (iterator.HasMoreResults)
+            {
+                FeedResponse<Shift> response = await iterator.ReadNextAsync();
+                results.AddRange(response);
+            }
+            return results;
         }
 
         public async Task<Shift> Update(Shift item)
         {
-            Shift current = await this.cosmosContainer.ReadItemAsync<Shift>(item.id, new PartitionKey(item.StoreName));
+            Shift current = await this.cosmosContainer.ReadItemAsync<Shift>(item.id, new PartitionKey(item.LocationId));
 
             current.EmployeeId = item.EmployeeId;
             current.Allocated = item.Allocated;
-            current.Start = item.Start;
-            current.End = item.End;
+            current.StartDateTime = item.StartDateTime;
+            current.EndDateTime = item.EndDateTime;
             current.WorkType = item.WorkType;            
 
-            return await this.cosmosContainer.ReplaceItemAsync<Shift>(current, current.id, new PartitionKey(current.StoreName));
-        }
-
-
-       
+            return await this.cosmosContainer.ReplaceItemAsync<Shift>(current, current.id, new PartitionKey(current.LocationId));
+        }       
     }
 }

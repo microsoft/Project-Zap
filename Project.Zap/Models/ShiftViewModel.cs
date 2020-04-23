@@ -11,7 +11,7 @@ namespace Project.Zap.Models
         [BindProperty]
         [Required]
         [Display(Name = "StoreName")]
-        public string StoreName { get; set; }
+        public string LocationName { get; set; }
         
         [BindProperty]
         [Required]
@@ -42,6 +42,6 @@ namespace Project.Zap.Models
         [Range(0, 200)]
         [Display(Name = "Available")]
         public int Available { get; set; }
-
+        public PointViewModel Point { get; internal set; }
     }
 }

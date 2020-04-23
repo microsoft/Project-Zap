@@ -1,0 +1,30 @@
+﻿@{
+    @using Microsoft.AspNetCore.Mvc.Localization
+
+    @inject IViewLocalizer Localizer
+}
+
+@model Project.Zap.Models.LocationViewModel
+
+<h3>@Localizer["Title"]</h3>
+
+<form asp-controller="Locations" asp-action="EditLocation" method="Post">
+    <div class="form-group">
+        <label asp-for="@Model.Name"></label>
+        <input type="text" asp-for="@Model.Name" class="form-control" />
+        <span asp-validation-for="@Model.Name"></span>
+    </div>
+    <h5>Address</h5>
+    <div class="form-group">
+        <label asp-for="@Model.Address"></label>
+        <input type="text" asp-for="@Model.Address" class="form-control" />
+        <span asp-validation-for="@Model.Address"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="@Model.ZipOrPostcode"></label>
+        <input type="text" asp-for="@Model.ZipOrPostcode" class="form-control" />
+        <span asp-validation-for="@Model.ZipOrPostcode"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary mb-2">@Localizer["Update"]</button>
+</form>

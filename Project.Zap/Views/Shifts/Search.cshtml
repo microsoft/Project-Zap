@@ -1,0 +1,55 @@
+﻿@{
+    @using Microsoft.AspNetCore.Mvc.Localization
+
+    @inject IViewLocalizer Localizer
+}
+
+
+@model Project.Zap.Models.SearchShiftViewModel
+<form asp-controller="Shifts" asp-action="Search" method="post">
+<div class="row">
+    <div class="d-none d-xs-block d-sm-block col-md-4 font-weight-bold mt-2 pl-0">@Localizer["Start"]</div>
+    <div class="d-none d-xs-block d-sm-block col-md-4 font-weight-bold mt-2 pl-0">@Localizer["Location"]</div>
+    <div class="d-none d-xs-block d-sm-block col-md-3 font-weight-bold mt-2 pl-0">@Localizer["ZipOrPostcode"]</div>
+    <div class="d-none d-xs-block d-sm-block col-md-1 font-weight-bold mt-2 invisible">@Localizer["Search"]</div>
+</div>
+
+<div class="row">
+    <div class="d-block d-xs-none d-sm-none col-xs-6 col-sm-6 font-weight-bold mt-2 pl-0">@Localizer["Start"]</div>
+    <div class="col-xs-6 col-sm-6 col-md-4 mt-2">
+        <div class="row">
+            <input type="datetime-local" asp-for="@Model.Start" class="form-control mr-2 " />
+            <span asp-validation-for="@Model.Start"></span>
+        </div>
+        <div class="row">
+            <label asp-for="@Model.Available" style="font-weight:bold"></label>
+            <input class="ml-2 mt-2" type="checkbox" asp-for="@Model.Available" />
+        </div>
+    </div>
+
+
+    <div class="d-block d-xs-none d-sm-none col-xs-6 col-sm-6 font-weight-bold mt-2 pl-0">@Localizer["Location"]</div>
+    <div class="col-xs-6 col-sm-6 col-md-4 mt-2 pl-0">
+        <select class="form-control" asp-for="@Model.Locations" asp-items="@Model.LocationNames" multiple="multiple">
+        </select>
+        <span asp-validation-for="@Model.Locations"></span>
+    </div>
+    <div class="d-block d-xs-none d-sm-none col-xs-6 col-sm-6 font-weight-bold mt-2 pl-0">@Localizer["ZipOrPostcode"]</div>
+    <div class="col-xs-6 col-sm-6 col-md-3 mt-2">
+        <div class="row">
+            <input type="text" asp-for="@Model.ZipOrPostcode" class="mr-2 form-control" />
+            <span asp-validation-for="@Model.ZipOrPostcode"></span>
+        </div>
+        <div class="row">
+            <label asp-for="@Model.DistanceInMeters" style="font-weight:bold"></label>
+            <select asp-for="@Model.DistanceInMeters" asp-items="@Model.Distances" class="form-control mr-2">
+            </select>
+            <span asp-validation-for="@Model.DistanceInMeters"></span>
+        </div>
+    </div>
+
+    <div class="d-block d-xs-none d-sm-none col-xs-6 col-sm-6 font-weight-bold invisible">@Localizer["SearchButton"]</div>
+    <button type="submit" class="btn btn-primary mb-2 col-md-1 form-control mt-2"> @Localizer["SearchButton"]</button>
+
+</div>
+    </form>

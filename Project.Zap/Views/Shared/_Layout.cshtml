@@ -42,10 +42,10 @@
                                 <a class="dropdown-toggle nav-link text-dark" data-toggle="dropdown" href="#">@Localizer["ManageOrganization"]<b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     <li class="nav-item">
-                                        <a class="nav-link text-dark" asp-area="" asp-controller="Organization" asp-action="Index">@Localizer["View"]</a>
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Locations" asp-action="Index">@Localizer["View"]</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link text-dark" asp-area="" asp-controller="Organization" asp-action="Add">@Localizer["Add"]</a>
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Locations" asp-action="Add">@Localizer["Add"]</a>
                                     </li>
                                 </ul>
                             </li>
@@ -69,22 +69,22 @@
                                     @if ((await AuthorizationService.AuthorizeAsync(User, "OrgAManager")).Succeeded)
                                     {
                                         <li class="nav-item">
-                                            <a class="nav-link text-dark" asp-area="" asp-controller="Shift" asp-action="Index">@Localizer["Search"]</a>
+                                            <a class="nav-link text-dark" asp-area="" asp-controller="Shifts" asp-action="Index">@Localizer["Search"]</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link text-dark" asp-area="" asp-controller="Shift" asp-action="Add">@Localizer["Add"]</a>
+                                            <a class="nav-link text-dark" asp-area="" asp-controller="Shifts" asp-action="Add">@Localizer["Add"]</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link text-dark" asp-area="" asp-controller="Shift" asp-action="Upload">@Localizer["Upload"]</a>
+                                            <a class="nav-link text-dark" asp-area="" asp-controller="Shifts" asp-action="Upload">@Localizer["Upload"]</a>
                                         </li>
                                     }
                                     @if ((await AuthorizationService.AuthorizeAsync(User, "OrgBEmployee")).Succeeded)
                                     {
                                         <li class="nav-item">
-                                            <a class="nav-link text-dark" asp-area="" asp-controller="Shift" asp-action="ViewShifts">@Localizer["MyShifts"]</a>
+                                            <a class="nav-link text-dark" asp-area="" asp-controller="Shifts" asp-action="ViewShifts">@Localizer["MyShifts"]</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link text-dark" asp-area="" asp-controller="Shift" asp-action="Index">@Localizer["BookShifts"]</a>
+                                            <a class="nav-link text-dark" asp-area="" asp-controller="Shifts" asp-action="Index">@Localizer["BookShifts"]</a>
                                         </li>
                                     }
                                 </ul>

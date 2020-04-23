@@ -8,11 +8,11 @@ namespace Project.Zap.Models
     public class FileUploadViewModel
     {
         [BindProperty]
-        [Display(Name = "StoreName")]
-        public string StoreName { get; set; }
+        [Display(Name = "LocationName")]
+        public string LocationName { get; set; }
 
-        [Display(Name = "StoreNames")]
-        public SelectList StoreNames { get; set; }
+        [Display(Name = "LocationNames")]
+        public SelectList LocationNames { get; set; }
 
         [BindProperty]
         [Display(Name = "FormFile")]
