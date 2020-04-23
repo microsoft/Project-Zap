@@ -66,6 +66,9 @@ namespace Project.Zap
             });
 
             services.AddLocalization(options => options.ResourcesPath = "Resources");
+
+            services.AddApplicationInsightsTelemetry();
+
             services.AddControllers().AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
                .AddDataAnnotationsLocalization();
             services.AddRazorPages();
