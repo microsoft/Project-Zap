@@ -30,17 +30,20 @@ namespace Project.Zap.Helpers
 
         private static ShiftViewModel Map(Shift shift, Location location)
         {
-            return new ShiftViewModel
+            var viewModel = new ShiftViewModel
             {
                 LocationName = location.Name,
                 Start = shift.StartDateTime,
                 End = shift.EndDateTime,
-                WorkType = shift.WorkType,
-                Point = new PointViewModel
-                {
-                    Coordinates = location.Address.Point.coordinates
-                }
+                WorkType = shift.WorkType,                
             };
+
+            if(location?.Address?.Point?.coordinates != null)
+            viewModel.Point = new PointViewModel
+            {
+                Coordinates = location.Address.Point.coordinates
+            };
+            return viewModel;
         }
 
         public static IEnumerable<Shift> Map(this ShiftViewModel viewModel, string locationId)
