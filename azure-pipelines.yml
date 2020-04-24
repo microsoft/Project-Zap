@@ -25,7 +25,7 @@ steps:
   displayName: 'Run tests'
   inputs:
     targetType: 'inline'
-    script: 'dotnet test -c $(buildConfiguration) -l trx;LogFileName=$(Agent.TempDirectory)\TestResults\Test-Results.xml'
+    script: 'dotnet test -c $(buildConfiguration) -l trx;LogFileName=$(Agent.TempDirectory)/TestResults/Test-Results.xml'
 
 - task: PublishTestResults@2
   inputs:
