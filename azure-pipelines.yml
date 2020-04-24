@@ -16,11 +16,19 @@ steps:
 - task: NuGetToolInstaller@1
 
 - task: Bash@3
+  displayName: 'Build sln'
   inputs:
     targetType: 'inline'
     script: 'dotnet build'
 
 - task: Bash@3
+  displayName: 'Run tests'
   inputs:
     targetType: 'inline'
-    script: 'dotnet test -c $(buildConfiguration) -l trx;LogFileName=$(Agent.TempDirectory)\TestResults\TestResults.trx'
+    script: 'dotnet test -c $(buildConfiguration) -l trx;LogFileName=$(Agent.TempDirectory)\TestResults\Test-Results.xml'
+
+- task: PublishTestResults@2
+  inputs:
+    testResultsFormat: 'XUnit'
+    testResultsFiles: '**/TEST-*.xml'
+    searchFolder: '$(Agent.TempDirectory)\TestResults'
