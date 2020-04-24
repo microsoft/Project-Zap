@@ -29,5 +29,5 @@ steps:
 
 - task: PublishTestResults@2
   inputs:
-    testResultsFormat: 'XUnit'
+    testResultsFormat: 'VSTest'
     testResultsFiles: '**/TestResults/*.xml'
