@@ -9,8 +9,10 @@
 
 @model Project.Zap.Models.SearchShiftViewModel
 
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+          integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+          crossorigin="" />
 
-<link rel="stylesheet" href="https://atlas.microsoft.com/sdk/javascript/mapcontrol/2/atlas.min.css" type="text/css" />
 
 <h1 class="mb-3">@Localizer["Title"]</h1>
 
@@ -36,16 +38,16 @@
     <h3 class="mt-3">@Localizer["ResultsTitle"]</h3>
     <ul class="nav nav-tabs">
         <li class="nav-item">
-            <a class="nav-link active" data-toggle="tab" href="#listView">List View</a>
+            <a class="nav-link" data-toggle="tab" href="#listView">List View</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#mapView">Map View</a>
+            <a class="nav-link active" data-toggle="tab" href="#mapView">Map View</a>
         </li>
     </ul>
 
     <div class="container-fluid">
         <div class="tab-content">
-            <div role="tabpanel" class="tab-pane active" id="listView">
+            <div role="tabpanel" class="tab-pane" id="listView">
                 @if (Model.Result != null)
                 {
                     <div class="row">
@@ -93,9 +95,9 @@
                     }
                 }
             </div>
-            <div role="tabpanel" class="tab-pane" id="mapView">
-                <div class="row">
-                    <div id="myMap" class="mt-2 col-12"></div>
+            <div role="tabpanel" class="tab-pane active" id="mapView">
+                <div class="row" style="height:100px">
+                    <div id="myMap" class="mt-2 col-12" style="height:400px"></div>
                 </div>
             </div>
         </div>
@@ -106,74 +108,78 @@
 
 @section Scripts
 {
-    <script src="https://atlas.microsoft.com/sdk/javascript/mapcontrol/2/atlas.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+            integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+            crossorigin=""></script>
+
     <script type="text/javascript">
-            var map = new atlas.Map('myMap', {
-                center: [-0.18, 51.51],
-                zoom: 10,
-                view: "Auto",
+        var map;
+        function onLocationFound(e) {
+            var radius = e.accuracy / 2;
+
+            L.marker(e.latlng)
+                .addTo(map)
+                .bindPopup("You are within " + radius + " meters from this point")
+                .openPopup();
+
+            L.circle(e.latlng, radius).addTo(map);
+        }
+
+        $(function () {
+            var subscriptionKey = '@ViewData["AzureMapsKey"]';
+
+            var roads = L.tileLayer('https://atlas.microsoft.com/map/tile?subscription-key={subscriptionKey}&api-version=2.0&tilesetId={tilesetId}&zoom={z}&x={x}&y={y}&tileSize=256&language={language}&view={view}', {
+                attribution: '© ' + new Date().getFullYear() + ' Microsoft, © 1992 - ' + new Date().getFullYear() + ' TomTom',
+                id: 'azureRoadMaps',
+                tilesetId: 'microsoft.base.road',
                 language: 'en-US',
-                authOptions: {
-                    authType: 'subscriptionKey',
-                    subscriptionKey: '@ViewData["AzureMapsKey"]'
-                }
+                view: 'Auto',
+                subscriptionKey: subscriptionKey
             });
 
-            map.events.add('ready', function () {
-                var popupTemplate = '<div><div class="name">{name}</div>{address}, {zipOrPostcode}</div>';
+            map = L.map('myMap', { layers: [roads] });
 
-                //Create a data source and add it to the map.
-                var dataSource = new atlas.source.DataSource();
-                map.sources.add(dataSource);
+            map.locate({ setView: true, enableHighAccuracy: true });
+            map.on('locationfound', onLocationFound);
+
+            var baseMaps = {
+                "Azure Roads": roads
+            };
+
+            L.control.layers(baseMaps, null, { collapsed: false }).addTo(map);
 
             @foreach(var shift in Model.Result)
             {
+
                 <text>
-                    dataSource.add(new atlas.data.Feature(new atlas.data.Point([@shift.Point.Coordinates[1],@shift.Point.Coordinates[0]]), {
-                        name: '@shift.LocationName',
-                        address: 'a',
-                        zipOrPostcode: 'b'
-                }));
+            var popUpContent = L.Util.template(`
+<dl>
+    <dt>@Localizer["TableStore"]</dt>
+    <dd>@shift.LocationName</dd>
+    <dt>@Localizer["TableStart"]</dt>
+    <dd>@shift.Start</dd>
+    <dt>@Localizer["TableEnd"]</dt>
+    <dd>@shift.End</dd>
+    <dt>@Localizer["TableWorkType"]</dt>
+    <dd>@shift.WorkType</dd>
+</dl>
+@if ((await AuthorizationService.AuthorizeAsync(User, "OrgAManager")).Succeeded)
+{
+    <a class="btn btn-primary text-white" asp-controller="Shifts" asp-action="ViewShift" asp-route-LocationName="@shift.LocationName" asp-route-Start="@shift.Start.ToString("yyyy-MM-ddTHH:mm")" asp-route-End="@shift.End.ToString("yyyy-MM-ddTHH:mm")" asp-route-WorkType="@shift.WorkType" asp-route-Quantity="@shift.Quantity" asp-route-Available="@shift.Available">@Localizer["LinkView"]</a>
+}
+@if ((await AuthorizationService.AuthorizeAsync(User, "OrgBEmployee")).Succeeded)
+{
+    <a class="btn btn-primary text-white" asp-controller="Shifts" asp-action="Book" asp-route-LocationName="@shift.LocationName" asp-route-Start="@shift.Start.ToString("yyyy-MM-ddTHH:mm")" asp-route-End="@shift.End.ToString("yyyy-MM-ddTHH:mm")" asp-route-WorkType="@shift.WorkType">@Localizer["LinkBook"]</a>
+}`);
+
+                L.marker([@shift.Point.Coordinates[0],@shift.Point.Coordinates[1]])
+                    .addTo(map)
+                    .bindPopup(popUpContent)
+                    .openPopup();
+
                 </text>
             }
+        });
 
-
-                //Create a layer to render point data.
-                var symbolLayer = new atlas.layer.SymbolLayer(dataSource);
-
-                //Add the polygon and line the symbol layer to the map.
-                map.layers.add(symbolLayer);
-
-                //Create a popup but leave it closed so we can update it and display it later.
-                popup = new atlas.Popup({
-                    pixelOffset: [0, -18],
-                    closeButton: true
-                });
-
-                map.events.add('click', symbolLayer, function (e) {
-                    //Make sure that the point exists.
-                    if (e.shapes && e.shapes.length > 0) {
-                        var content, coordinate;
-                        var properties = e.shapes[0].getProperties();
-                        content = popupTemplate
-                            .replace(/{name}/g, properties.name)
-                            .replace(/{address}/g, properties.address)
-                            .replace(/{zipOrPostcode}/g, properties.zipOrPostcode);
-
-                        coordinate = e.shapes[0].getCoordinates();
-
-                        popup.setOptions({
-                            //Update the content of the popup.
-                            content: content,
-
-                            //Update the popup's position with the symbol's coordinate.
-                            position: coordinate
-
-                        });
-                        //Open the popup.
-                        popup.open(map);
-                    }
-                });
-            });
     </script>
 }
