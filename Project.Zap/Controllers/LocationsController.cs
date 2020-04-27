@@ -2,8 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Project.Zap.Helpers;
 using Project.Zap.Library.Models;
-using Project.Zap.Library.Services;
 using Project.Zap.Models;
+using Project.Zap.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,18 +14,16 @@ namespace Project.Zap.Controllers
     [Authorize(Policy = "OrgAManager")]
     public class LocationsController : Controller
     {
-        private readonly IRepository<Location> repository;
-        private readonly IMapService mapService;
+        private readonly ILocationService locationService;
 
-        public LocationsController(IRepository<Location> repository, IMapService mapService)
+        public LocationsController(ILocationService locationService)
         {
-            this.repository = repository;
-            this.mapService = mapService;
+            this.locationService = locationService;
         }
 
         public async Task<IActionResult> Index()
         {
-            IEnumerable<Location> locations = await this.repository.Get();
+            IEnumerable<Location> locations = await this.locationService.Get();
             return View("Index", locations.Map());
         }
 
@@ -43,24 +42,22 @@ namespace Project.Zap.Controllers
                 return BadRequest(ModelState);
             }
 
-            Location location = viewModel.Map();
-            location.Address.Point = await this.mapService.GetCoordinates(location.Address);
+            await this.locationService.Add(viewModel.Map());
 
-            await this.repository.Add(location);
             return await this.Index();
         }
 
         [HttpGet]
         public async Task<IActionResult> Delete(string id)
         {
-            await this.repository.Delete(x => x.Name == id);
+            await this.locationService.DeleteByName(id);
             return await this.Index();
         }
 
         [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
-            Location location = (await this.repository.Get("SELECT * FROM c WHERE c.Name = @name", new Dictionary<string, object> { {"@name", id } })).FirstOrDefault();
+            Location location = await this.locationService.GetByName(id);
             return View(location.Map());
         }
 
@@ -68,9 +65,7 @@ namespace Project.Zap.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditLocation(AddLocationViewModel viewModel)
         {
-            Location location = viewModel.Map();
-
-            await this.repository.Update(location);
+            await this.locationService.Update(viewModel.Map());
 
             return await this.Index();
         }

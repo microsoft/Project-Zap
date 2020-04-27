@@ -16,5 +16,7 @@ namespace Project.Zap.Library.Services
         Task <T> Update(T item);
 
         Task Delete(Expression<Func<T, bool>> query);
+
+        Task<T> Replace(T item);
     }
 }
