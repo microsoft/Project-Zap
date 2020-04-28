@@ -1,14 +1,11 @@
-﻿using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Project.Zap.Controllers;
 using Project.Zap.Library.Models;
-using Project.Zap.Library.Services;
 using Project.Zap.Models;
-using System;
+using Project.Zap.Services;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
 using Xunit;
@@ -28,16 +25,15 @@ namespace Project.Zap.Tests
         public async Task Index_NoParams_RepoGetHitWithNoParams()
         {
             // Arrange
-            IRepository<Location> repository = Substitute.For<IRepository<Location>>();
-            IMapService mapService = Substitute.For<IMapService>();
-            LocationsController controller = new LocationsController(repository, mapService);
+            ILocationService service = Substitute.For<ILocationService>();
+            LocationsController controller = new LocationsController(service);
 
             // Act
             await controller.Index();
 
             // Assert
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            repository.Received(1).Get();
+            service.Received(1).Get();
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
         }
 
@@ -45,9 +41,8 @@ namespace Project.Zap.Tests
         public async Task Index_NoParams_ResultModelIsEnumerableOfLocationViewModel()
         {
             // Arrange
-            IRepository<Location> repository = Substitute.For<IRepository<Location>>();
-            IMapService mapService = Substitute.For<IMapService>();
-            LocationsController controller = new LocationsController(repository, mapService);
+            ILocationService service = Substitute.For<ILocationService>();
+            LocationsController controller = new LocationsController(service);
 
             // Act
             IActionResult result = await controller.Index();
@@ -61,9 +56,8 @@ namespace Project.Zap.Tests
         public void Add_NoParams_ReturnsViewResult()
         {
             // Arrange
-            IRepository<Location> repository = Substitute.For<IRepository<Location>>();
-            IMapService mapService = Substitute.For<IMapService>();
-            LocationsController controller = new LocationsController(repository, mapService);
+            ILocationService service = Substitute.For<ILocationService>();
+            LocationsController controller = new LocationsController(service);
             // Act
             IActionResult result = controller.Add();
 
@@ -75,9 +69,8 @@ namespace Project.Zap.Tests
         public async Task AddLocation_LocationViewModelInValid_ReturnsBadRequest()            
         {
             // Arrange
-            IRepository<Location> repository = Substitute.For<IRepository<Location>>();
-            IMapService mapService = Substitute.For<IMapService>();
-            LocationsController controller = new LocationsController(repository, mapService);
+            ILocationService service = Substitute.For<ILocationService>();
+            LocationsController controller = new LocationsController(service);
             controller.ModelState.AddModelError("Name", "Required");
             AddLocationViewModel viewModel = new AddLocationViewModel();
 
@@ -89,12 +82,11 @@ namespace Project.Zap.Tests
         }
 
         [Fact]
-        public async Task AddLocation_LocationViewModel_AddOnRepoHitWithMappedLocation()
+        public async Task AddLocation_LocationViewModel_AddOnServiceHitWithMappedLocation()
         {
             // Arrange
-            IRepository<Location> repository = Substitute.For<IRepository<Location>>();
-            IMapService mapService = Substitute.For<IMapService>();
-            LocationsController controller = new LocationsController(repository, mapService);
+            ILocationService service = Substitute.For<ILocationService>();
+            LocationsController controller = new LocationsController(service);
             AddLocationViewModel viewModel = new AddLocationViewModel { Name = "Contoso", Address =  "Seattle", ZipOrPostcode = "54321" };
 
             // Act
@@ -102,7 +94,7 @@ namespace Project.Zap.Tests
 
             // Assert
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            repository.Received(1).Add(Arg.Any<Location>());
+            service.Received(1).Add(Arg.Any<Location>());
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             Assert.IsType<ViewResult>(result);
         }
@@ -111,9 +103,8 @@ namespace Project.Zap.Tests
         public async Task Delete_LocationName_RepoDeleteHitWithExpression()
         {
             // Arrange
-            IRepository<Location> repository = Substitute.For<IRepository<Location>>();
-            IMapService mapService = Substitute.For<IMapService>();
-            LocationsController controller = new LocationsController(repository, mapService);
+            ILocationService service = Substitute.For<ILocationService>();
+            LocationsController controller = new LocationsController(service);
             string id = "Contoso";
 
             // Act
@@ -121,48 +112,26 @@ namespace Project.Zap.Tests
 
             // Assert            
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            repository.Received(1).Delete(Arg.Any<Expression<Func<Location, bool>>>());
+            service.Received(1).DeleteByName("Contoso");
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed            
         }
 
         [Fact]
-        public async Task Edit_LocationName_RepoGetHitWithCorrectQuery()
+        public async Task Edit_LocationName_ServiceGetsHitWithRightName()
         {
             // Arrange
-            IRepository<Location> repository = Substitute.For<IRepository<Location>>();
-            repository.Get(Arg.Any<string>(), Arg.Any<IDictionary<string, object>>()).Returns(new[] { new Location { Name = "Contoso", Address = new Address { Text = "Seattle", ZipOrPostcode = "54321" } } });
-
-            IMapService mapService = Substitute.For<IMapService>();
-            LocationsController controller = new LocationsController(repository, mapService);
+            ILocationService service = Substitute.For<ILocationService>();
+            service.GetByName(Arg.Any<string>()).Returns(new Location { id = "1", Name = "Contoso", Address = new Address { Text = "abc", ZipOrPostcode = "54321" } });
+            LocationsController controller = new LocationsController(service);
             string id = "Contoso";
 
             // Act
-            IActionResult result = await controller.Edit(id);
+            await controller.Edit(id);
 
             // Assert            
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            repository.Received(1).Get("SELECT * FROM c WHERE c.Name = @name", Arg.Is<Dictionary<string, object>>(x => x.ContainsKey("@name") && id == (string)x["@name"]));
+            service.Received(1).GetByName(id);
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed  
-            Assert.IsType<ViewResult>(result);
-        }
-
-        [Fact]
-        public async Task EditLocation_LocationViewModel_RepoGetHitWithExpression()
-        {
-            // Arrange
-            IRepository<Location> repository = Substitute.For<IRepository<Location>>();
-            IMapService mapService = Substitute.For<IMapService>();
-            LocationsController controller = new LocationsController(repository, mapService);
-            AddLocationViewModel viewModel = new AddLocationViewModel { Name = "Contoso", Address =  "Seattle", ZipOrPostcode = "54321" };
-
-            // Act
-            IActionResult result = await controller.EditLocation(viewModel);
-
-            // Assert            
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            repository.Received(1).Update(Arg.Any<Location>());
-#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed  
-            Assert.IsType<ViewResult>(result);
         }
     }
 }

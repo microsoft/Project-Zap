@@ -60,6 +60,11 @@ namespace Project.Zap.Library.Services
             return results;
         }
 
+        public Task<Shift> Replace(Shift item)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<Shift> Update(Shift item)
         {
             Shift current = await this.cosmosContainer.ReadItemAsync<Shift>(item.id, new PartitionKey(item.LocationId));

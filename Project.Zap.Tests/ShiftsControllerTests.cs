@@ -9,6 +9,7 @@ using NSubstitute;
 using Project.Zap.Controllers;
 using Project.Zap.Library.Services;
 using Project.Zap.Models;
+using Project.Zap.Services;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -50,9 +51,9 @@ namespace Project.Zap.Tests
         {
             // Arrange
             IRepository<Library.Models.Shift> shiftRepository = Substitute.For<IRepository<Library.Models.Shift>>();
-            IRepository<Library.Models.Location> locationRepository = Substitute.For<IRepository<Library.Models.Location>>();
-            locationRepository.Get().Returns(new[] { new Library.Models.Location { id = "1", Name = "Contoso" } });
-            ShiftsController controller = this.GetController(shiftRepository: shiftRepository, locationRepository: locationRepository);
+            ILocationService locationService = Substitute.For<ILocationService>();
+            locationService.Get().Returns(new[] { new Library.Models.Location { id = "1", Name = "Contoso" } });
+            ShiftsController controller = this.GetController(shiftRepository: shiftRepository, locationService: locationService);
             // Act
             await controller.Index();
 
@@ -63,20 +64,11 @@ namespace Project.Zap.Tests
         }
 
         [Fact]
-        public async Task Search_SearchViewModel_LocationsRepoHitOnce()
+        public async Task Search_SearchViewModel_LocationsServiceHitOnce()
         {
             // Arrange
-            IRepository<Library.Models.Shift> shiftRepository = Substitute.For<IRepository<Library.Models.Shift>>();
-            shiftRepository.Get(Arg.Any<string>(), Arg.Any<IDictionary<string, object>>(), Arg.Any<string>()).Returns(new[]
-            {
-                new Library.Models.Shift { StartDateTime = DateTime.Now.Add(new TimeSpan(1,0,0,0)), LocationId = "1" },
-                new Library.Models.Shift { StartDateTime = DateTime.Now.Add(new TimeSpan(1,0,0,0)), LocationId = "2" },
-                new Library.Models.Shift { StartDateTime = DateTime.Now, LocationId = "1" },
-            });
-            IRepository<Library.Models.Location> locationRepository = Substitute.For<IRepository<Library.Models.Location>>();
-            locationRepository.Get().Returns(new[] { new Library.Models.Location { id = "1", Name = "Contoso" }, new Library.Models.Location { id = "2", Name = "Fabrikam" } });
-
-            ShiftsController controller = this.GetController(shiftRepository: shiftRepository, locationRepository: locationRepository);
+            ILocationService locationService = Substitute.For<ILocationService>();
+            ShiftsController controller = this.GetController(locationService: locationService);
             SearchShiftViewModel viewModel = new SearchShiftViewModel { Locations = new List<string> { "Contoso" }, Start = DateTime.Now };
 
             // Act
@@ -84,7 +76,7 @@ namespace Project.Zap.Tests
 
             // Assert
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            locationRepository.Received(1).Get();
+            locationService.Received(1).Get();
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
         }
 
@@ -97,9 +89,9 @@ namespace Project.Zap.Tests
             {
                 new Library.Models.Shift { StartDateTime = DateTime.Now.Add(new TimeSpan(1,0,0,0)), LocationId = "1" },
             });
-            IRepository<Library.Models.Location> locationRepository = Substitute.For<IRepository<Library.Models.Location>>();
-            locationRepository.Get().Returns(new[] { new Library.Models.Location { id = "1", Name = "Contoso" }, new Library.Models.Location { id = "2", Name = "Fabrikam" } });
-            ShiftsController controller = this.GetController(shiftRepository: shiftRepository, locationRepository: locationRepository);
+            ILocationService locationService = Substitute.For<ILocationService>();
+            locationService.Get().Returns(new[] { new Library.Models.Location { id = "1", Name = "Contoso" }, new Library.Models.Location { id = "2", Name = "Fabrikam" } });
+            ShiftsController controller = this.GetController(shiftRepository: shiftRepository, locationService: locationService);
             SearchShiftViewModel viewModel = new SearchShiftViewModel { Locations = new List<string> { "Contoso" }, Start = DateTime.Now };
 
             // Act
@@ -123,9 +115,9 @@ namespace Project.Zap.Tests
                 new Library.Models.Shift { StartDateTime = DateTime.Now.Add(new TimeSpan(1,0,0,0)), LocationId = "1", Allocated = false }
                 
             });
-            IRepository<Library.Models.Location> locationRepository = Substitute.For<IRepository<Library.Models.Location>>();
-            locationRepository.Get().Returns(new[] { new Library.Models.Location { id = "1", Name = "Contoso" }, new Library.Models.Location { id = "2", Name = "Fabrikam" } });
-            ShiftsController controller = this.GetController(shiftRepository: shiftRepository, locationRepository: locationRepository);
+            ILocationService locationService = Substitute.For<ILocationService>();
+            locationService.Get().Returns(new[] { new Library.Models.Location { id = "1", Name = "Contoso" }, new Library.Models.Location { id = "2", Name = "Fabrikam" } });
+            ShiftsController controller = this.GetController(shiftRepository: shiftRepository, locationService: locationService);
             SearchShiftViewModel viewModel = new SearchShiftViewModel { Locations = new List<string> { "Contoso" }, Start = DateTime.Now.Add(new TimeSpan(1, 0, 0, 0)) };
 
             // Act
@@ -148,9 +140,9 @@ namespace Project.Zap.Tests
                 new Library.Models.Shift { StartDateTime = DateTime.Now.Add(new TimeSpan(1,0,0,0)), LocationId = "1", Allocated = false }
 
             });
-            IRepository<Library.Models.Location> locationRepository = Substitute.For<IRepository<Library.Models.Location>>();
-            locationRepository.Get().Returns(new[] { new Library.Models.Location { id = "1", Name = "Contoso" }, new Library.Models.Location { id = "2", Name = "Fabrikam" } });
-            ShiftsController controller = this.GetController(shiftRepository: shiftRepository, locationRepository: locationRepository);
+            ILocationService locationService = Substitute.For<ILocationService>();
+            locationService.Get().Returns(new[] { new Library.Models.Location { id = "1", Name = "Contoso" }, new Library.Models.Location { id = "2", Name = "Fabrikam" } });
+            ShiftsController controller = this.GetController(shiftRepository: shiftRepository, locationService: locationService);
             SearchShiftViewModel viewModel = new SearchShiftViewModel { Locations = new List<string> { "Contoso" }, Start = DateTime.Now };
 
             // Act
@@ -173,9 +165,9 @@ namespace Project.Zap.Tests
         {
             // Arrange
             IRepository<Library.Models.Shift> shiftRepository = Substitute.For<IRepository<Library.Models.Shift>>();
-            IRepository<Library.Models.Location> locationRepository = Substitute.For<IRepository<Library.Models.Location>>();
-            locationRepository.Get().Returns(new[] { new Library.Models.Location { id = "1", Name = "Contoso" }, new Library.Models.Location { id = "2", Name = "Fabrikam" } });
-            ShiftsController controller = this.GetController(shiftRepository: shiftRepository, locationRepository: locationRepository);
+            ILocationService locationService = Substitute.For<ILocationService>();
+            locationService.Get().Returns(new[] { new Library.Models.Location { id = "1", Name = "Contoso" }, new Library.Models.Location { id = "2", Name = "Fabrikam" } });
+            ShiftsController controller = this.GetController(shiftRepository: shiftRepository, locationService: locationService);
 
             DateTime now = DateTime.Now;
             ShiftViewModel viewModel = new ShiftViewModel { LocationName = "Contoso", Start = now, End = now.AddHours(9), WorkType = "Till" };
@@ -236,9 +228,9 @@ namespace Project.Zap.Tests
                 new Library.Models.Shift { StartDateTime = DateTime.Now.Add(new TimeSpan(1,0,0,0)), LocationId = "1", Allocated = false }
 
             });
-            IRepository<Library.Models.Location> locationRepository = Substitute.For<IRepository<Library.Models.Location>>();
-            locationRepository.Get().Returns(new[] { new Library.Models.Location { id = "1", Name = "Contoso" }, new Library.Models.Location { id = "2", Name = "Fabrikam" } });
-            ShiftsController controller = this.GetController(shiftRepository: shiftRepository, locationRepository: locationRepository);
+            ILocationService locationService = Substitute.For<ILocationService>();
+            locationService.Get().Returns(new[] { new Library.Models.Location { id = "1", Name = "Contoso" }, new Library.Models.Location { id = "2", Name = "Fabrikam" } });
+            ShiftsController controller = this.GetController(shiftRepository: shiftRepository, locationService: locationService);
             controller.HttpContext.User = new ClaimsPrincipal(new ClaimsIdentity(new[] { new Claim("http://schemas.microsoft.com/identity/claims/objectidentifier", "123") }));
 
             // Act
@@ -283,13 +275,12 @@ namespace Project.Zap.Tests
         {
             // Arrange
             DateTime now = DateTime.Now;
-            IRepository<Library.Models.Location> locationRepository = Substitute.For<IRepository<Library.Models.Location>>();
-            locationRepository.Get(Arg.Any<string>(), Arg.Any<IDictionary<string, object>>())
-                .Returns(new[] { new Library.Models.Location { id = "1", Name = "Contoso" }, new Library.Models.Location { id = "2", Name = "Fabrikam" } });
+            ILocationService locationService = Substitute.For<ILocationService>();
+            locationService.GetByName("Contoso").Returns(new Library.Models.Location { id = "1", Name = "Contoso" });
 
             IStringLocalizer<ShiftsController> stringLocalizer = Substitute.For<IStringLocalizer<ShiftsController>>();
 
-            ShiftsController controller = this.GetController(locationRepository: locationRepository, stringLocalizer: stringLocalizer);
+            ShiftsController controller = this.GetController(locationService: locationService, stringLocalizer: stringLocalizer);
             ShiftViewModel viewModel = new ShiftViewModel { LocationName = "Contoso", Start = now, End = now.AddHours(9), WorkType = "Till" };
 
             // Act
@@ -312,14 +303,13 @@ namespace Project.Zap.Tests
                 new Library.Models.Shift { StartDateTime = now.Add(new TimeSpan(1,0,0,0)), LocationId = "1", Allocated = true, EmployeeId = "xyz" }
 
             });
-            IRepository<Library.Models.Location> locationRepository = Substitute.For<IRepository<Library.Models.Location>>();
-            locationRepository.Get(Arg.Any<string>(), Arg.Any<IDictionary<string, object>>())
-                .Returns(new[] { new Library.Models.Location { id = "1", Name = "Contoso" }, new Library.Models.Location { id = "2", Name = "Fabrikam" } });
+            ILocationService locationService = Substitute.For<ILocationService>();
+            locationService.GetByName("Contoso").Returns(new Library.Models.Location { id = "1", Name = "Contoso" });
 
             IGraphServiceClient graphClient = Substitute.For<IGraphServiceClient>();
             graphClient.Users[Arg.Any<string>()].Request().GetAsync().Returns(new User { GivenName = "a", Surname = "b" });
 
-            ShiftsController controller = this.GetController(shiftRepository: shiftRepository, locationRepository: locationRepository, graphClient: graphClient);
+            ShiftsController controller = this.GetController(shiftRepository: shiftRepository, locationService: locationService, graphClient: graphClient);
             ShiftViewModel viewModel = new ShiftViewModel { LocationName = "Contoso", Start = now, End = now.AddHours(9), WorkType = "Till" };
 
             // Act
@@ -344,14 +334,13 @@ namespace Project.Zap.Tests
                 new Library.Models.Shift { StartDateTime = now.Add(new TimeSpan(1,0,0,0)), LocationId = "1", Allocated = true, EmployeeId = "xyz" }
 
             });
-            IRepository<Library.Models.Location> locationRepository = Substitute.For<IRepository<Library.Models.Location>>();
-            locationRepository.Get(Arg.Any<string>(), Arg.Any<IDictionary<string, object>>())
-                .Returns(new[] { new Library.Models.Location { id = "1", Name = "Contoso" }, new Library.Models.Location { id = "2", Name = "Fabrikam" } });
+            ILocationService locationService = Substitute.For<ILocationService>();
+            locationService.GetByName("Contoso").Returns(new Library.Models.Location { id = "1", Name = "Contoso" });
 
             IGraphServiceClient graphClient = Substitute.For<IGraphServiceClient>();
             graphClient.Users[Arg.Any<string>()].Request().GetAsync().Returns(new User { GivenName = "a", Surname = "b" });
 
-            ShiftsController controller = this.GetController(shiftRepository: shiftRepository, locationRepository: locationRepository, graphClient: graphClient);
+            ShiftsController controller = this.GetController(shiftRepository: shiftRepository, locationService: locationService, graphClient: graphClient);
             ShiftViewModel viewModel = new ShiftViewModel { LocationName = "Contoso", Start = now, End = now.AddHours(9), WorkType = "Till" };
 
             // Act
@@ -375,14 +364,13 @@ namespace Project.Zap.Tests
                 new Library.Models.Shift { StartDateTime = now.Add(new TimeSpan(1,0,0,0)), LocationId = "1", Allocated = true, EmployeeId = "xyz" }
 
             });
-            IRepository<Library.Models.Location> locationRepository = Substitute.For<IRepository<Library.Models.Location>>();
-            locationRepository.Get(Arg.Any<string>(), Arg.Any<IDictionary<string, object>>())
-                .Returns(new[] { new Library.Models.Location { id = "1", Name = "Contoso" }, new Library.Models.Location { id = "2", Name = "Fabrikam" } });
+            ILocationService locationService = Substitute.For<ILocationService>();
+            locationService.GetByName("Contoso").Returns(new Library.Models.Location { id = "1", Name = "Contoso" });
 
             IGraphServiceClient graphClient = Substitute.For<IGraphServiceClient>();
             graphClient.Users[Arg.Any<string>()].Request().GetAsync().Returns(new User { GivenName = "a", Surname = "b" });
 
-            ShiftsController controller = this.GetController(shiftRepository: shiftRepository, locationRepository: locationRepository, graphClient: graphClient);
+            ShiftsController controller = this.GetController(shiftRepository: shiftRepository, locationService: locationService, graphClient: graphClient);
             ShiftViewModel viewModel = new ShiftViewModel { LocationName = "Contoso", Start = now, End = now.AddHours(9), WorkType = "Till" };
 
             // Act
@@ -433,11 +421,10 @@ namespace Project.Zap.Tests
 
             });
 
-            IRepository<Library.Models.Location> locationRepository = Substitute.For<IRepository<Library.Models.Location>>();
-            locationRepository.Get(Arg.Any<string>(), Arg.Any<IDictionary<string, object>>())
-                .Returns(new[] { new Library.Models.Location { id = "1", Name = "Contoso" }, new Library.Models.Location { id = "2", Name = "Fabrikam" } });
+            ILocationService locationService = Substitute.For<ILocationService>();
+            locationService.GetByName("Contoso").Returns(new Library.Models.Location { id = "1", Name = "Contoso" });
 
-            ShiftsController controller = this.GetController(shiftRepository: shiftRepository, locationRepository: locationRepository);
+            ShiftsController controller = this.GetController(shiftRepository: shiftRepository, locationService: locationService);
             controller.ControllerContext = new ControllerContext();
             controller.ControllerContext.HttpContext = new DefaultHttpContext();
             controller.HttpContext.User = new ClaimsPrincipal(new ClaimsIdentity(new[] { new Claim("http://schemas.microsoft.com/identity/claims/objectidentifier", "123") }));
@@ -465,12 +452,10 @@ namespace Project.Zap.Tests
 
             });
 
-            IRepository<Library.Models.Location> locationRepository = Substitute.For<IRepository<Library.Models.Location>>();
-            locationRepository.Get(Arg.Any<string>(), Arg.Any<IDictionary<string, object>>())
-                .Returns(new[] { new Library.Models.Location { id = "1", Name = "Contoso" }, new Library.Models.Location { id = "2", Name = "Fabrikam" } });
+            ILocationService locationService = Substitute.For<ILocationService>();
+            locationService.GetByName("Contoso").Returns(new Library.Models.Location { id = "1", Name = "Contoso" });
 
-
-            ShiftsController controller = this.GetController(shiftRepository: shiftRepository, locationRepository: locationRepository);
+            ShiftsController controller = this.GetController(shiftRepository: shiftRepository, locationService: locationService);
             controller.ControllerContext = new ControllerContext();
             controller.ControllerContext.HttpContext = new DefaultHttpContext();
             controller.HttpContext.User = new ClaimsPrincipal(new ClaimsIdentity(new[] { new Claim("http://schemas.microsoft.com/identity/claims/objectidentifier", "123") }));
@@ -523,12 +508,12 @@ namespace Project.Zap.Tests
                 new Library.Models.Shift { StartDateTime = now.Add(new TimeSpan(1,0,0,0)), LocationId = "1", Allocated = true, EmployeeId = "xyz" }
 
             });
-            IRepository<Library.Models.Location> locationRepository = Substitute.For<IRepository<Library.Models.Location>>();
-            locationRepository.Get(Arg.Any<string>(), Arg.Any<IDictionary<string, object>>())
+            ILocationService locationService = Substitute.For<ILocationService>();
+            locationService.Get()
                 .Returns(new[] { new Library.Models.Location { id = "1", Name = "Contoso" }, new Library.Models.Location { id = "2", Name = "Fabrikam" } });
 
 
-            ShiftsController controller = this.GetController(shiftRepository: shiftRepository, locationRepository: locationRepository);
+            ShiftsController controller = this.GetController(shiftRepository: shiftRepository, locationService: locationService);
             controller.ControllerContext = new ControllerContext();
             controller.ControllerContext.HttpContext = new DefaultHttpContext();
             controller.HttpContext.User = new ClaimsPrincipal(new ClaimsIdentity(new[] { new Claim("http://schemas.microsoft.com/identity/claims/objectidentifier", "123") }));
@@ -557,13 +542,10 @@ namespace Project.Zap.Tests
                 new Library.Models.Shift { StartDateTime = now.Add(new TimeSpan(1,0,0,0)), LocationId = "1", Allocated = true, EmployeeId = "xyz" }
 
             });
-            IRepository<Library.Models.Location> locationRepository = Substitute.For<IRepository<Library.Models.Location>>();
-            locationRepository.Get().Returns(new[] { new Library.Models.Location { id = "1", Name = "Contoso" }, new Library.Models.Location { id = "2", Name = "Fabrikam" } });
-            locationRepository.Get(Arg.Any<string>(), Arg.Any<IDictionary<string, object>>())
-                .Returns(new[] { new Library.Models.Location { id = "1", Name = "Contoso" }, new Library.Models.Location { id = "2", Name = "Fabrikam" } });
+            ILocationService locationService = Substitute.For<ILocationService>();
+            locationService.Get().Returns(new[] { new Library.Models.Location { id = "1", Name = "Contoso" }, new Library.Models.Location { id = "2", Name = "Fabrikam" } });
 
-
-            ShiftsController controller = this.GetController(shiftRepository: shiftRepository, locationRepository: locationRepository);            
+            ShiftsController controller = this.GetController(shiftRepository: shiftRepository, locationService: locationService);            
             controller.HttpContext.User = new ClaimsPrincipal(new ClaimsIdentity(new[] { new Claim("http://schemas.microsoft.com/identity/claims/objectidentifier", "123") }));
             ShiftViewModel viewModel = new ShiftViewModel { LocationName = "Contoso", Start = now, End = now.AddHours(9), WorkType = "Till" };
 
@@ -588,12 +570,10 @@ namespace Project.Zap.Tests
                 new Library.Models.Shift { StartDateTime = now.AddDays(1), LocationId = "1", Allocated = true, EmployeeId = "xyz" }
 
             });
-            IRepository<Library.Models.Location> locationRepository = Substitute.For<IRepository<Library.Models.Location>>();
-            locationRepository.Get().Returns(new[] { new Library.Models.Location { id = "1", Name = "Contoso" }, new Library.Models.Location { id = "2", Name = "Fabrikam" } });
-            locationRepository.Get(Arg.Any<string>(), Arg.Any<IDictionary<string, object>>())
-                .Returns(new[] { new Library.Models.Location { id = "1", Name = "Contoso" }, new Library.Models.Location { id = "2", Name = "Fabrikam" } });
+            ILocationService locationService = Substitute.For<ILocationService>();
+            locationService.GetByName("Contoso").Returns(new Library.Models.Location { id = "1", Name = "Contoso" });
 
-            ShiftsController controller = this.GetController(shiftRepository: shiftRepository, locationRepository: locationRepository);
+            ShiftsController controller = this.GetController(shiftRepository: shiftRepository, locationService: locationService);
             controller.HttpContext.User = new ClaimsPrincipal(new ClaimsIdentity(new[] { new Claim("http://schemas.microsoft.com/identity/claims/objectidentifier", "123") }));
             ShiftViewModel viewModel = new ShiftViewModel { LocationName = "Contoso", Start = now, End = now.AddHours(9), WorkType = "Till" };
 
@@ -612,13 +592,11 @@ namespace Project.Zap.Tests
             // Arrange
             IRepository<Library.Models.Shift> shiftRepository = Substitute.For<IRepository<Library.Models.Shift>>();
             DateTime now = DateTime.Now;
-            IRepository<Library.Models.Location> locationRepository = Substitute.For<IRepository<Library.Models.Location>>();
-            locationRepository.Get().Returns(new[] { new Library.Models.Location { id = "1", Name = "Contoso" }, new Library.Models.Location { id = "2", Name = "Fabrikam" } });
-            locationRepository.Get(Arg.Any<string>(), Arg.Any<IDictionary<string, object>>())
-                .Returns(new[] { new Library.Models.Location { id = "1", Name = "Contoso" }, new Library.Models.Location { id = "2", Name = "Fabrikam" } });
+            ILocationService locationService = Substitute.For<ILocationService>();
+            locationService.Get().Returns(new[] { new Library.Models.Location { id = "1", Name = "Contoso" } });
+            locationService.GetByName("Contoso").Returns(new Library.Models.Location { id = "1", Name = "Contoso" });
 
-
-            ShiftsController controller = this.GetController(shiftRepository: shiftRepository, locationRepository: locationRepository);
+            ShiftsController controller = this.GetController(shiftRepository: shiftRepository, locationService: locationService);
             controller.HttpContext.User = new ClaimsPrincipal(new ClaimsIdentity(new[] { new Claim("http://schemas.microsoft.com/identity/claims/objectidentifier", "123") }));
             ShiftViewModel viewModel = new ShiftViewModel { LocationName = "Contoso", Start = now, End = now.AddHours(9), WorkType = "Till" };
 
@@ -641,14 +619,14 @@ namespace Project.Zap.Tests
         public async Task Add_NoParams_LocationRepoHit()
         {
             // Arrange
-            IRepository<Library.Models.Location> locationRepository = Substitute.For<IRepository<Library.Models.Location>>();
-            ShiftsController controller = this.GetController(locationRepository: locationRepository);
+            ILocationService locationService = Substitute.For<ILocationService>();
+            ShiftsController controller = this.GetController(locationService: locationService);
             // Act
             await controller.Add();
 
             // Assert
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            locationRepository.Received(1).Get();
+            locationService.Received(1).Get();
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
         }
 
@@ -677,11 +655,10 @@ namespace Project.Zap.Tests
         {
             // Arrange
             IRepository<Library.Models.Shift> shiftRepository = Substitute.For<IRepository<Library.Models.Shift>>();
-            IRepository<Library.Models.Location> locationRepository = Substitute.For<IRepository<Library.Models.Location>>();
-            locationRepository.Get(Arg.Any<string>(), Arg.Any<IDictionary<string, object>>())
-                .Returns(new[] { new Library.Models.Location { id = "1", Name = "Contoso" }, new Library.Models.Location { id = "2", Name = "Fabrikam" } });
+            ILocationService locationService = Substitute.For<ILocationService>();
+            locationService.GetByName("Contoso").Returns(new Library.Models.Location { id = "1", Name = "Contoso" });
 
-            ShiftsController controller = this.GetController(shiftRepository: shiftRepository, locationRepository: locationRepository);
+            ShiftsController controller = this.GetController(shiftRepository: shiftRepository, locationService: locationService);
             AddShiftViewModel viewModel = new AddShiftViewModel
             {
                 NewShift = new ShiftViewModel
@@ -713,10 +690,10 @@ namespace Project.Zap.Tests
         public async Task Upload_NoParams_FileUploadViewModel()
         {
             // Arrange
-            IRepository<Library.Models.Location> locationRepository = Substitute.For<IRepository<Library.Models.Location>>();
-            locationRepository.Get().Returns(new[] { new Library.Models.Location { id = "1", Name = "Contoso" }, new Library.Models.Location { id = "2", Name = "Fabrikam" } });
+            ILocationService locationService = Substitute.For<ILocationService>();
+            locationService.Get().Returns(new[] { new Library.Models.Location { id = "1", Name = "Contoso" }, new Library.Models.Location { id = "2", Name = "Fabrikam" } });
 
-            ShiftsController controller = this.GetController(locationRepository: locationRepository);
+            ShiftsController controller = this.GetController(locationService: locationService);
 
             // Act
             IActionResult result = await controller.Upload();
@@ -744,11 +721,10 @@ namespace Project.Zap.Tests
                 .Returns(new MemoryStream(Encoding.UTF8.GetBytes("Start,End,WorkType\n2020-10-10,2020-10-10,Till\n2020-10-10,2020-10-10,Till")));
 
             IRepository<Library.Models.Shift> shiftRepository = Substitute.For<IRepository<Library.Models.Shift>>();
-            IRepository<Library.Models.Location> locationRepository = Substitute.For<IRepository<Library.Models.Location>>();
-            locationRepository.Get(Arg.Any<string>(), Arg.Any<IDictionary<string, object>>())
-                .Returns(new[] { new Library.Models.Location { id = "1", Name = "Contoso" }, new Library.Models.Location { id = "2", Name = "Fabrikam" } });
+            ILocationService locationService = Substitute.For<ILocationService>();
+            locationService.GetByName("Contoso").Returns(new Library.Models.Location { id = "1", Name = "Contoso" });
 
-            ShiftsController controller = this.GetController(shiftRepository: shiftRepository, locationRepository: locationRepository);
+            ShiftsController controller = this.GetController(shiftRepository: shiftRepository, locationService: locationService);
             FileUploadViewModel viewModel = new FileUploadViewModel
             {
                 LocationName = "Contoso",
@@ -767,7 +743,7 @@ namespace Project.Zap.Tests
 
         private ShiftsController GetController(
             IRepository<Library.Models.Shift> shiftRepository = null, 
-            IRepository<Library.Models.Location> locationRepository = null,
+            ILocationService locationService = null,
             IGraphServiceClient graphClient = null,
             IStringLocalizer<ShiftsController> stringLocalizer = null,
             IConfiguration configuration = null,
@@ -775,14 +751,14 @@ namespace Project.Zap.Tests
             ILogger<ShiftsController> logger = null)
         {
             shiftRepository = shiftRepository ?? Substitute.For<IRepository<Library.Models.Shift>>();
-            locationRepository = locationRepository ?? Substitute.For<IRepository<Library.Models.Location>>();
+            locationService = locationService ?? Substitute.For<ILocationService>();
             graphClient = graphClient ?? Substitute.For<IGraphServiceClient>();
             stringLocalizer = stringLocalizer ?? Substitute.For<IStringLocalizer<ShiftsController>>();
             configuration = configuration ?? Substitute.For<IConfiguration>();
             mapService = mapService ?? Substitute.For<IMapService>();
             logger = logger ?? Substitute.For<ILogger<ShiftsController>>();
 
-            var controller = new ShiftsController(shiftRepository, locationRepository, graphClient, stringLocalizer, configuration, mapService, logger);
+            var controller = new ShiftsController(shiftRepository, locationService, graphClient, stringLocalizer, configuration, mapService, logger);
             controller.ControllerContext = new ControllerContext();
             controller.ControllerContext.HttpContext = new DefaultHttpContext();
             return controller;

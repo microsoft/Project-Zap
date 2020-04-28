@@ -11,7 +11,6 @@ using Microsoft.Azure.Cosmos.Fluent;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Localization;
 using Microsoft.Graph;
 using Microsoft.Graph.Auth;
 using Microsoft.Identity.Client;
@@ -19,6 +18,7 @@ using Project.Zap.Filters;
 using Project.Zap.Library.Models;
 using Project.Zap.Library.Services;
 using Project.Zap.Middleware;
+using Project.Zap.Services;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Net.Http;
@@ -80,6 +80,7 @@ namespace Project.Zap
             services.AddSingleton<IRepository<Library.Models.Location>, LocationRepository>();
             services.AddSingleton<IRepository<Library.Models.Shift>, ShiftRepository>();
             services.AddSingleton<IRepository<PartnerOrganization>, PartnerRepository>();
+            services.AddTransient<ILocationService, LocationService>();
 
             services.AddTransient<IConfidentialClientApplication>(x => ConfidentialClientApplicationBuilder
                 .Create(this.Configuration["ClientId"])

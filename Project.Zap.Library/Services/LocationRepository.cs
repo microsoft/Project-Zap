@@ -58,13 +58,14 @@ namespace Project.Zap.Library.Services
             return results;
         }
 
-        public async Task<Location> Update(Location item)
+        public async Task<Location> Replace(Location item)
         {
-            Location location = this.cosmosContainer.GetItemLinqQueryable<Location>(true).Where(x => x.Name == item.Name).AsEnumerable().FirstOrDefault();
+            return await this.cosmosContainer.ReplaceItemAsync<Location>(item, item.id, new PartitionKey(item.Name));
+        }
 
-            location.Address = item.Address;
-
-            return await this.cosmosContainer.ReplaceItemAsync<Location>(location, location.id, new PartitionKey(location.Name));
+        public Task<Location> Update(Location item)
+        {
+            throw new NotImplementedException();            
         }
     }
 }

@@ -30,7 +30,7 @@ namespace Project.Zap.Models
 
         [Display(Name = "Distance")]
         [BindProperty]
-        public int DistanceInMeters { get; set; }
+        public int? DistanceInMeters { get; set; }
 
         public SelectList Distances { get; set; } = new SelectList(new[] { new SelectListItem { Text = "10 Miles", Value = "16093" }, new SelectListItem { Text = "30 Miles", Value = "48280" }}, "Value", "Text");
 

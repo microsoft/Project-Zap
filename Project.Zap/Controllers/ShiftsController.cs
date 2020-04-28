@@ -8,12 +8,12 @@ using Project.Zap.Helpers;
 using Project.Zap.Library.Models;
 using Project.Zap.Library.Services;
 using Project.Zap.Models;
+using Project.Zap.Services;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Project.Zap.Controllers
@@ -22,7 +22,7 @@ namespace Project.Zap.Controllers
     public class ShiftsController : Controller
     {
         private readonly IRepository<Shift> shiftRepository;
-        private readonly IRepository<Location> locationRepository;
+        private readonly ILocationService locationService;
         private readonly Microsoft.Graph.IGraphServiceClient graphServiceClient;
         private readonly IStringLocalizer<ShiftsController> stringLocalizer;
         private readonly IConfiguration configuration;
@@ -31,7 +31,7 @@ namespace Project.Zap.Controllers
 
         public ShiftsController(
             IRepository<Shift> shiftRepository,
-            IRepository<Location> locationRepository,
+            ILocationService locationService,
             Microsoft.Graph.IGraphServiceClient graphServiceClient,
             IStringLocalizer<ShiftsController> stringLocalizer,
             IConfiguration configuration,
@@ -39,7 +39,7 @@ namespace Project.Zap.Controllers
             ILogger<ShiftsController> logger)
         {
             this.shiftRepository = shiftRepository;
-            this.locationRepository = locationRepository;
+            this.locationService = locationService;
             this.graphServiceClient = graphServiceClient;
             this.stringLocalizer = stringLocalizer;
             this.configuration = configuration;
@@ -49,7 +49,7 @@ namespace Project.Zap.Controllers
 
         public async Task<IActionResult> Index()
         {
-            IEnumerable<Location> locations = await this.locationRepository.Get();
+            IEnumerable<Location> locations = await this.locationService.Get();
             if (locations == null || !locations.Any())
             {
                 this.logger.LogInformation("No locations, so redirecting to location view");
@@ -76,7 +76,7 @@ namespace Project.Zap.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Search(SearchShiftViewModel search)
         {
-            IEnumerable<Location> locations = await this.locationRepository.Get();
+            IEnumerable<Location> locations = await this.locationService.Get();
 
             List<string> locationIds = new List<string>();
 
@@ -87,12 +87,7 @@ namespace Project.Zap.Controllers
             if(search.DistanceInMeters != null && !string.IsNullOrWhiteSpace(search.ZipOrPostcode))
             {
                 Point point = await this.mapService.GetCoordinates(new Address { ZipOrPostcode = search.ZipOrPostcode });
-                IEnumerable<Location> filteredLocations = await this.locationRepository.Get(
-                    $"SELECT * FROM c WHERE ST_DISTANCE(c.Address.Point, {{'type': 'Point', 'coordinates':[{point.coordinates[0]}, {point.coordinates[1]}]}}) < @radiusDistance",
-                    new Dictionary<string, object>
-                    {
-                        {"@radiusDistance", search.DistanceInMeters }
-                    });
+                IEnumerable<Location> filteredLocations = await this.locationService.GetByDistance(point, search.DistanceInMeters.Value);
                 locationIds.AddRange(filteredLocations.Select(x => x.id));
             }
 
@@ -123,7 +118,7 @@ namespace Project.Zap.Controllers
             return await this.Index();
         }
 
-        private async Task<Location> GetLocation(string name) => (await this.locationRepository.Get("SELECT * FROM c WHERE c.Name = @name", new Dictionary<string, object> { { "@name", name } })).FirstOrDefault();
+        private async Task<Location> GetLocation(string name) => await this.locationService.GetByName(name);
 
         [HttpGet]
         [Authorize(Policy = "OrgBEmployee")]
@@ -147,7 +142,7 @@ namespace Project.Zap.Controllers
                 this.logger.LogInformation("Trying to view shifts, but shifts currently available");
                 ViewData["NoShifts"] = this.stringLocalizer["NoShifts"];
             }
-            return View("ViewShifts", shifts.Map(await this.locationRepository.Get()));
+            return View("ViewShifts", shifts.Map(await this.locationService.Get()));
         }
 
         [HttpGet]
@@ -276,7 +271,7 @@ namespace Project.Zap.Controllers
         {
             AddShiftViewModel viewModel = new AddShiftViewModel
             {
-                LocationNames = this.GetLocationNames(await this.locationRepository.Get()),
+                LocationNames = this.GetLocationNames(await this.locationService.Get()),
                 NewShift = new ShiftViewModel()
             };
             return View(viewModel);
@@ -306,7 +301,7 @@ namespace Project.Zap.Controllers
         [Authorize(Policy = "OrgAManager")]
         public async Task<IActionResult> Upload()
         {
-            return View(new FileUploadViewModel { LocationNames = this.GetLocationNames(await this.locationRepository.Get()) });
+            return View(new FileUploadViewModel { LocationNames = this.GetLocationNames(await this.locationService.Get()) });
         }
 
         [HttpPost]

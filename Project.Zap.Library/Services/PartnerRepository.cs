@@ -61,6 +61,11 @@ namespace Project.Zap.Library.Services
             return results;
         }
 
+        public Task<PartnerOrganization> Replace(PartnerOrganization item)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<PartnerOrganization> Update(PartnerOrganization item)
         {
             throw new NotImplementedException();
