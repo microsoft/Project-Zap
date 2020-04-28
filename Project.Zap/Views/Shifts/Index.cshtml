@@ -38,11 +38,10 @@
     <h3 class="mt-3">@Localizer["ResultsTitle"]</h3>
     <ul class="nav nav-tabs">
         <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#listView">List View</a>
+            <a class="nav-link" data-toggle="tab" href="#listView">@Localizer["ListView"]</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link active" data-toggle="tab" href="#mapView">Map View</a>
-
+            <a class="nav-link active" data-toggle="tab" href="#mapView">@Localizer["MapView"]</a>
         </li>
     </ul>
 
@@ -52,7 +51,7 @@
                 @if (Model.Result != null)
                 {
                     <div class="row">
-                        <div class="d-none d-xs-block d-sm-block col-md-4 font-weight-bold mt-2">@Localizer["TableStore"]</div>
+                        <div class="d-none d-xs-block d-sm-block col-md-4 font-weight-bold mt-2">@Localizer["TableLocation"]</div>
                         <div class="d-none d-xs-block d-sm-block col-md-2 font-weight-bold mt-2">@Localizer["TableStart"]</div>
                         <div class="d-none d-xs-block d-sm-block col-md-2 font-weight-bold mt-2">@Localizer["TableEnd"]</div>
                         <div class="d-none d-xs-block d-sm-block col-md-2 font-weight-bold mt-2">@Localizer["TableWorkType"]</div>
@@ -69,7 +68,7 @@
                     @foreach (var shift in Model.Result)
                     {
                         <div class="row">
-                            <div class="d-block d-xs-none d-sm-none col-xs-6 col-sm-6 font-weight-bold mt-2">@Localizer["TableStore"]</div>
+                            <div class="d-block d-xs-none d-sm-none col-xs-6 col-sm-6 font-weight-bold mt-2">@Localizer["TableLocation"]</div>
                             <div class="col-xs-6 col-sm-6 col-md-4 mt-2">@shift.LocationName</div>
 
                             <div class="d-block d-xs-none d-sm-none col-xs-6 col-sm-6 font-weight-bold mt-2">@Localizer["TableStart"]</div>
@@ -155,7 +154,7 @@
                 <text>
             var popUpContent = L.Util.template(`
 <dl>
-    <dt>@Localizer["TableStore"]</dt>
+    <dt>@Localizer["TableLocation"]</dt>
     <dd>@shift.LocationName</dd>
     <dt>@Localizer["TableStart"]</dt>
     <dd>@shift.Start</dd>

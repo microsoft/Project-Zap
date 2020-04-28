@@ -15,23 +15,20 @@
 
 <dl class="row">
 
-    <dt class="col-sm-3">@Localizer["TableStoreName"]</dt>
+    <dt class="col-sm-3">@Localizer["Location"]</dt>
     <dd class="col-sm-9">@Model.LocationName</dd>
 
-    <dt class="col-sm-3">@Localizer["TableStart"]</dt>
+    <dt class="col-sm-3">@Localizer["Start"]</dt>
     <dd class="col-sm-9">@Model.Start</dd>
 
-    <dt class="col-sm-3">@Localizer["TableEnd"]</dt>
+    <dt class="col-sm-3">@Localizer["End"]</dt>
     <dd class="col-sm-9">@Model.End</dd>
 
-    <dt class="col-sm-3 text-truncate">@Localizer["TableWorkType"]</dt>
+    <dt class="col-sm-3 text-truncate">@Localizer["WorkType"]</dt>
     <dd class="col-sm-9">@Model.WorkType</dd>
 
-    <dt class="col-sm-3">@Localizer["TableQuantity"]</dt>
-    <dd class="col-sm-9">@Model.Quantity</dd>
-
-    <dt class="col-sm-3">@Localizer["TableAvailable"]</dt>
-    <dd class="col-sm-9">@Model.Available</dd>
+    <dt class="col-sm-3">@Localizer["Available"]</dt>
+    <dd class="col-sm-9">@Model.Available/@Model.Quantity</dd>
 
     <dt class="col-sm-3">@Localizer["Employees"]</dt>
     <dd>
@@ -54,7 +51,7 @@
 
 </dl>
 
-<a class="btn btn-danger col-xs-6 col-sm-6 col-md-2" asp-controller="Shifts" asp-action="Delete" asp-route-LocationName="@Model.LocationName" asp-route-Start="@Model.Start.ToString("yyyy-MM-ddTHH:mm")" asp-route-End="@Model.End.ToString("yyyy-MM-ddTHH:mm")" asp-route-WorkType="@Model.WorkType">@Localizer["Delete"]</a>
+<a class="btn btn-danger col-xs-6 col-sm-6 col-md-2" asp-controller="Shifts" asp-action="Delete" asp-route-LocationName="@Model.LocationName" asp-route-Start="@Model.Start.ToString("yyyy-MM-ddTHH:mm")" asp-route-End="@Model.End.ToString("yyyy-MM-ddTHH:mm")" asp-route-WorkType="@Model.WorkType">@Localizer["DeleteButton"]</a>
 
 
 

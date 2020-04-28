@@ -10,7 +10,7 @@ namespace Project.Zap.Models
     {
         [BindProperty]
         [Required]
-        [Display(Name = "StoreName")]
+        [Display(Name = "LocationName")]
         public string LocationName { get; set; }
         
         [BindProperty]

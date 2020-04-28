@@ -120,8 +120,8 @@
   <data name="FormFile" xml:space="preserve">
     <value>Fichier</value>
   </data>
-  <data name="StoreName" xml:space="preserve">
-    <value>Magasin</value>
+  <data name="LocationName" xml:space="preserve">
+    <value>Lieux</value>
   </data>
   <data name="StoreNames" xml:space="preserve">
     <value>Noms des magasins</value>

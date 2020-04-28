@@ -129,6 +129,12 @@
   <data name="LinkView" xml:space="preserve">
     <value>Afficher</value>
   </data>
+  <data name="ListView" xml:space="preserve">
+    <value>Vue en liste</value>
+  </data>
+  <data name="MapView" xml:space="preserve">
+    <value>Vue Cartographique</value>
+  </data>
   <data name="ResultsTitle" xml:space="preserve">
     <value>Résultats</value>
   </data>
@@ -150,14 +156,14 @@
   <data name="TableEnd" xml:space="preserve">
     <value>Heure de fin</value>
   </data>
+  <data name="TableLocation" xml:space="preserve">
+    <value>Lieux</value>
+  </data>
   <data name="TableQuantity" xml:space="preserve">
     <value>Nombre</value>
   </data>
   <data name="TableStart" xml:space="preserve">
     <value>Heure de début</value>
-  </data>
-  <data name="TableStore" xml:space="preserve">
-    <value>Magasin</value>
   </data>
   <data name="TableView" xml:space="preserve">
     <value>Afficher</value>
