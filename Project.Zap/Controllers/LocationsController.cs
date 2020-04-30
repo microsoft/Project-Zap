@@ -4,9 +4,7 @@ using Project.Zap.Helpers;
 using Project.Zap.Library.Models;
 using Project.Zap.Models;
 using Project.Zap.Services;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Project.Zap.Controllers
@@ -44,14 +42,14 @@ namespace Project.Zap.Controllers
 
             await this.locationService.Add(viewModel.Map());
 
-            return await this.Index();
+            return Redirect("/Locations");
         }
 
         [HttpGet]
         public async Task<IActionResult> Delete(string id)
         {
             await this.locationService.DeleteByName(id);
-            return await this.Index();
+            return Redirect("/Locations");
         }
 
         [HttpGet]
@@ -67,7 +65,7 @@ namespace Project.Zap.Controllers
         {
             await this.locationService.Update(viewModel.Map());
 
-            return await this.Index();
+            return Redirect("/Locations");
         }
     }
 }

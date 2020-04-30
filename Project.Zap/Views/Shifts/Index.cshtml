@@ -36,75 +36,56 @@
 
 <div id="results">
     <h3 class="mt-3">@Localizer["ResultsTitle"]</h3>
-    <ul class="nav nav-tabs">
-        <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#listView">List View</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link active" data-toggle="tab" href="#mapView">Map View</a>
 
-        </li>
-    </ul>
-
-    <div class="container-fluid">
-        <div class="tab-content">
-            <div role="tabpanel" class="tab-pane" id="listView">
-                @if (Model.Result != null)
-                {
-                    <div class="row">
-                        <div class="d-none d-xs-block d-sm-block col-md-4 font-weight-bold mt-2">@Localizer["TableStore"]</div>
-                        <div class="d-none d-xs-block d-sm-block col-md-2 font-weight-bold mt-2">@Localizer["TableStart"]</div>
-                        <div class="d-none d-xs-block d-sm-block col-md-2 font-weight-bold mt-2">@Localizer["TableEnd"]</div>
-                        <div class="d-none d-xs-block d-sm-block col-md-2 font-weight-bold mt-2">@Localizer["TableWorkType"]</div>
-                        <div class="d-none d-xs-block d-sm-block col-md-1 font-weight-bold mt-2">@Localizer["TableAvailable"]</div>
-                        @if ((await AuthorizationService.AuthorizeAsync(User, "OrgAManager")).Succeeded)
-                        {
-                            <div class="d-none d-xs-block d-sm-block col-md-1 font-weight-bold mt-2 invisible">@Localizer["TableView"]</div>
-                        }
-                        @if ((await AuthorizationService.AuthorizeAsync(User, "OrgBEmployee")).Succeeded)
-                        {
-                            <div class="d-none d-xs-block d-sm-block col-md-1 font-weight-bold mt-2 invisible">@Localizer["TableBook"]</div>
-                        }
-                    </div>
-                    @foreach (var shift in Model.Result)
-                    {
-                        <div class="row">
-                            <div class="d-block d-xs-none d-sm-none col-xs-6 col-sm-6 font-weight-bold mt-2">@Localizer["TableStore"]</div>
-                            <div class="col-xs-6 col-sm-6 col-md-4 mt-2">@shift.LocationName</div>
-
-                            <div class="d-block d-xs-none d-sm-none col-xs-6 col-sm-6 font-weight-bold mt-2">@Localizer["TableStart"]</div>
-                            <div class="col-xs-6 col-sm-6 col-md-2 mt-2">@shift.Start.ToString("MM/dd/yyyy HH:mm")</div>
-
-                            <div class="d-block d-xs-none d-sm-none col-xs-6 col-sm-6 font-weight-bold mt-2">@Localizer["TableEnd"]</div>
-                            <div class="col-xs-6 col-sm-6 col-md-2 mt-2">@shift.End.ToString("MM/dd/yyyy HH:mm")</div>
-
-
-                            <div class="d-block d-xs-none d-sm-none col-xs-6 col-sm-6 font-weight-bold mt-2">@Localizer["TableWorkType"]</div>
-                            <div class="col-xs-6 col-sm-6 col-md-2 mt-2">@shift.WorkType</div>
-
-                            <div class="d-block d-xs-none d-sm-none col-xs-6 col-sm-6 font-weight-bold mt-2">@Localizer["TableAvailable"]</div>
-                            <div class="col-xs-6 col-sm-6 col-md-1 mt-2">@shift.Available / @shift.Quantity</div>
-                            @if ((await AuthorizationService.AuthorizeAsync(User, "OrgAManager")).Succeeded)
-                            {
-                                <a class="btn btn-primary col-xs-6 col-sm-6 col-md-1 mt-2" asp-controller="Shifts" asp-action="ViewShift" asp-route-LocationName="@shift.LocationName" asp-route-Start="@shift.Start.ToString("yyyy-MM-ddTHH:mm")" asp-route-End="@shift.End.ToString("yyyy-MM-ddTHH:mm")" asp-route-WorkType="@shift.WorkType" asp-route-Quantity="@shift.Quantity" asp-route-Available="@shift.Available">@Localizer["LinkView"]</a>
-                            }
-                            @if ((await AuthorizationService.AuthorizeAsync(User, "OrgBEmployee")).Succeeded)
-                            {
-                                <a class="btn btn-primary col-xs-6 col-sm-6 col-md-1 mt-2" asp-controller="Shifts" asp-action="Book" asp-route-LocationName="@shift.LocationName" asp-route-Start="@shift.Start.ToString("yyyy-MM-ddTHH:mm")" asp-route-End="@shift.End.ToString("yyyy-MM-ddTHH:mm")" asp-route-WorkType="@shift.WorkType">@Localizer["LinkBook"]</a>
-                            }
-                        </div>
-                    }
-                }
-            </div>
-            <div role="tabpanel" class="tab-pane active" id="mapView">
-                <div class="row">
-                    <div id="myMap" class="mt-2 col-12" style="height:400px"></div>
-                </div>
-            </div>
-        </div>
+    @if (Model.Result != null)
+    {
+    <div class="row">
+        <div id="myMap" class="mt-2 col-12" style="height:400px"></div>
     </div>
-
-
+    <div class="row">
+        <div class="d-none d-xs-block d-sm-block col-md-4 font-weight-bold mt-2">@Localizer["TableStore"]</div>
+        <div class="d-none d-xs-block d-sm-block col-md-2 font-weight-bold mt-2">@Localizer["TableStart"]</div>
+        <div class="d-none d-xs-block d-sm-block col-md-2 font-weight-bold mt-2">@Localizer["TableEnd"]</div>
+        <div class="d-none d-xs-block d-sm-block col-md-2 font-weight-bold mt-2">@Localizer["TableWorkType"]</div>
+        <div class="d-none d-xs-block d-sm-block col-md-1 font-weight-bold mt-2">@Localizer["TableAvailable"]</div>
+        @if ((await AuthorizationService.AuthorizeAsync(User, "OrgAManager")).Succeeded)
+            {
+        <div class="d-none d-xs-block d-sm-block col-md-1 font-weight-bold mt-2 invisible">@Localizer["TableView"]</div>
+            }
+        @if ((await AuthorizationService.AuthorizeAsync(User, "OrgBEmployee")).Succeeded)
+            {
+        <div class="d-none d-xs-block d-sm-block col-md-1 font-weight-bold mt-2 invisible">@Localizer["TableBook"]</div>
+            }
+    </div>
+    @foreach (var shift in Model.Result)
+        {
+    <div class="row">
+        <div class="d-block d-xs-none d-sm-none col-xs-6 col-sm-6 font-weight-bold mt-2">@Localizer["TableStore"]</div>
+        <div class="col-xs-6 col-sm-6 col-md-4 mt-2">@shift.LocationName</div>
+    
+        <div class="d-block d-xs-none d-sm-none col-xs-6 col-sm-6 font-weight-bold mt-2">@Localizer["TableStart"]</div>
+        <div class="col-xs-6 col-sm-6 col-md-2 mt-2">@shift.Start.ToString("MM/dd/yyyy HH:mm")</div>
+    
+        <div class="d-block d-xs-none d-sm-none col-xs-6 col-sm-6 font-weight-bold mt-2">@Localizer["TableEnd"]</div>
+        <div class="col-xs-6 col-sm-6 col-md-2 mt-2">@shift.End.ToString("MM/dd/yyyy HH:mm")</div>
+    
+    
+        <div class="d-block d-xs-none d-sm-none col-xs-6 col-sm-6 font-weight-bold mt-2">@Localizer["TableWorkType"]</div>
+        <div class="col-xs-6 col-sm-6 col-md-2 mt-2">@shift.WorkType</div>
+    
+        <div class="d-block d-xs-none d-sm-none col-xs-6 col-sm-6 font-weight-bold mt-2">@Localizer["TableAvailable"]</div>
+        <div class="col-xs-6 col-sm-6 col-md-1 mt-2">@shift.Available / @shift.Quantity</div>
+        @if ((await AuthorizationService.AuthorizeAsync(User, "OrgAManager")).Succeeded)
+                {
+        <a class="btn btn-primary col-xs-6 col-sm-6 col-md-1 mt-2" asp-controller="Shifts" asp-action="ViewShift" asp-route-LocationName="@shift.LocationName" asp-route-Start="@shift.Start.ToString("yyyy-MM-ddTHH:mm")" asp-route-End="@shift.End.ToString("yyyy-MM-ddTHH:mm")" asp-route-WorkType="@shift.WorkType" asp-route-Quantity="@shift.Quantity" asp-route-Available="@shift.Available">@Localizer["LinkView"]</a>
+                }
+        @if ((await AuthorizationService.AuthorizeAsync(User, "OrgBEmployee")).Succeeded)
+                {
+        <a class="btn btn-primary col-xs-6 col-sm-6 col-md-1 mt-2" asp-controller="Shifts" asp-action="Book" asp-route-LocationName="@shift.LocationName" asp-route-Start="@shift.Start.ToString("yyyy-MM-ddTHH:mm")" asp-route-End="@shift.End.ToString("yyyy-MM-ddTHH:mm")" asp-route-WorkType="@shift.WorkType">@Localizer["LinkBook"]</a>
+                }
+    </div>
+        }
+    }
 </div>
 
 @section Scripts

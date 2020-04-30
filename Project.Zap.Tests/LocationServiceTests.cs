@@ -7,6 +7,7 @@ using NSubstitute;
 using System;
 using System.Linq.Expressions;
 using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
 
 namespace Project.Zap.Tests
 {
@@ -178,16 +179,36 @@ namespace Project.Zap.Tests
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed  
         }
 
+        [Fact]
+        public async Task Add_LocationWithExistingName_NotAdded()
+        {
+            // Arrange
+            IRepository<Location> repository = Substitute.For<IRepository<Location>>();
+            repository.Get(Arg.Any<string>(), Arg.Any<Dictionary<string, object>>()).Returns(new[] { new Location { Address = new Address { } } });
+            IMapService mapService = Substitute.For<IMapService>();
+            ILocationService service = this.GetLocationService(locationRepository: repository, mapService: mapService);
+
+            // Act
+            await service.Add(new Location { Name = "Contoso" });
+
+            // Assert            
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            repository.DidNotReceive().Add(Arg.Any<Location>());
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed  
+        }
+
         private ILocationService GetLocationService(
             IRepository<Location> locationRepository = null,
             IRepository<Shift> shiftRepository = null,
-            IMapService mapService = null)
+            IMapService mapService = null,
+            ILogger<LocationService> logger = null)
         {
             locationRepository = locationRepository ?? Substitute.For<IRepository<Location>>();
             shiftRepository = shiftRepository ?? Substitute.For<IRepository<Shift>>();
             mapService = mapService ?? Substitute.For<IMapService>();
+            logger = logger ?? Substitute.For<ILogger<LocationService>>();
 
-            return new LocationService(locationRepository, shiftRepository, mapService);
+            return new LocationService(locationRepository, shiftRepository, mapService, logger);
         }
     }
 }
