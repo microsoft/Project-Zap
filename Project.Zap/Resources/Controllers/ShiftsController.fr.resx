@@ -117,10 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="MultipleBookError" xml:space="preserve">
+    <value>Vous êtes déjà réservé pour travailler ce jour-là.</value>
+  </data>
   <data name="NoEmployees" xml:space="preserve">
     <value>Pas d’employés enregistrés pour ce créneau.</value>
   </data>
   <data name="NoShifts" xml:space="preserve">
-    <value>Pas de créneaux disponibles.</value>
+    <value>Pas de créneaux réservé.</value>
+  </data>
+  <data name="NoShiftsAvailable" xml:space="preserve">
+    <value>Pas de créneaux disponible.</value>
   </data>
 </root>

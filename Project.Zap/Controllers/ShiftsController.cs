@@ -234,7 +234,7 @@ namespace Project.Zap.Controllers
             if (bookedShifts?.Where(x => x.StartDateTime.DayOfYear == viewModel.Start.DayOfYear && x.StartDateTime.Year == viewModel.Start.Year).FirstOrDefault() != null)
             {
                 this.logger.LogInformation("Trying to book on a shift when user is already booked out for this day");
-                ViewData["ValidationError"] = "You are already booked to work on this day.";
+                ViewData["ValidationError"] = this.stringLocalizer["MultipleBookError"];
                 return await this.Index();
             }
 
@@ -253,7 +253,7 @@ namespace Project.Zap.Controllers
             if (shift == null)
             {
                 this.logger.LogInformation("Trying to book shift for a time when no shifts are available");
-                ViewData["ValidationError"] = "No available shifts at this time.";
+                ViewData["ValidationError"] = this.stringLocalizer["NoShiftsAvailable"];
                 return await this.Index();
             }
 

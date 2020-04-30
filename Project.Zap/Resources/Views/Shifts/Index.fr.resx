@@ -130,10 +130,10 @@
     <value>Afficher</value>
   </data>
   <data name="ListView" xml:space="preserve">
-    <value>Vue en liste</value>
+    <value>Afficher en liste</value>
   </data>
   <data name="MapView" xml:space="preserve">
-    <value>Vue Cartographique</value>
+    <value>Afficher Cartographique</value>
   </data>
   <data name="ResultsTitle" xml:space="preserve">
     <value>Résultats</value>
@@ -157,7 +157,7 @@
     <value>Heure de fin</value>
   </data>
   <data name="TableLocation" xml:space="preserve">
-    <value>Lieux</value>
+    <value>Lieu</value>
   </data>
   <data name="TableQuantity" xml:space="preserve">
     <value>Nombre</value>

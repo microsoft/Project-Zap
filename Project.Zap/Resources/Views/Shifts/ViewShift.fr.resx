@@ -129,11 +129,8 @@
   <data name="End" xml:space="preserve">
     <value>Heure de fin</value>
   </data>
-  <data name="ErrorTitle" xml:space="preserve">
-    <value>Pas de créneaux disponibles</value>
-  </data>
   <data name="Location" xml:space="preserve">
-    <value>Lieux</value>
+    <value>Lieu</value>
   </data>
   <data name="Start" xml:space="preserve">
     <value>Heure de début</value>

@@ -150,4 +150,7 @@
   <data name="Upload" xml:space="preserve">
     <value>Upload</value>
   </data>
+  <data name="View" xml:space="preserve">
+    <value>View</value>
+  </data>
 </root>
