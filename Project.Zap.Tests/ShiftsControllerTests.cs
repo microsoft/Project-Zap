@@ -534,6 +534,7 @@ namespace Project.Zap.Tests
         public async Task Book_EmployeeOnShift_ViewDataError()
         {
             // Arrange
+            IStringLocalizer<ShiftsController> stringLocalizer = Substitute.For<IStringLocalizer<ShiftsController>>();
             IRepository<Library.Models.Shift> shiftRepository = Substitute.For<IRepository<Library.Models.Shift>>();
             DateTime now = DateTime.Now;
             shiftRepository.Get(Arg.Any<string>(), Arg.Any<IDictionary<string, object>>(), Arg.Any<string>()).Returns(new[]
@@ -554,7 +555,7 @@ namespace Project.Zap.Tests
 
             // Assert
             ViewResult viewResult = Assert.IsType<ViewResult>(result);
-            Assert.Equal("You are already booked to work on this day.", viewResult.ViewData["ValidationError"].ToString());
+            Assert.Equal(stringLocalizer["MultipleBookError"], viewResult.ViewData["ValidationError"]);
         }
 
         [Fact]
@@ -590,6 +591,7 @@ namespace Project.Zap.Tests
         public async Task Book_EmployeeNotOnShiftButShiftNotAvailable_ViewDataWarning()
         {
             // Arrange
+            IStringLocalizer<ShiftsController> stringLocalizer = Substitute.For<IStringLocalizer<ShiftsController>>();
             IRepository<Library.Models.Shift> shiftRepository = Substitute.For<IRepository<Library.Models.Shift>>();
             DateTime now = DateTime.Now;
             ILocationService locationService = Substitute.For<ILocationService>();
@@ -605,7 +607,7 @@ namespace Project.Zap.Tests
 
             // Assert
             ViewResult viewResult = Assert.IsType<ViewResult>(result);
-            Assert.Equal("No available shifts at this time.", viewResult.ViewData["ValidationError"].ToString());
+            Assert.Equal(stringLocalizer["NoShiftsAvailable"], viewResult.ViewData["ValidationError"]);
         }
 
         [Fact]
