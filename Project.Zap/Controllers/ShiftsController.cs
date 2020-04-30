@@ -115,7 +115,7 @@ namespace Project.Zap.Controllers
         {
             Location location = await this.GetLocation(viewModel.LocationName);
             await this.shiftRepository.Delete(x => x.LocationId == location.id && x.StartDateTime == viewModel.Start && x.EndDateTime == viewModel.End && x.WorkType == viewModel.WorkType);
-            return await this.Index();
+            return Redirect("/Shifts");
         }
 
         private async Task<Location> GetLocation(string name) => await this.locationService.GetByName(name);
@@ -214,7 +214,7 @@ namespace Project.Zap.Controllers
 
             await this.shiftRepository.Update(shift);
 
-            return await this.Index();
+            return Redirect("/Shifts");
         }
 
         [HttpGet]
@@ -235,7 +235,7 @@ namespace Project.Zap.Controllers
             {
                 this.logger.LogInformation("Trying to book on a shift when user is already booked out for this day");
                 ViewData["ValidationError"] = "You are already booked to work on this day.";
-                return await this.Index();
+                return Redirect("/Shifts");
             }
 
             Location location = await this.GetLocation(viewModel.LocationName);
@@ -254,7 +254,7 @@ namespace Project.Zap.Controllers
             {
                 this.logger.LogInformation("Trying to book shift for a time when no shifts are available");
                 ViewData["ValidationError"] = "No available shifts at this time.";
-                return await this.Index();
+                return Redirect("/Shifts");
             }
 
             shift.EmployeeId = id.Value;
@@ -294,7 +294,7 @@ namespace Project.Zap.Controllers
 
             shifts.ForEach(async x => await this.shiftRepository.Add(x));
 
-            return await this.Index();
+            return Redirect("/Shifts");
         }
 
         [HttpGet]
@@ -336,7 +336,7 @@ namespace Project.Zap.Controllers
                 }
             }
 
-            return await this.Index();
+            return Redirect("/Shifts");
         }
     }
 }
