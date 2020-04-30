@@ -55,16 +55,21 @@ namespace Project.Zap.Controllers
                 this.logger.LogInformation("No locations, so redirecting to location view");
                 return Redirect("/Locations");
             }
+            SearchShiftViewModel viewModel = await GetShifts(locations);
 
+            ViewData["AzureMapsKey"] = this.configuration["AzureMapsSubscriptionKey"];
+            return View("Index", viewModel);
+        }
+
+        private async Task<SearchShiftViewModel> GetShifts(IEnumerable<Location> locations)
+        {
             IEnumerable<Shift> shifts = await this.shiftRepository.Get("SELECT * FROM c WHERE c.StartDateTime > @start", new Dictionary<string, object> { { "@start", DateTime.Now } });
             SearchShiftViewModel viewModel = new SearchShiftViewModel
             {
                 LocationNames = this.GetLocationNames(locations),
                 Result = shifts.Map(locations)
             };
-
-            ViewData["AzureMapsKey"] = this.configuration["AzureMapsSubscriptionKey"];
-            return View("Index", viewModel);
+            return viewModel;
         }
 
         private SelectList GetLocationNames(IEnumerable<Location> locations)
@@ -235,7 +240,13 @@ namespace Project.Zap.Controllers
             {
                 this.logger.LogInformation("Trying to book on a shift when user is already booked out for this day");
                 ViewData["ValidationError"] = "You are already booked to work on this day.";
-                return Redirect("/Shifts");
+                IEnumerable<Location> locations = await this.locationService.Get();
+                if (locations == null || !locations.Any())
+                {
+                    this.logger.LogInformation("No locations, so redirecting to location view");
+                    return Redirect("/Locations");
+                }
+                return View("/Index", await this.GetShifts(locations));
             }
 
             Location location = await this.GetLocation(viewModel.LocationName);
@@ -254,7 +265,13 @@ namespace Project.Zap.Controllers
             {
                 this.logger.LogInformation("Trying to book shift for a time when no shifts are available");
                 ViewData["ValidationError"] = "No available shifts at this time.";
-                return Redirect("/Shifts");
+                IEnumerable<Location> locations = await this.locationService.Get();
+                if (locations == null || !locations.Any())
+                {
+                    this.logger.LogInformation("No locations, so redirecting to location view");
+                    return Redirect("/Locations");
+                }
+                return View("/Index", await this.GetShifts(locations));
             }
 
             shift.EmployeeId = id.Value;

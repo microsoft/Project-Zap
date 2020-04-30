@@ -1,4 +1,5 @@
-﻿using Project.Zap.Library.Models;
+﻿using Microsoft.Extensions.Logging;
+using Project.Zap.Library.Models;
 using Project.Zap.Library.Services;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,12 +22,14 @@ namespace Project.Zap.Services
         private readonly IRepository<Location> repository;
         private readonly IRepository<Shift> shiftRepository;
         private readonly IMapService mapService;
+        private readonly ILogger<LocationService> logger;
 
-        public LocationService(IRepository<Location> repository, IRepository<Shift> shiftRepository, IMapService mapService)
+        public LocationService(IRepository<Location> repository, IRepository<Shift> shiftRepository, IMapService mapService, ILogger<LocationService> logger)
         {
             this.repository = repository;
             this.shiftRepository = shiftRepository;
             this.mapService = mapService;
+            this.logger = logger;
         }
 
         public async Task Add(Location location)
@@ -39,6 +42,12 @@ namespace Project.Zap.Services
         public async Task DeleteByName(string name)
         {
             Location existing = await this.GetByName(name);
+            if (existing == null)
+            {
+                this.logger.LogWarning("Trying to delete location that doesn't exist");
+                return;
+            }
+            
             await this.repository.Delete(x => x.Name == name);
             await this.shiftRepository.Delete(x => x.LocationId == existing.id);
         }
@@ -46,6 +55,11 @@ namespace Project.Zap.Services
         public async Task Update(Location location)
         {
             Location existing = await this.GetByName(location.Name);
+            if (existing == null)
+            {
+                this.logger.LogWarning("Trying to update location that doesn't exist");
+                return;
+            }
             existing.Address = location.Address;
             existing.Address.Point = await this.mapService.GetCoordinates(location.Address);
             await this.repository.Replace(existing);
@@ -69,7 +83,12 @@ namespace Project.Zap.Services
         public async Task<Location> GetByName(string name)
         {
             Location location =  (await this.repository.Get("SELECT * FROM c WHERE c.Name = @name", new Dictionary<string, object> { { "@name", name } })).FirstOrDefault();
-            
+            if (location == null)
+            {
+                this.logger.LogWarning("Trying to get location that doesn't exist");
+                return null;
+            }
+
             if (location.Address.Point == null)
             {
                 location.Address.Point = await this.mapService.GetCoordinates(location.Address);

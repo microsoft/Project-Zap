@@ -7,6 +7,7 @@ using NSubstitute;
 using System;
 using System.Linq.Expressions;
 using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
 
 namespace Project.Zap.Tests
 {
@@ -181,13 +182,15 @@ namespace Project.Zap.Tests
         private ILocationService GetLocationService(
             IRepository<Location> locationRepository = null,
             IRepository<Shift> shiftRepository = null,
-            IMapService mapService = null)
+            IMapService mapService = null,
+            ILogger<LocationService> logger = null)
         {
             locationRepository = locationRepository ?? Substitute.For<IRepository<Location>>();
             shiftRepository = shiftRepository ?? Substitute.For<IRepository<Shift>>();
             mapService = mapService ?? Substitute.For<IMapService>();
+            logger = logger ?? Substitute.For<ILogger<LocationService>>();
 
-            return new LocationService(locationRepository, shiftRepository, mapService);
+            return new LocationService(locationRepository, shiftRepository, mapService, logger);
         }
     }
 }
