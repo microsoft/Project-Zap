@@ -44,14 +44,14 @@ namespace Project.Zap.Controllers
 
             await this.locationService.Add(viewModel.Map());
 
-            return await this.Index();
+            return Redirect("/Locations");
         }
 
         [HttpGet]
         public async Task<IActionResult> Delete(string id)
         {
             await this.locationService.DeleteByName(id);
-            return await this.Index();
+            return Redirect("/Locations");
         }
 
         [HttpGet]
@@ -67,7 +67,7 @@ namespace Project.Zap.Controllers
         {
             await this.locationService.Update(viewModel.Map());
 
-            return await this.Index();
+            return Redirect("/Locations");
         }
     }
 }
