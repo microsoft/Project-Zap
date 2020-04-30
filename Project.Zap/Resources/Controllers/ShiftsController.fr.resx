@@ -124,9 +124,9 @@
     <value>Pas d’employés enregistrés pour ce créneau.</value>
   </data>
   <data name="NoShifts" xml:space="preserve">
-    <value>Pas de créneaux réservé.</value>
+    <value>Pas de créneaux réservés.</value>
   </data>
   <data name="NoShiftsAvailable" xml:space="preserve">
-    <value>Pas de créneaux disponible.</value>
+    <value>Pas de créneaux disponibles.</value>
   </data>
 </root>
