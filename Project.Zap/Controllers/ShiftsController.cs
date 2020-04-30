@@ -96,13 +96,18 @@ namespace Project.Zap.Controllers
                 locationIds.AddRange(filteredLocations.Select(x => x.id));
             }
 
-            IEnumerable <Shift> shifts = await this.shiftRepository.Get(
-                "SELECT * FROM c WHERE c.StartDateTime >= @startDateTime AND ARRAY_CONTAINS(@locationIds, c.LocationId)",
-                new Dictionary<string, object>
+            string sql = "SELECT * FROM c WHERE c.StartDateTime >= @startDateTime";
+            IDictionary<string, object> parameters = new Dictionary<string, object>
                 {
-                    { "@startDateTime", search.Start },
-                    { "@locationIds", locationIds }
-                });
+                    { "@startDateTime", search.Start }
+                };
+
+            if (locationIds.Any())
+            {
+                sql = sql + " AND ARRAY_CONTAINS(@locationIds, c.LocationId)";
+                parameters.Add("@locationIds", locationIds);
+            }
+            IEnumerable <Shift> shifts = await this.shiftRepository.Get(sql, parameters);
 
             SearchShiftViewModel viewModel = new SearchShiftViewModel
             {
