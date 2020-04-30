@@ -150,7 +150,7 @@ namespace Project.Zap
             app.UseRouting();
             
             app.UseAuthentication();
-            app.UseUserRegistration(this.Configuration["ManagerCode"], this.Configuration["ExtensionId"]);           
+            app.UseUserRegistration();           
             app.UseAuthorization();
             
             app.UseEndpoints(endpoints =>

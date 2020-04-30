@@ -51,15 +51,15 @@ namespace Project.Zap.Controllers
 
             await this.repository.Add(partner);
 
-            return await this.Index();   
+            return Redirect("/PartnerOrganization");
         }
 
         [HttpGet]
         public async Task<IActionResult> DeletePartner(string id)
         {
             await this.repository.Delete(x => x.Name == id);
-            
-            return await this.Index();
+
+            return Redirect("/PartnerOrganization");
         }
 
         private char[] chars = new char[]
