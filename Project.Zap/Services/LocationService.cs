@@ -34,8 +34,13 @@ namespace Project.Zap.Services
 
         public async Task Add(Location location)
         {
-            location.Address.Point = await this.mapService.GetCoordinates(location.Address);
+            Location existing = await this.GetByName(location.Name);
+            if(existing != null)
+            {
+                return;
+            }
 
+            location.Address.Point = await this.mapService.GetCoordinates(location.Address);            
             await this.repository.Add(location);
         }
 
