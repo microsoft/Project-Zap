@@ -61,27 +61,27 @@
         {
     <div class="row">
         <div class="d-block d-xs-none d-sm-none col-xs-6 col-sm-6 font-weight-bold mt-2">@Localizer["TableStore"]</div>
-        <div class="col-xs-6 col-sm-6 col-md-4 mt-2">@shift.LocationName</div>
+        <div class="col-xs-6 col-sm-6 col-md-4 my-auto">@shift.LocationName</div>
     
         <div class="d-block d-xs-none d-sm-none col-xs-6 col-sm-6 font-weight-bold mt-2">@Localizer["TableStart"]</div>
-        <div class="col-xs-6 col-sm-6 col-md-2 mt-2">@shift.Start.ToString("MM/dd/yyyy HH:mm")</div>
+        <div class="col-xs-6 col-sm-6 col-md-2 my-auto">@shift.Start.ToString("MM/dd/yyyy HH:mm")</div>
     
         <div class="d-block d-xs-none d-sm-none col-xs-6 col-sm-6 font-weight-bold mt-2">@Localizer["TableEnd"]</div>
-        <div class="col-xs-6 col-sm-6 col-md-2 mt-2">@shift.End.ToString("MM/dd/yyyy HH:mm")</div>
+        <div class="col-xs-6 col-sm-6 col-md-2 my-auto">@shift.End.ToString("MM/dd/yyyy HH:mm")</div>
     
     
         <div class="d-block d-xs-none d-sm-none col-xs-6 col-sm-6 font-weight-bold mt-2">@Localizer["TableWorkType"]</div>
-        <div class="col-xs-6 col-sm-6 col-md-2 mt-2">@shift.WorkType</div>
+        <div class="col-xs-6 col-sm-6 col-md-2 my-auto">@shift.WorkType</div>
     
         <div class="d-block d-xs-none d-sm-none col-xs-6 col-sm-6 font-weight-bold mt-2">@Localizer["TableAvailable"]</div>
-        <div class="col-xs-6 col-sm-6 col-md-1 mt-2">@shift.Available / @shift.Quantity</div>
+        <div class="col-xs-6 col-sm-6 col-md-1 my-auto">@shift.Available / @shift.Quantity</div>
         @if ((await AuthorizationService.AuthorizeAsync(User, "OrgAManager")).Succeeded)
                 {
-        <a class="btn btn-primary col-xs-6 col-sm-6 col-md-1 mt-2" asp-controller="Shifts" asp-action="ViewShift" asp-route-LocationName="@shift.LocationName" asp-route-Start="@shift.Start.ToString("yyyy-MM-ddTHH:mm")" asp-route-End="@shift.End.ToString("yyyy-MM-ddTHH:mm")" asp-route-WorkType="@shift.WorkType" asp-route-Quantity="@shift.Quantity" asp-route-Available="@shift.Available">@Localizer["LinkView"]</a>
+        <a class="btn btn-primary col-xs-6 col-sm-6 col-md-1 my-auto" asp-controller="Shifts" asp-action="ViewShift" asp-route-LocationName="@shift.LocationName" asp-route-Start="@shift.Start.ToString("yyyy-MM-ddTHH:mm")" asp-route-End="@shift.End.ToString("yyyy-MM-ddTHH:mm")" asp-route-WorkType="@shift.WorkType" asp-route-Quantity="@shift.Quantity" asp-route-Available="@shift.Available">@Localizer["LinkView"]</a>
                 }
         @if ((await AuthorizationService.AuthorizeAsync(User, "OrgBEmployee")).Succeeded)
                 {
-        <a class="btn btn-primary col-xs-6 col-sm-6 col-md-1 mt-2" asp-controller="Shifts" asp-action="Book" asp-route-LocationName="@shift.LocationName" asp-route-Start="@shift.Start.ToString("yyyy-MM-ddTHH:mm")" asp-route-End="@shift.End.ToString("yyyy-MM-ddTHH:mm")" asp-route-WorkType="@shift.WorkType">@Localizer["LinkBook"]</a>
+        <a class="btn btn-primary col-xs-6 col-sm-6 col-md-1 mt-1 mb-1" asp-controller="Shifts" asp-action="Book" asp-route-LocationName="@shift.LocationName" asp-route-Start="@shift.Start.ToString("yyyy-MM-ddTHH:mm")" asp-route-End="@shift.End.ToString("yyyy-MM-ddTHH:mm")" asp-route-WorkType="@shift.WorkType">@Localizer["LinkBook"]</a>
                 }
     </div>
         }
