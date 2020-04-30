@@ -1,0 +1,27 @@
+﻿@{
+    @using Microsoft.AspNetCore.Mvc.Localization
+
+    @inject IViewLocalizer Localizer
+}
+
+
+@model Project.Zap.Models.NewUserViewModel
+
+<h2>@Localizer["Title"]</h2>
+<p>@Localizer["SignOutMessage"]</p>
+
+@if (ViewData.ContainsKey("ErrorMessage"))
+{
+    <div class="alert alert-danger">
+        @ViewData["ErrorMessage"]
+    </div>
+}
+
+<form asp-controller="NewUser" asp-action="Register" method="post">
+    <div class="form-group">
+        <label asp-for="@Model.RegistrationCode"></label>
+        <input type="text" asp-for="@Model.RegistrationCode" class="form-control" />
+        <span asp-validation-for="@Model.RegistrationCode"></span>
+    </div>
+    <button type="submit" class="btn btn-primary mb-2">@Localizer["Register"]</button>
+</form>
