@@ -120,7 +120,7 @@
   <data name="Add" xml:space="preserve">
     <value>Add</value>
   </data>
-  <data name="NewStoreTitle" xml:space="preserve">
+  <data name="NewLocationTitle" xml:space="preserve">
     <value>New Location</value>
   </data>
 </root>

@@ -14,10 +14,12 @@ namespace Project.Zap.Models
 
         [BindProperty]
         [Required]
+        [Display(Name = "ZipOrPostcode")]
         public string ZipOrPostcode { get; set; }
 
         [BindProperty]
         [Required]
+        [Display(Name = "Address")]
         public string Address { get; set; }
 
     }
@@ -33,8 +35,10 @@ namespace Project.Zap.Models
 
         [BindProperty]
         [Required]
+        [Display(Name = "ZipOrPostcode")]
         public string ZipOrPostcode { get; set; }
 
+        [Display(Name = "Address")]
         public string Address { get; set; }
     }
 }

@@ -123,14 +123,14 @@
   <data name="End" xml:space="preserve">
     <value>Heure de fin</value>
   </data>
+  <data name="LocationName" xml:space="preserve">
+    <value>Lieu</value>
+  </data>
   <data name="Quantity" xml:space="preserve">
     <value>Nombre</value>
   </data>
   <data name="Start" xml:space="preserve">
     <value>Heure de début</value>
-  </data>
-  <data name="StoreName" xml:space="preserve">
-    <value>Magasin</value>
   </data>
   <data name="WorkType" xml:space="preserve">
     <value>Type de travail</value>

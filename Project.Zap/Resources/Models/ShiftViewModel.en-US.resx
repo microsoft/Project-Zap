@@ -123,6 +123,9 @@
   <data name="End" xml:space="preserve">
     <value>End</value>
   </data>
+  <data name="LocationName" xml:space="preserve">
+    <value>Location</value>
+  </data>
   <data name="Quantity" xml:space="preserve">
     <value>Quantity</value>
   </data>
@@ -131,9 +134,6 @@
   </data>
   <data name="StartLessThanEnd" xml:space="preserve">
     <value>Start Date and Time needs to be before End</value>
-  </data>
-  <data name="StoreName" xml:space="preserve">
-    <value>Store Name</value>
   </data>
   <data name="WorkType" xml:space="preserve">
     <value>Work Type</value>

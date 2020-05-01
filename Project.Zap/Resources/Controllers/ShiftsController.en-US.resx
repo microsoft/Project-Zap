@@ -117,10 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="MultipleBookError" xml:space="preserve">
+    <value>You are already booked to work on this day.</value>
+  </data>
   <data name="NoEmployees" xml:space="preserve">
     <value>No employees are booked for this shift.</value>
   </data>
   <data name="NoShifts" xml:space="preserve">
     <value>You have no shifts booked.</value>
+  </data>
+  <data name="NoShiftsAvailable" xml:space="preserve">
+    <value>There are no shifts available.</value>
   </data>
 </root>
