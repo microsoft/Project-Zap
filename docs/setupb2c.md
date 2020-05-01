@@ -22,10 +22,8 @@
 1. Select the **User.ReadWrite.All** permission and click **Add permissions**
 1. Click the **Grant admin consent for [directory name]** button then **Yes**
 
-# Add custom attributes
-* Follow the steps [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/user-flow-custom-attributes) to add two custom **string** attributes:
-  * RegistrationCode
-  * zaprole
+# Add custom attribute
+* Follow the steps [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/user-flow-custom-attributes) to add one custom **string** attribute with the name **zaprole**
 
 # Extensions Application ID
 
@@ -43,12 +41,10 @@ Configure the attributes and claims as below:
 ## Edit profile
 
 * User attributes
-  * Display Name
   * Given Name
   * Surname
 
 * Application claims
-  * Display Name
   * Given Name
   * Identity Provider
   * Identity Provider Access Token
@@ -58,7 +54,6 @@ Configure the attributes and claims as below:
 ## Password reset
 
 * Application claims
-  * Display Name
   * Email Addresses
   * Given Name
   * Surname
@@ -67,19 +62,15 @@ Configure the attributes and claims as below:
 ## Sign-up/sign-in
 
 * User attributes
-  * Display Name
   * Email Address
   * Given Name
-  * RegistrationCode
   * Surname
 
 * Application claims
-  * Display Name
   * Email Addresses
   * Given Name
   * Identity Provider
   * Identity Provider Access Token
-  * RegistrationCode
   * Surname
   * User is new
   * User's Object ID
