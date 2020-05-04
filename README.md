@@ -1,37 +1,12 @@
-# Deploy to Azure
+# Project Zap
+Project Zap is a “shift sharing” application which enables furloughed workers to book shifts at a company which has demand for labor. Project Zap can also be customized and integrated with a company’s existing time and attendance tools to allow workers to book shifts across jobs within the company. 
 
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmicrosoft%2FProject-Zap%2Fmaster%2Ftemplates%2Fazuredeploy.json" target="_blank">
-<img src="/images/deploytoazure.png"/>
-</a>
+Companies can easily upload available shifts at their locations from a CSV file or post those shifts directly from the Project Zap application interface. Those shifts can be made available to a partnering company with a supply of labor (due to furlough or flexible scheduling) via a specific partner code. That code is required for workers to enter the Project Zap portal to view and book shifts made available by the company with demand.
 
-This project includes Azure Resource Manager (ARM) templates to deploy the solution to Microsoft Azure.
+The source code has been made available on GitHub to quickly enable companies to provide access to work opportunities and meet the labor needs of essential businesses.
 
-## Prerequisites
-
-To deploy this application from the supplied ARM templates, an AAD B2C tenant is required.  This tenant must be configured with the appropriate attributes, flows and permissions to support the application.  The process to configure AAD B2C for this application can be found [here](./docs/setupb2c.md).
-
-A number of properties are also required from this tenant to use as input to the deployment, these are summarized here:
-
-| Property | Deployment parameter | Comments |
-|----------|----------------------|----------|
-| Registered application ID | B2C Client ID | App ID for the application registration in AAD B2C |
-| App registration secret | App registration client secret | Auth key for application registration, used to set zaprole custom attribute |
-| Extension App ID | Extension Client ID | App ID for the B2C Extensions app, used to reference custom attributes |
-| Tenant ID | Tenant ID | Unique identifier for AAD B2C tenant |
-| Domain Name | B2C domain | AAD B2C domain name |
-| Token endpoint | B2C Instance | Token endpoint e.g. https://[domain label].b2clogin.com/tfp/ where [domain label] is the first component of the AAD domain name.  For the domain contoso.onmicrosoft.com this would be https://contoso.b2clogin.com/tfp/ |
-| Manager code | Manager code | Initial registration code string to use for organization manager access |
-| Signup/Signin policy ID | Signup Signin Policy ID | Policy ID for signup/signin user flow e.g. B2C_1_susi |
-| Edit profile policy ID | Edit profile Policy ID | Policy ID for edit profile user flow e.g. B2C_1_edit_profile |
-| Reset password policy ID | Reset Password Policy ID | Policy ID for password user flow e.g. B2C_1_password_reset |
-| Customer/Organization Name | Org Name | Name of customer or organization for application naming e.g. Contoso |
-
-
-## Components Deployed
-
-* **Cosmos DB** - database to support application functionality including organization setup, stores, shifts and bookings
-* **App Service** - application runtime environment, includes deployment of application from source code in this repo
-
+# Deploy Project Zap
+To get started using Project Zap please follow the [deployment guide](./docs/azuredeploy.md) to use the provided Azure Resource Manager templates to provision the application in your own Azure subscription.
 
 # Contributing
 
