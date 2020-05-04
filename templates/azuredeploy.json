@@ -12,19 +12,19 @@
             "type": "string",
             "defaultValue": "https://github.com/microsoft/Project-Zap.git"
         },
-        "b2cInstance": {
+        "b2cTokenEndpoint": {
             "type": "string",
             "metadata": {
                 "description": "AAD B2C endpoint e.g. https://{b2ctenantname}.b2clogin.com/tfp/"
             }
         },
-        "b2cClientId": {
+        "applicationId": {
             "type": "string",
             "metadata": {
                 "description": "Client ID for app registration in AAD B2C"
             }
         },
-        "b2cDomain": {
+        "b2cDomainName": {
             "type": "string",
             "metadata": {
                 "description": "AAD B2C domain name e.g. {b2ctenantname}.onmicrosoft.com"
@@ -58,13 +58,13 @@
                 "description": "Initial code for manager sign up"
             }
         },
-        "extensionClientId": {
+        "extensionApplicationId": {
             "type": "string",
             "metadata": {
                 "description": "Application ID for B2C extensions app"
             }
         },
-        "tenantId": {
+        "AADTenantId": {
             "type": "string",
             "metadata": {
                 "description": "AAD B2C tenant ID"
@@ -82,7 +82,7 @@
         "resgpguid": "[substring(replace(guid(resourceGroup().id), '-', ''), 0, 4)]",
         "resourceName": "[concat(toLower(parameters('orgName')), '-', toLower(variables('appName')))]",
         "callbackPath": "/signin-oidc",
-        "extensionClientId": "[replace(parameters('extensionClientId'), '-', '')]",
+        "extensionClientId": "[replace(parameters('extensionApplicationId'), '-', '')]",
         "azureMapsUri": "https://atlas.microsoft.com",
         "linuxFxVersion": "DOTNETCORE|3.1"
     },
@@ -179,11 +179,11 @@
                         },
                         {
                             "Name": "AzureAdB2C__Instance",
-                            "Value": "[parameters('b2cInstance')]"
+                            "Value": "[parameters('b2cTokenEndpoint')]"
                         },
                         {
                             "Name": "AzureAdB2C__ClientId",
-                            "Value": "[parameters('b2cClientId')]"
+                            "Value": "[parameters('applicationId')]"
                         },
                         {
                             "Name": "AzureAdB2C__Callbackpath",
@@ -191,7 +191,7 @@
                         },
                         {
                             "Name": "AzureAdB2C__Domain",
-                            "Value": "[parameters('b2cDomain')]"
+                            "Value": "[parameters('b2cDomainName')]"
                         },
                         {
                             "Name": "AzureAdB2C__SignUpSignInPolicyId",
@@ -215,11 +215,11 @@
                         },
                         {
                             "Name": "ClientId",
-                            "Value": "[parameters('b2cClientId')]"
+                            "Value": "[parameters('applicationId')]"
                         },
                         {
                             "Name": "TenantId",
-                            "Value": "[parameters('tenantId')]"
+                            "Value": "[parameters('AADTenantId')]"
                         },
                         {
                             "Name": "ClientSecret",
