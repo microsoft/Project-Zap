@@ -19,7 +19,7 @@
 @if (ViewData.ContainsKey("ValidationError"))
 {
     <div class="alert alert-danger">
-        <strong>@Localizer["ErrorTitle"]</strong> @ViewData["ValidationError"]
+        <strong>@ViewData["ValidationError"]</strong> @ViewData["ValidationError"]
     </div>
 }
 
@@ -43,7 +43,7 @@
         <div id="myMap" class="mt-2 col-12" style="height:400px"></div>
     </div>
     <div class="row">
-        <div class="d-none d-xs-block d-sm-block col-md-4 font-weight-bold mt-2">@Localizer["TableStore"]</div>
+        <div class="d-none d-xs-block d-sm-block col-md-4 font-weight-bold mt-2">@Localizer["TableLocation"]</div>
         <div class="d-none d-xs-block d-sm-block col-md-2 font-weight-bold mt-2">@Localizer["TableStart"]</div>
         <div class="d-none d-xs-block d-sm-block col-md-2 font-weight-bold mt-2">@Localizer["TableEnd"]</div>
         <div class="d-none d-xs-block d-sm-block col-md-2 font-weight-bold mt-2">@Localizer["TableWorkType"]</div>
@@ -136,7 +136,7 @@
                 <text>
             var popUpContent = L.Util.template(`
 <dl>
-    <dt>@Localizer["TableStore"]</dt>
+    <dt>@Localizer["TableLocation"]</dt>
     <dd>@shift.LocationName</dd>
     <dt>@Localizer["TableStart"]</dt>
     <dd>@shift.Start</dd>

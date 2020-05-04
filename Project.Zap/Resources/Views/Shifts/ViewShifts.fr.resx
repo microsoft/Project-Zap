@@ -120,9 +120,6 @@
   <data name="CancelButton" xml:space="preserve">
     <value>Annuler</value>
   </data>
-  <data name="ErrorTitle" xml:space="preserve">
-    <value>Pas de créneaux disponibles</value>
-  </data>
   <data name="TableCancel" xml:space="preserve">
     <value>Annuler</value>
   </data>

@@ -204,6 +204,7 @@ namespace Project.Zap.Tests
         {
             // Arrange
             IStringLocalizer<ShiftsController> stringLocalizer = Substitute.For<IStringLocalizer<ShiftsController>>();
+            stringLocalizer.GetString("NoShifts").Returns(new LocalizedString("NoShifts", "You have no shifts booked."));
             ShiftsController controller = this.GetController(stringLocalizer: stringLocalizer);
             controller.ControllerContext = new ControllerContext();
             controller.ControllerContext.HttpContext = new DefaultHttpContext();
@@ -279,6 +280,8 @@ namespace Project.Zap.Tests
             locationService.GetByName("Contoso").Returns(new Library.Models.Location { id = "1", Name = "Contoso" });
 
             IStringLocalizer<ShiftsController> stringLocalizer = Substitute.For<IStringLocalizer<ShiftsController>>();
+            stringLocalizer.GetString("NoEmployees").Returns(new LocalizedString("NoEmployees", "No employees are booked for this shift."));
+
 
             ShiftsController controller = this.GetController(locationService: locationService, stringLocalizer: stringLocalizer);
             ShiftViewModel viewModel = new ShiftViewModel { LocationName = "Contoso", Start = now, End = now.AddHours(9), WorkType = "Till" };
@@ -534,6 +537,10 @@ namespace Project.Zap.Tests
         public async Task Book_EmployeeOnShift_ViewDataError()
         {
             // Arrange
+            IStringLocalizer<ShiftsController> stringLocalizer = Substitute.For<IStringLocalizer<ShiftsController>>();
+            stringLocalizer.GetString("MultipleBookError").Returns(new LocalizedString("MultipleBookError", "You are already booked to work on this day."));
+
+
             IRepository<Library.Models.Shift> shiftRepository = Substitute.For<IRepository<Library.Models.Shift>>();
             DateTime now = DateTime.Now;
             shiftRepository.Get(Arg.Any<string>(), Arg.Any<IDictionary<string, object>>(), Arg.Any<string>()).Returns(new[]
@@ -545,7 +552,7 @@ namespace Project.Zap.Tests
             ILocationService locationService = Substitute.For<ILocationService>();
             locationService.Get().Returns(new[] { new Library.Models.Location { id = "1", Name = "Contoso" }, new Library.Models.Location { id = "2", Name = "Fabrikam" } });
 
-            ShiftsController controller = this.GetController(shiftRepository: shiftRepository, locationService: locationService);            
+            ShiftsController controller = this.GetController(shiftRepository: shiftRepository, locationService: locationService, stringLocalizer : stringLocalizer);            
             controller.HttpContext.User = new ClaimsPrincipal(new ClaimsIdentity(new[] { new Claim("http://schemas.microsoft.com/identity/claims/objectidentifier", "123") }));
             ShiftViewModel viewModel = new ShiftViewModel { LocationName = "Contoso", Start = now, End = now.AddHours(9), WorkType = "Till" };
 
@@ -554,7 +561,7 @@ namespace Project.Zap.Tests
 
             // Assert
             ViewResult viewResult = Assert.IsType<ViewResult>(result);
-            Assert.Equal("You are already booked to work on this day.", viewResult.ViewData["ValidationError"].ToString());
+            Assert.Equal(stringLocalizer["MultipleBookError"], viewResult.ViewData["ValidationError"]);
         }
 
         [Fact]
@@ -590,13 +597,16 @@ namespace Project.Zap.Tests
         public async Task Book_EmployeeNotOnShiftButShiftNotAvailable_ViewDataWarning()
         {
             // Arrange
+            IStringLocalizer<ShiftsController> stringLocalizer = Substitute.For<IStringLocalizer<ShiftsController>>();
+            stringLocalizer.GetString("NoShiftsAvailable").Returns(new LocalizedString("NoShiftsAvailable", "There are no shifts available."));
+
             IRepository<Library.Models.Shift> shiftRepository = Substitute.For<IRepository<Library.Models.Shift>>();
             DateTime now = DateTime.Now;
             ILocationService locationService = Substitute.For<ILocationService>();
             locationService.Get().Returns(new[] { new Library.Models.Location { id = "1", Name = "Contoso" } });
             locationService.GetByName("Contoso").Returns(new Library.Models.Location { id = "1", Name = "Contoso" });
 
-            ShiftsController controller = this.GetController(shiftRepository: shiftRepository, locationService: locationService);
+            ShiftsController controller = this.GetController(shiftRepository: shiftRepository, locationService: locationService, stringLocalizer : stringLocalizer);
             controller.HttpContext.User = new ClaimsPrincipal(new ClaimsIdentity(new[] { new Claim("http://schemas.microsoft.com/identity/claims/objectidentifier", "123") }));
             ShiftViewModel viewModel = new ShiftViewModel { LocationName = "Contoso", Start = now, End = now.AddHours(9), WorkType = "Till" };
 
@@ -605,7 +615,7 @@ namespace Project.Zap.Tests
 
             // Assert
             ViewResult viewResult = Assert.IsType<ViewResult>(result);
-            Assert.Equal("No available shifts at this time.", viewResult.ViewData["ValidationError"].ToString());
+            Assert.Equal(stringLocalizer["NoShiftsAvailable"], viewResult.ViewData["ValidationError"]);
         }
 
         [Fact]

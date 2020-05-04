@@ -120,6 +120,12 @@
   <data name="Available" xml:space="preserve">
     <value>Available</value>
   </data>
+  <data name="DistanceInMeters" xml:space="preserve">
+    <value>Distance</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>Location</value>
+  </data>
   <data name="Start" xml:space="preserve">
     <value>Start</value>
   </data>

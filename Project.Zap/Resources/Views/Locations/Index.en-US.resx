@@ -138,10 +138,10 @@
   <data name="Edit" xml:space="preserve">
     <value>Edit</value>
   </data>
-  <data name="NewStoreTitle" xml:space="preserve">
-    <value>New Location</value>
-  </data>
-  <data name="StoresTitle" xml:space="preserve">
+  <data name="LocationsTitle" xml:space="preserve">
     <value>Locations</value>
+  </data>
+  <data name="NewLocationTitle" xml:space="preserve">
+    <value>New Location</value>
   </data>
 </root>
