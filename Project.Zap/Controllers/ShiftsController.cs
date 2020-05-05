@@ -252,7 +252,9 @@ namespace Project.Zap.Controllers
                     this.logger.LogInformation("No locations, so redirecting to location view");
                     return Redirect("/Locations");
                 }
-                return View("/Index", await this.GetShifts(locations));
+                ViewData["AzureMapsKey"] = this.configuration["AzureMapsSubscriptionKey"];
+
+                return View("Index", await this.GetShifts(locations));
             }
 
             Location location = await this.GetLocation(viewModel.LocationName);
@@ -278,7 +280,9 @@ namespace Project.Zap.Controllers
                     this.logger.LogInformation("No locations, so redirecting to location view");
                     return Redirect("/Locations");
                 }
-                return View("/Index", await this.GetShifts(locations));
+                ViewData["AzureMapsKey"] = this.configuration["AzureMapsSubscriptionKey"];
+
+                return View("Index", await this.GetShifts(locations));
             }
 
             shift.EmployeeId = id.Value;
