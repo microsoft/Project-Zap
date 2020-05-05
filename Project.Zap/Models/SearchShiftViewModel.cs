@@ -38,6 +38,10 @@ namespace Project.Zap.Models
 
         [Display(Name = "Available")]
         public bool Available { get; set; } = true;
-        
+
+
+        [Display(Name = "UseMyLocation")]
+        public bool UseMyLocation { get; set; } = true;
+
     }
 }
