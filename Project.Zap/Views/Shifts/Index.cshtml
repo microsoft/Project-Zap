@@ -99,14 +99,14 @@
         var markers = [];
         function onLocationFound(e) {
             var radius = e.accuracy / 2;
-            
+
             var marker = L.marker(e.latlng)
                 .addTo(map)
                 .bindPopup("You are within " + radius + " meters from this point")
                 .openPopup();
 
             L.circle(e.latlng, radius).addTo(map);
-            
+
             markers.push(marker);
             var group = new L.featureGroup(markers);
             map.fitBounds(group.getBounds());
@@ -129,43 +129,38 @@
 
             @if(Model.UseMyLocation)
             {
-                <text>            
+                <text>
                     map.locate({ setView: false, enableHighAccuracy: true });
-                    map.on('locationfound', onLocationFound);         
+                    map.on('locationfound', onLocationFound);
                 </text>
-            }            
+            }
 
             var baseMaps = {
                 "Azure Roads": roads
             };
 
-            L.control.layers(baseMaps, null, { collapsed: false }).addTo(map);  
+            L.control.layers(baseMaps, null, { collapsed: false }).addTo(map);
 
-            @foreach(var shift in Model.Result)
+            @foreach(var mapPoint in Model.MapPoints)
             {
 
                 <text>
             var popUpContent = L.Util.template(`
 <dl>
     <dt>@Localizer["TableLocation"]</dt>
-    <dd>@shift.LocationName</dd>
+    <dd>@mapPoint.Location</dd>
     <dt>@Localizer["TableStart"]</dt>
-    <dd>@shift.Start</dd>
-    <dt>@Localizer["TableEnd"]</dt>
-    <dd>@shift.End</dd>
-    <dt>@Localizer["TableWorkType"]</dt>
-    <dd>@shift.WorkType</dd>
-</dl>
-@if ((await AuthorizationService.AuthorizeAsync(User, "OrgAManager")).Succeeded)
-{
-    <a class="btn btn-primary text-white" asp-controller="Shifts" asp-action="ViewShift" asp-route-LocationName="@shift.LocationName" asp-route-Start="@shift.Start.ToString("yyyy-MM-ddTHH:mm")" asp-route-End="@shift.End.ToString("yyyy-MM-ddTHH:mm")" asp-route-WorkType="@shift.WorkType" asp-route-Quantity="@shift.Quantity" asp-route-Available="@shift.Available">@Localizer["LinkView"]</a>
-}
-@if ((await AuthorizationService.AuthorizeAsync(User, "OrgBEmployee")).Succeeded)
-{
-    <a class="btn btn-primary text-white" asp-controller="Shifts" asp-action="Book" asp-route-LocationName="@shift.LocationName" asp-route-Start="@shift.Start.ToString("yyyy-MM-ddTHH:mm")" asp-route-End="@shift.End.ToString("yyyy-MM-ddTHH:mm")" asp-route-WorkType="@shift.WorkType">@Localizer["LinkBook"]</a>
-}`);
+    <dd>@mapPoint.Start</dd>
+    <dt>@Localizer["AddressText"]</dt>
+    <dd>@mapPoint.Address</dd>
+    <dt>@Localizer["ZipOrPostcode"]</dt>
+    <dd>@mapPoint.ZipOrPostcode</dd>
+    <dt>@Localizer["TableAvailable"]</dt>
+    <dd>@mapPoint.Available  @mapPoint.Quantity</dd>
+</dl>`);
 
-                markers.push(L.marker([@shift.Point.Coordinates[0], @shift.Point.Coordinates[1]])
+
+                markers.push(L.marker([@mapPoint.Point.Coordinates[0], @mapPoint.Point.Coordinates[1]])
                     .addTo(map)
                     .bindPopup(popUpContent)
                     .openPopup());

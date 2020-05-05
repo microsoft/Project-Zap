@@ -49,33 +49,52 @@ namespace Project.Zap.Controllers
 
         [HttpGet]
         public async Task<IActionResult> Index(SearchShiftViewModel search = null)
-        { 
-            if(search == null)
+        {
+            IEnumerable<Location> locations = await this.locationService.Get();
+            if (locations == null || !locations.Any())
             {
-                IEnumerable<Location> locations = await this.locationService.Get();
-                if (locations == null || !locations.Any())
-                {
-                    this.logger.LogInformation("No locations, so redirecting to location view");
-                    return Redirect("/Locations");
-                }
-                SearchShiftViewModel viewModel = await GetShifts(locations);
-
-                ViewData["AzureMapsKey"] = this.configuration["AzureMapsSubscriptionKey"];
-                return View("Index", viewModel);
+                this.logger.LogInformation("No locations, so redirecting to location view");
+                return Redirect("/Locations");
             }
 
             return await this.Search(search);
         }
 
-        private async Task<SearchShiftViewModel> GetShifts(IEnumerable<Location> locations)
+        private async Task<SearchShiftViewModel> GetShifts(IEnumerable<Location> locations, string sql, IDictionary<string, object> parameters, bool available = true)
         {
-            IEnumerable<Shift> shifts = await this.shiftRepository.Get("SELECT * FROM c WHERE c.StartDateTime > @start", new Dictionary<string, object> { { "@start", DateTime.Now } });
+            IEnumerable<Shift> shifts = await this.shiftRepository.Get(sql, parameters);
+            IEnumerable<ShiftViewModel> shiftViewModels = shifts.Map(locations).Where(x => available ? x.Available > 0 : true);
             SearchShiftViewModel viewModel = new SearchShiftViewModel
             {
                 LocationNames = this.GetLocationNames(locations),
-                Result = shifts.Map(locations)
+                Result = shiftViewModels,
+                MapPoints = this.GetMapPoints(shiftViewModels, locations)
             };
             return viewModel;
+        }
+
+        private IEnumerable<MapPointViewModel> GetMapPoints(IEnumerable<ShiftViewModel> shifts, IEnumerable<Location> locations)
+        {
+            List<MapPointViewModel> mapPoints = new List<MapPointViewModel>();
+            foreach(var location in shifts.GroupBy(x => x.LocationName))
+            {
+                Address address = locations.Where(x => x.Name == location.Key).Select(x => x.Address).FirstOrDefault();
+
+                MapPointViewModel mapPoint = new MapPointViewModel
+                {
+                    Location = location.Key,
+                    Address = address?.Text,
+                    ZipOrPostcode = address?.ZipOrPostcode,
+                    Quantity = location.Sum(x => x.Quantity),
+                    Available = location.Sum(x => x.Available),
+                    Point = location.Select(x => x.Point).FirstOrDefault(),
+                    Start = location.Select(x => x.Start).FirstOrDefault()
+                };
+
+                mapPoints.Add(mapPoint);
+            }
+
+            return mapPoints;
         }
 
         private SelectList GetLocationNames(IEnumerable<Location> locations)
@@ -118,10 +137,11 @@ namespace Project.Zap.Controllers
                 sql = sql + " AND ARRAY_CONTAINS(@locationIds, c.LocationId)";
                 parameters.Add("@locationIds", locationIds);
             }
-            IEnumerable<Shift> shifts = await this.shiftRepository.Get(sql, parameters);
-
-            search.LocationNames = this.GetLocationNames(locations);
-            search.Result = shifts.Map(locations).Where(x => search.Available ? x.Available > 0 : true);
+            
+            SearchShiftViewModel results = await this.GetShifts(locations, sql, parameters, search.Available);
+            search.Result = results.Result;
+            search.MapPoints = results.MapPoints;
+            search.LocationNames = results.LocationNames;
 
             ViewData["AzureMapsKey"] = this.configuration["AzureMapsSubscriptionKey"];
 
@@ -263,7 +283,7 @@ namespace Project.Zap.Controllers
                 }
                 ViewData["AzureMapsKey"] = this.configuration["AzureMapsSubscriptionKey"];
 
-                return View("Index", await this.GetShifts(locations));
+                return View("Index", await this.GetShifts(locations, "SELECT * FROM c WHERE c.StartDateTime > @start", new Dictionary<string, object> { { "@start", DateTime.Now } }));
             }
 
             Location location = await this.GetLocation(viewModel.LocationName);
@@ -291,7 +311,7 @@ namespace Project.Zap.Controllers
                 }
                 ViewData["AzureMapsKey"] = this.configuration["AzureMapsSubscriptionKey"];
 
-                return View("Index", await this.GetShifts(locations));
+                return View("Index", await this.GetShifts(locations, "SELECT * FROM c WHERE c.StartDateTime > @start", new Dictionary<string, object> { { "@start", DateTime.Now } }));
             }
 
             shift.EmployeeId = id.Value;

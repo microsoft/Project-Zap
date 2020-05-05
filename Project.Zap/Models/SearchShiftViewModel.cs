@@ -1,11 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 
 namespace Project.Zap.Models
 {
@@ -36,10 +33,13 @@ namespace Project.Zap.Models
 
         public IEnumerable<ShiftViewModel> Result { get; set; }
 
+        public IEnumerable<MapPointViewModel> MapPoints { get; set; }
+
+        [BindProperty]
         [Display(Name = "Available")]
         public bool Available { get; set; } = true;
 
-
+        [BindProperty]
         [Display(Name = "UseMyLocation")]
         public bool UseMyLocation { get; set; } = true;
 
