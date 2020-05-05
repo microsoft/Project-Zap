@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using NSubstitute;
 using Project.Zap.Controllers;
 using Project.Zap.Library.Models;
@@ -26,7 +28,7 @@ namespace Project.Zap.Tests
         {
             // Arrange
             ILocationService service = Substitute.For<ILocationService>();
-            LocationsController controller = new LocationsController(service);
+            LocationsController controller = GetController(locationService: service);
 
             // Act
             await controller.Index();
@@ -42,7 +44,7 @@ namespace Project.Zap.Tests
         {
             // Arrange
             ILocationService service = Substitute.For<ILocationService>();
-            LocationsController controller = new LocationsController(service);
+            LocationsController controller = GetController(locationService: service);
 
             // Act
             IActionResult result = await controller.Index();
@@ -57,7 +59,8 @@ namespace Project.Zap.Tests
         {
             // Arrange
             ILocationService service = Substitute.For<ILocationService>();
-            LocationsController controller = new LocationsController(service);
+            LocationsController controller = GetController(locationService: service);
+
             // Act
             IActionResult result = controller.Add();
 
@@ -70,7 +73,7 @@ namespace Project.Zap.Tests
         {
             // Arrange
             ILocationService service = Substitute.For<ILocationService>();
-            LocationsController controller = new LocationsController(service);
+            LocationsController controller = GetController(locationService: service);
             controller.ModelState.AddModelError("Name", "Required");
             AddLocationViewModel viewModel = new AddLocationViewModel();
 
@@ -86,7 +89,7 @@ namespace Project.Zap.Tests
         {
             // Arrange
             ILocationService service = Substitute.For<ILocationService>();
-            LocationsController controller = new LocationsController(service);
+            LocationsController controller = GetController(locationService: service);
             AddLocationViewModel viewModel = new AddLocationViewModel { Name = "Contoso", Address =  "Seattle", ZipOrPostcode = "54321" };
 
             // Act
@@ -104,7 +107,7 @@ namespace Project.Zap.Tests
         {
             // Arrange
             ILocationService service = Substitute.For<ILocationService>();
-            LocationsController controller = new LocationsController(service);
+            LocationsController controller = GetController(locationService: service);
             string id = "Contoso";
 
             // Act
@@ -122,7 +125,7 @@ namespace Project.Zap.Tests
             // Arrange
             ILocationService service = Substitute.For<ILocationService>();
             service.GetByName(Arg.Any<string>()).Returns(new Location { id = "1", Name = "Contoso", Address = new Address { Text = "abc", ZipOrPostcode = "54321" } });
-            LocationsController controller = new LocationsController(service);
+            LocationsController controller = GetController(locationService:service);
             string id = "Contoso";
 
             // Act
@@ -132,6 +135,20 @@ namespace Project.Zap.Tests
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             service.Received(1).GetByName(id);
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed  
+        }
+
+        private LocationsController GetController(
+            ILocationService locationService = null,
+             IConfiguration configuration = null
+            ) 
+        {
+            locationService = locationService ?? Substitute.For<ILocationService>();
+            configuration = configuration ?? Substitute.For<IConfiguration>();
+
+            var controller = new LocationsController(locationService, configuration);
+            controller.ControllerContext = new ControllerContext();
+            controller.ControllerContext.HttpContext = new DefaultHttpContext();
+            return controller;
         }
     }
 }
