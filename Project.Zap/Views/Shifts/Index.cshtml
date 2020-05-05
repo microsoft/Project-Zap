@@ -129,8 +129,7 @@
 
             @if((Model.Locations == null || !Model.Locations.Any()) && string.IsNullOrEmpty(Model.ZipOrPostcode))
             {
-                <text>
-            debugger;
+                <text>            
                     map.locate({ setView: false, enableHighAccuracy: true });
                     map.on('locationfound', onLocationFound);         
                 </text>
