@@ -109,14 +109,11 @@ namespace Project.Zap.Controllers
             }
             IEnumerable <Shift> shifts = await this.shiftRepository.Get(sql, parameters);
 
-            SearchShiftViewModel viewModel = new SearchShiftViewModel
-            {
-                LocationNames = this.GetLocationNames(locations),
-                Result = shifts.Map(locations).Where(x => search.Available ? x.Available > 0 : true)
-            };
+            search.LocationNames = this.GetLocationNames(locations);
+            search.Result = shifts.Map(locations).Where(x => search.Available ? x.Available > 0 : true);
 
             ViewData["AzureMapsKey"] = this.configuration["AzureMapsSubscriptionKey"];
-            return View("Index", viewModel);
+            return View("Index", search);
         }
 
         [HttpGet]

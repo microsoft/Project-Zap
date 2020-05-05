@@ -96,15 +96,20 @@
 
     <script type="text/javascript">
         var map;
+        var markers = [];
         function onLocationFound(e) {
             var radius = e.accuracy / 2;
-
-            L.marker(e.latlng)
+            
+            var marker = L.marker(e.latlng)
                 .addTo(map)
                 .bindPopup("You are within " + radius + " meters from this point")
                 .openPopup();
 
             L.circle(e.latlng, radius).addTo(map);
+            
+            markers.push(marker);
+            var group = new L.featureGroup(markers);
+            map.fitBounds(group.getBounds());
         }
 
         $(function () {
@@ -122,11 +127,12 @@
 
             map = L.map('myMap', { layers: [roads] });
 
-            @if (Model.Result == null || !Model.Result.Any())
+            @if((Model.Locations == null || !Model.Locations.Any()) && string.IsNullOrEmpty(Model.ZipOrPostcode))
             {
                 <text>
-                    map.locate({ setView: true, enableHighAccuracy: true });
-                    map.on('locationfound', onLocationFound);
+            debugger;
+                    map.locate({ setView: false, enableHighAccuracy: true });
+                    map.on('locationfound', onLocationFound);         
                 </text>
             }            
 
@@ -134,10 +140,8 @@
                 "Azure Roads": roads
             };
 
-            L.control.layers(baseMaps, null, { collapsed: false }).addTo(map);
-
-            var markers = [];
-
+            L.control.layers(baseMaps, null, { collapsed: false }).addTo(map);            
+            var count = 0.00004;
 
             @foreach(var shift in Model.Result)
             {
@@ -163,10 +167,12 @@
     <a class="btn btn-primary text-white" asp-controller="Shifts" asp-action="Book" asp-route-LocationName="@shift.LocationName" asp-route-Start="@shift.Start.ToString("yyyy-MM-ddTHH:mm")" asp-route-End="@shift.End.ToString("yyyy-MM-ddTHH:mm")" asp-route-WorkType="@shift.WorkType">@Localizer["LinkBook"]</a>
 }`);
 
-                markers.push(L.marker([@shift.Point.Coordinates[0],@shift.Point.Coordinates[1]])
+                markers.push(L.marker([@shift.Point.Coordinates[0] - count, @shift.Point.Coordinates[1] - count])
                     .addTo(map)
                     .bindPopup(popUpContent)
                     .openPopup());
+
+            count = count - 0.00004;
 
                 </text>
             }
