@@ -72,7 +72,7 @@ namespace Project.Zap.Tests
             SearchShiftViewModel viewModel = new SearchShiftViewModel { Locations = new List<string> { "Contoso" }, Start = DateTime.Now };
 
             // Act
-            await controller.Search(viewModel);
+            await controller.Index(viewModel);
 
             // Assert
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
@@ -95,7 +95,7 @@ namespace Project.Zap.Tests
             SearchShiftViewModel viewModel = new SearchShiftViewModel { Locations = new List<string> { "Contoso" }, Start = DateTime.Now };
 
             // Act
-            IActionResult result = await controller.Search(viewModel);
+            IActionResult result = await controller.Index(viewModel);
 
             // Assert
             ViewResult viewResult = Assert.IsType<ViewResult>(result);
@@ -121,7 +121,7 @@ namespace Project.Zap.Tests
             SearchShiftViewModel viewModel = new SearchShiftViewModel { Locations = new List<string> { "Contoso" }, Start = DateTime.Now.Add(new TimeSpan(1, 0, 0, 0)) };
 
             // Act
-            IActionResult result = await controller.Search(viewModel);
+            IActionResult result = await controller.Index(viewModel);
 
             // Assert
             ViewResult viewResult = Assert.IsType<ViewResult>(result);
@@ -146,7 +146,7 @@ namespace Project.Zap.Tests
             SearchShiftViewModel viewModel = new SearchShiftViewModel { Locations = new List<string> { "Contoso" }, Start = DateTime.Now };
 
             // Act
-            IActionResult result = await controller.Search(viewModel);
+            IActionResult result = await controller.Index(viewModel);
 
             // Assert
             ViewResult viewResult = Assert.IsType<ViewResult>(result);

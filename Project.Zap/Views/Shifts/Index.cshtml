@@ -31,7 +31,7 @@
 }
 
 <div class="container">
-    <partial name="Search" model="new Project.Zap.Models.SearchShiftViewModel { LocationNames = Model.LocationNames }" />
+    <partial name="Search" model="Model ?? new Project.Zap.Models.SearchShiftViewModel { LocationNames = Model.LocationNames }" />
 </div>
 
 <div id="results">
@@ -127,7 +127,7 @@
 
             map = L.map('myMap', { layers: [roads] });
 
-            @if((Model.Locations == null || !Model.Locations.Any()) && string.IsNullOrEmpty(Model.ZipOrPostcode))
+            @if(Model.UseMyLocation)
             {
                 <text>            
                     map.locate({ setView: false, enableHighAccuracy: true });
@@ -139,8 +139,7 @@
                 "Azure Roads": roads
             };
 
-            L.control.layers(baseMaps, null, { collapsed: false }).addTo(map);            
-            var count = 0.00004;
+            L.control.layers(baseMaps, null, { collapsed: false }).addTo(map);  
 
             @foreach(var shift in Model.Result)
             {
@@ -166,12 +165,10 @@
     <a class="btn btn-primary text-white" asp-controller="Shifts" asp-action="Book" asp-route-LocationName="@shift.LocationName" asp-route-Start="@shift.Start.ToString("yyyy-MM-ddTHH:mm")" asp-route-End="@shift.End.ToString("yyyy-MM-ddTHH:mm")" asp-route-WorkType="@shift.WorkType">@Localizer["LinkBook"]</a>
 }`);
 
-                markers.push(L.marker([@shift.Point.Coordinates[0] - count, @shift.Point.Coordinates[1] - count])
+                markers.push(L.marker([@shift.Point.Coordinates[0], @shift.Point.Coordinates[1]])
                     .addTo(map)
                     .bindPopup(popUpContent)
                     .openPopup());
-
-            count = count - 0.00004;
 
                 </text>
             }

@@ -47,18 +47,24 @@ namespace Project.Zap.Controllers
             this.logger = logger;
         }
 
-        public async Task<IActionResult> Index()
-        {
-            IEnumerable<Location> locations = await this.locationService.Get();
-            if (locations == null || !locations.Any())
+        [HttpGet]
+        public async Task<IActionResult> Index(SearchShiftViewModel search = null)
+        { 
+            if(search == null)
             {
-                this.logger.LogInformation("No locations, so redirecting to location view");
-                return Redirect("/Locations");
-            }
-            SearchShiftViewModel viewModel = await GetShifts(locations);
+                IEnumerable<Location> locations = await this.locationService.Get();
+                if (locations == null || !locations.Any())
+                {
+                    this.logger.LogInformation("No locations, so redirecting to location view");
+                    return Redirect("/Locations");
+                }
+                SearchShiftViewModel viewModel = await GetShifts(locations);
 
-            ViewData["AzureMapsKey"] = this.configuration["AzureMapsSubscriptionKey"];
-            return View("Index", viewModel);
+                ViewData["AzureMapsKey"] = this.configuration["AzureMapsSubscriptionKey"];
+                return View("Index", viewModel);
+            }
+
+            return await this.Search(search);
         }
 
         private async Task<SearchShiftViewModel> GetShifts(IEnumerable<Location> locations)
@@ -79,7 +85,12 @@ namespace Project.Zap.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Search(SearchShiftViewModel search)
+        public IActionResult OnSearch(SearchShiftViewModel search)
+        {
+            return RedirectToAction("Index", new { Start = search.Start.ToString("yyyy-MM-ddTHH:mm"), search.Locations, search.UseMyLocation, search.Available, search.ZipOrPostcode });
+        }
+
+        private async Task<IActionResult> Search(SearchShiftViewModel search)
         {
             IEnumerable<Location> locations = await this.locationService.Get();
 
@@ -88,8 +99,8 @@ namespace Project.Zap.Controllers
             if (search.Locations != null && search.Locations.Any())
             {
                 locationIds.AddRange(locations.Where(x => search.Locations.Contains(x.Name)).Select(x => x.id).ToList());
-            } 
-            if(search.DistanceInMeters != null && !string.IsNullOrWhiteSpace(search.ZipOrPostcode))
+            }
+            if (search.DistanceInMeters != null && !string.IsNullOrWhiteSpace(search.ZipOrPostcode))
             {
                 Point point = await this.mapService.GetCoordinates(new Address { ZipOrPostcode = search.ZipOrPostcode });
                 IEnumerable<Location> filteredLocations = await this.locationService.GetByDistance(point, search.DistanceInMeters.Value);
@@ -107,12 +118,13 @@ namespace Project.Zap.Controllers
                 sql = sql + " AND ARRAY_CONTAINS(@locationIds, c.LocationId)";
                 parameters.Add("@locationIds", locationIds);
             }
-            IEnumerable <Shift> shifts = await this.shiftRepository.Get(sql, parameters);
+            IEnumerable<Shift> shifts = await this.shiftRepository.Get(sql, parameters);
 
             search.LocationNames = this.GetLocationNames(locations);
             search.Result = shifts.Map(locations).Where(x => search.Available ? x.Available > 0 : true);
 
             ViewData["AzureMapsKey"] = this.configuration["AzureMapsSubscriptionKey"];
+
             return View("Index", search);
         }
 
