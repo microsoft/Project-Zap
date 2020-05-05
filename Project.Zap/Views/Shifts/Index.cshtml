@@ -122,14 +122,22 @@
 
             map = L.map('myMap', { layers: [roads] });
 
-            map.locate({ setView: true, enableHighAccuracy: true });
-            map.on('locationfound', onLocationFound);
+            @if (Model.Result == null || !Model.Result.Any())
+            {
+                <text>
+                    map.locate({ setView: true, enableHighAccuracy: true });
+                    map.on('locationfound', onLocationFound);
+                </text>
+            }            
 
             var baseMaps = {
                 "Azure Roads": roads
             };
 
             L.control.layers(baseMaps, null, { collapsed: false }).addTo(map);
+
+            var markers = [];
+
 
             @foreach(var shift in Model.Result)
             {
@@ -155,13 +163,17 @@
     <a class="btn btn-primary text-white" asp-controller="Shifts" asp-action="Book" asp-route-LocationName="@shift.LocationName" asp-route-Start="@shift.Start.ToString("yyyy-MM-ddTHH:mm")" asp-route-End="@shift.End.ToString("yyyy-MM-ddTHH:mm")" asp-route-WorkType="@shift.WorkType">@Localizer["LinkBook"]</a>
 }`);
 
-                L.marker([@shift.Point.Coordinates[0],@shift.Point.Coordinates[1]])
+                markers.push(L.marker([@shift.Point.Coordinates[0],@shift.Point.Coordinates[1]])
                     .addTo(map)
                     .bindPopup(popUpContent)
-                    .openPopup();
+                    .openPopup());
 
                 </text>
             }
+
+            var group = new L.featureGroup(markers);
+
+            map.fitBounds(group.getBounds());
         });
     </script>
 }
