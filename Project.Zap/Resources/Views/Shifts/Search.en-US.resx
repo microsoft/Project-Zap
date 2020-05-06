@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="infoSelect" xml:space="preserve">
+    <value>Use ctrl+click to select and unselect multiple items</value>
+  </data>
   <data name="Location" xml:space="preserve">
     <value>Location</value>
   </data>

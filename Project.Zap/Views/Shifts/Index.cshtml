@@ -113,6 +113,8 @@
 
         $(function () {
 
+            $('[data-toggle="tooltip"]').tooltip();
+
             var subscriptionKey = '@ViewData["AzureMapsKey"]';
             debugger;
             var roads = L.tileLayer('https://atlas.microsoft.com/map/tile?subscription-key={subscriptionKey}&api-version=2.0&tilesetId={tilesetId}&zoom={z}&x={x}&y={y}&tileSize=256&language={language}&view={view}', {
