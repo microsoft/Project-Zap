@@ -251,7 +251,7 @@ namespace Project.Zap.Controllers
 
             await this.shiftRepository.Update(shift);
 
-            return Redirect("/Shifts");
+            return RedirectToAction("ViewShifts");
         }
 
         [HttpGet]
