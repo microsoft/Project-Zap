@@ -132,6 +132,9 @@
   <data name="StoreNames" xml:space="preserve">
     <value>Store Names</value>
   </data>
+  <data name="UseMyLocation" xml:space="preserve">
+    <value>Use my location</value>
+  </data>
   <data name="ZipOrPostcode" xml:space="preserve">
     <value>Zip</value>
   </data>

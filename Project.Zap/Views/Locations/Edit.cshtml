@@ -6,6 +6,10 @@
 
 @model Project.Zap.Models.LocationViewModel
 
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+      integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+      crossorigin="" />
+
 <h3>@Localizer["Title"]</h3>
 
 <form asp-controller="Locations" asp-action="EditLocation" method="Post">
@@ -14,7 +18,7 @@
         <span>@Model.Name</span>
         <input type="hidden" asp-for="@Model.Name" class="form-control" />
     </div>
-    
+
     <div class="form-group">
         <label asp-for="@Model.Address"></label>
         <input type="text" asp-for="@Model.Address" class="form-control" />
@@ -26,5 +30,70 @@
         <span asp-validation-for="@Model.ZipOrPostcode"></span>
     </div>
 
+    <div class="row">
+        <div id="myMap" class="mt-2 col-12" style="height:400px"></div>
+    </div>
+
+    <div class="form-group">
+        <input id="newLatitude" type="hidden" asp-for="@Model.Latitude"/>
+        <input id="newLongitude" type ="hidden" asp-for="@Model.Longitude"/>
+    </div>
     <button type="submit" class="btn btn-primary mb-2">@Localizer["Update"]</button>
 </form>
+
+@section Scripts
+{
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+            integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+            crossorigin=""></script>
+
+    <script type="text/javascript">
+        var map;
+        var marker;
+
+        function updateLatLng() {
+
+            document.getElementById('newLatitude').value = marker.getLatLng().lat;
+            document.getElementById('newLongitude').value = marker.getLatLng().lng;
+
+        }
+
+        $(function () {
+
+            var subscriptionKey = '@ViewData["AzureMapsKey"]';
+
+            var roads = L.tileLayer('https://atlas.microsoft.com/map/tile?subscription-key={subscriptionKey}&api-version=2.0&tilesetId={tilesetId}&zoom={z}&x={x}&y={y}&tileSize=256&language={language}&view={view}', {
+                attribution: '© ' + new Date().getFullYear() + ' Microsoft, © 1992 - ' + new Date().getFullYear() + ' TomTom',
+                id: 'azureRoadMaps',
+                tilesetId: 'microsoft.base.road',
+                language: 'en-US',
+                view: 'Auto',
+                subscriptionKey: subscriptionKey
+            });
+
+            map = L.map('myMap', { layers: [roads] });
+
+            var baseMaps = {
+                "Azure Roads": roads
+            };
+
+            L.control.layers(baseMaps, null, { collapsed: false }).addTo(map);
+
+            marker = new L.marker([@Model.Point.Coordinates[0].ToString().Replace(',', '.'),@Model.Point.Coordinates[1].ToString().Replace(',', '.')],
+                { draggable: 'true' });
+            marker.addTo(map);
+
+
+            marker.on('dragend', function (event) {
+                var position = marker.getLatLng();             
+                marker.setLatLng(position, {
+                    draggable: 'true'
+                }).update();
+                updateLatLng();
+            });
+
+            map.setView([@Model.Point.Coordinates[0].ToString().Replace(',', '.'),@Model.Point.Coordinates[1].ToString().Replace(',', '.')], 100)
+
+        });
+    </script>
+}

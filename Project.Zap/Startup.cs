@@ -133,14 +133,19 @@ namespace Project.Zap
             var supportedCultures = new[]
             {
                 new CultureInfo("en-US"),
+            };
+
+            var supportedUICultures = new[]
+           {
+                new CultureInfo("en-US"),
                 new CultureInfo("fr"),
             };
 
             app.UseRequestLocalization(new RequestLocalizationOptions
             {
-                DefaultRequestCulture = new RequestCulture("en-US"),                
+                DefaultRequestCulture = new RequestCulture("en-US"),           
                 SupportedCultures = supportedCultures,                
-                SupportedUICultures = supportedCultures
+                SupportedUICultures = supportedUICultures
             });
 
             app.UseHttpsRedirection();

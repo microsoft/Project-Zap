@@ -40,5 +40,12 @@ namespace Project.Zap.Models
 
         [Display(Name = "Address")]
         public string Address { get; set; }
+
+        public PointViewModel Point { get; internal set; }
+
+        public double Latitude { get; set; }
+
+        public double Longitude { get; set; }
+
     }
 }

@@ -1,11 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 
 namespace Project.Zap.Models
 {
@@ -18,7 +15,7 @@ namespace Project.Zap.Models
         [Required]
         [Display(Name = "Starting from")]
         [DisplayFormat(DataFormatString = "{yyyy-MM-ddTHH:mm}")]
-        public DateTime Start { get; set; } = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
+        public DateTime Start { get; set; } = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute, 0);
 
         [BindProperty]
         [Display(Name = "Location")]
@@ -34,10 +31,20 @@ namespace Project.Zap.Models
 
         public SelectList Distances { get; set; } = new SelectList(new[] { new SelectListItem { Text = "10 Miles", Value = "16093" }, new SelectListItem { Text = "30 Miles", Value = "48280" }}, "Value", "Text");
 
+        [BindProperty]
+        public string FilterByLocation { get; set; }
+
         public IEnumerable<ShiftViewModel> Result { get; set; }
 
+        public IEnumerable<MapPointViewModel> MapPoints { get; set; }
+
+        [BindProperty]
         [Display(Name = "Available")]
         public bool Available { get; set; } = true;
-        
+
+        [BindProperty]
+        [Display(Name = "UseMyLocation")]
+        public bool UseMyLocation { get; set; } = true;
+
     }
 }

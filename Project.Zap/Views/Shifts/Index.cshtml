@@ -31,7 +31,7 @@
 }
 
 <div class="container">
-    <partial name="Search" model="new Project.Zap.Models.SearchShiftViewModel { LocationNames = Model.LocationNames }" />
+    <partial name="Search" model="Model ?? new Project.Zap.Models.SearchShiftViewModel { LocationNames = Model.LocationNames }" />
 </div>
 
 <div id="results">
@@ -96,6 +96,7 @@
 
     <script type="text/javascript">
         var map;
+        var markers = L.latLngBounds()
         function onLocationFound(e) {
             var radius = e.accuracy / 2;
 
@@ -105,25 +106,33 @@
                 .openPopup();
 
             L.circle(e.latlng, radius).addTo(map);
+
+            markers.extend(e.latlng);            
+            map.fitBounds(markers);
         }
 
         $(function () {
 
             var subscriptionKey = '@ViewData["AzureMapsKey"]';
-
+            debugger;
             var roads = L.tileLayer('https://atlas.microsoft.com/map/tile?subscription-key={subscriptionKey}&api-version=2.0&tilesetId={tilesetId}&zoom={z}&x={x}&y={y}&tileSize=256&language={language}&view={view}', {
                 attribution: '© ' + new Date().getFullYear() + ' Microsoft, © 1992 - ' + new Date().getFullYear() + ' TomTom',
                 id: 'azureRoadMaps',
                 tilesetId: 'microsoft.base.road',
-                language: 'en-US',
+                language: '@System.Threading.Thread.CurrentThread.CurrentCulture.Name',
                 view: 'Auto',
                 subscriptionKey: subscriptionKey
             });
 
             map = L.map('myMap', { layers: [roads] });
 
-            map.locate({ setView: true, enableHighAccuracy: true });
-            map.on('locationfound', onLocationFound);
+            @if(Model.UseMyLocation)
+            {
+                <text>
+                    map.locate({ setView: false, enableHighAccuracy: true });
+                    map.on('locationfound', onLocationFound);
+                </text>
+            }
 
             var baseMaps = {
                 "Azure Roads": roads
@@ -131,37 +140,52 @@
 
             L.control.layers(baseMaps, null, { collapsed: false }).addTo(map);
 
-            @foreach(var shift in Model.Result)
+            @foreach(var mapPoint in Model.MapPoints)
             {
 
                 <text>
             var popUpContent = L.Util.template(`
 <dl>
     <dt>@Localizer["TableLocation"]</dt>
-    <dd>@shift.LocationName</dd>
+    <dd>@mapPoint.Location</dd>
     <dt>@Localizer["TableStart"]</dt>
-    <dd>@shift.Start</dd>
-    <dt>@Localizer["TableEnd"]</dt>
-    <dd>@shift.End</dd>
-    <dt>@Localizer["TableWorkType"]</dt>
-    <dd>@shift.WorkType</dd>
+    <dd>@mapPoint.Start</dd>
+    <dt>@Localizer["AddressText"]</dt>
+    <dd>@mapPoint.Address</dd>
+    <dt>@Localizer["ZipOrPostcode"]</dt>
+    <dd>@mapPoint.ZipOrPostcode</dd>
+    <dt>@Localizer["TableAvailable"]</dt>
+    <dd>@mapPoint.Available / @mapPoint.Quantity</dd>
 </dl>
-@if ((await AuthorizationService.AuthorizeAsync(User, "OrgAManager")).Succeeded)
-{
-    <a class="btn btn-primary text-white" asp-controller="Shifts" asp-action="ViewShift" asp-route-LocationName="@shift.LocationName" asp-route-Start="@shift.Start.ToString("yyyy-MM-ddTHH:mm")" asp-route-End="@shift.End.ToString("yyyy-MM-ddTHH:mm")" asp-route-WorkType="@shift.WorkType" asp-route-Quantity="@shift.Quantity" asp-route-Available="@shift.Available">@Localizer["LinkView"]</a>
-}
-@if ((await AuthorizationService.AuthorizeAsync(User, "OrgBEmployee")).Succeeded)
-{
-    <a class="btn btn-primary text-white" asp-controller="Shifts" asp-action="Book" asp-route-LocationName="@shift.LocationName" asp-route-Start="@shift.Start.ToString("yyyy-MM-ddTHH:mm")" asp-route-End="@shift.End.ToString("yyyy-MM-ddTHH:mm")" asp-route-WorkType="@shift.WorkType">@Localizer["LinkBook"]</a>
-}`);
 
-                L.marker([@shift.Point.Coordinates[0],@shift.Point.Coordinates[1]])
+<a class="btn btn-primary col-xs-6 col-sm-6 col-md-12 my-auto text-white"
+    asp-controller="Shifts"
+    asp-action="Index"
+    asp-route-Start="@Model.Start.ToString("yyyy-MM-ddTHH:mm")"
+    asp-route-ZipOrPostcode="@Model.ZipOrPostcode"
+    asp-route-DistanceInMeters="@Model.DistanceInMeters"
+    asp-route-Locations="@Model.Locations"
+    asp-route-Available="@Model.Available"
+    asp-route-UseMyLocation="@Model.UseMyLocation"
+    asp-route-FilterByLocation="@mapPoint.Location">
+    @Localizer["LinkView"]
+</a>
+
+
+`);
+
+
+            L.marker([@mapPoint.Point.Coordinates[0], @mapPoint.Point.Coordinates[1]])
                     .addTo(map)
                     .bindPopup(popUpContent)
                     .openPopup();
 
+            markers.extend([@mapPoint.Point.Coordinates[0], @mapPoint.Point.Coordinates[1]]);
                 </text>
             }
+
+            map.fitBounds(markers);
         });
     </script>
+    
 }
