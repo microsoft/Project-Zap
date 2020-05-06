@@ -175,12 +175,12 @@
 `);
 
 
-            L.marker([@mapPoint.Point.Coordinates[0].ToString().Replace(',', '.'), @mapPoint.Point.Coordinates[1].ToString().Replace(',', '.')])
+            L.marker([@mapPoint.Point.Coordinates[0], @mapPoint.Point.Coordinates[1]])
                     .addTo(map)
                     .bindPopup(popUpContent)
                     .openPopup();
 
-            markers.extend([@mapPoint.Point.Coordinates[0].ToString().Replace(',', '.'), @mapPoint.Point.Coordinates[1].ToString().Replace(',', '.')]);
+            markers.extend([@mapPoint.Point.Coordinates[0], @mapPoint.Point.Coordinates[1]]);
                 </text>
             }
 
