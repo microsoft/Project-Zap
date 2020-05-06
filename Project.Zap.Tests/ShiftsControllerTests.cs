@@ -270,7 +270,7 @@ namespace Project.Zap.Tests
         }
 
         [Fact]
-        public async Task ViewShifts_Shifts_AfterToday()
+        public async Task ViewShifts_Shifts_AfterOrEqualToNow()
         {
             // Arrange
             IRepository<Library.Models.Shift> shiftRepository = Substitute.For<IRepository<Library.Models.Shift>>();
@@ -285,7 +285,7 @@ namespace Project.Zap.Tests
             // Assert
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             shiftRepository.Received(1).Get(
-                "SELECT * FROM c WHERE c.EmployeeId = @employeeId AND c.StartDateTime > @start", 
+                "SELECT * FROM c WHERE c.EmployeeId = @employeeId AND c.StartDateTime >= @start", 
                 Arg.Is<Dictionary<string, object>>(x => x.ContainsKey("@employeeId") && x.ContainsKey("@start")));
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
         }

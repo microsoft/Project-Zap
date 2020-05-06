@@ -171,7 +171,7 @@ namespace Project.Zap.Controllers
             }
 
             IEnumerable<Shift> shifts = await this.shiftRepository.Get(
-               "SELECT * FROM c WHERE c.EmployeeId = @employeeId AND c.StartDateTime > @start",
+               "SELECT * FROM c WHERE c.EmployeeId = @employeeId AND c.StartDateTime >= @start",
                new Dictionary<string, object> { { "@employeeId", id.Value }, { "@start", DateTime.Now } });
 
             if (shifts?.Any() == false)
