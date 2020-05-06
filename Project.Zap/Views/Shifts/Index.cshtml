@@ -156,8 +156,24 @@
     <dt>@Localizer["ZipOrPostcode"]</dt>
     <dd>@mapPoint.ZipOrPostcode</dd>
     <dt>@Localizer["TableAvailable"]</dt>
-    <dd>@mapPoint.Available  @mapPoint.Quantity</dd>
-</dl>`);
+    <dd>@mapPoint.Available / @mapPoint.Quantity</dd>
+</dl>
+
+<a class="btn btn-primary col-xs-6 col-sm-6 col-md-12 my-auto text-white" 
+    asp-controller="Shifts" 
+    asp-action="Index" 
+    asp-route-Start="@Model.Start.ToString("yyyy-MM-ddTHH:mm")" 
+    asp-route-ZipOrPostcode="@Model.ZipOrPostcode" 
+    asp-route-DistanceInMeters="@Model.DistanceInMeters" 
+    asp-route-Locations="@Model.Locations" 
+    asp-route-Available="@Model.Available" 
+    asp-route-UseMyLocation="@Model.UseMyLocation" 
+    asp-route-FilterByLocation="@mapPoint.Location">
+    @Localizer["LinkView"]
+</a>
+
+
+`);
 
 
                 markers.push(L.marker([@mapPoint.Point.Coordinates[0], @mapPoint.Point.Coordinates[1]])
@@ -173,4 +189,5 @@
             map.fitBounds(group.getBounds());
         });
     </script>
+    
 }

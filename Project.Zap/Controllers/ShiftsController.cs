@@ -57,17 +57,17 @@ namespace Project.Zap.Controllers
                 return Redirect("/Locations");
             }
 
-            return await this.Search(search);
+            return await this.Search(search ?? new SearchShiftViewModel(), locations);
         }
 
-        private async Task<SearchShiftViewModel> GetShifts(IEnumerable<Location> locations, string sql, IDictionary<string, object> parameters, bool available = true)
+        private async Task<SearchShiftViewModel> GetShifts(IEnumerable<Location> locations, string sql, IDictionary<string, object> parameters, bool available = true, string filterLocation = null)
         {
             IEnumerable<Shift> shifts = await this.shiftRepository.Get(sql, parameters);
             IEnumerable<ShiftViewModel> shiftViewModels = shifts.Map(locations).Where(x => available ? x.Available > 0 : true);
             SearchShiftViewModel viewModel = new SearchShiftViewModel
             {
                 LocationNames = this.GetLocationNames(locations),
-                Result = shiftViewModels,
+                Result = shiftViewModels.Where(x => string.IsNullOrEmpty(filterLocation) ? true : x.LocationName == filterLocation),
                 MapPoints = this.GetMapPoints(shiftViewModels, locations)
             };
             return viewModel;
@@ -109,10 +109,8 @@ namespace Project.Zap.Controllers
             return RedirectToAction("Index", new { Start = search.Start.ToString("yyyy-MM-ddTHH:mm"), search.Locations, search.UseMyLocation, search.Available, search.ZipOrPostcode });
         }
 
-        private async Task<IActionResult> Search(SearchShiftViewModel search)
+        private async Task<IActionResult> Search(SearchShiftViewModel search, IEnumerable<Location> locations)
         {
-            IEnumerable<Location> locations = await this.locationService.Get();
-
             List<string> locationIds = new List<string>();
 
             if (search.Locations != null && search.Locations.Any())
@@ -134,11 +132,11 @@ namespace Project.Zap.Controllers
 
             if (locationIds.Any())
             {
-                sql = sql + " AND ARRAY_CONTAINS(@locationIds, c.LocationId)";
+                sql += " AND ARRAY_CONTAINS(@locationIds, c.LocationId)";
                 parameters.Add("@locationIds", locationIds);
             }
             
-            SearchShiftViewModel results = await this.GetShifts(locations, sql, parameters, search.Available);
+            SearchShiftViewModel results = await this.GetShifts(locations, sql, parameters, search.Available, search.FilterByLocation);
             search.Result = results.Result;
             search.MapPoints = results.MapPoints;
             search.LocationNames = results.LocationNames;

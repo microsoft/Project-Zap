@@ -47,7 +47,7 @@ namespace Project.Zap.Tests
         }
 
         [Fact]
-        public async Task Index_NoParams_ReturnsShiftsForLaterThanNow()
+        public async Task Index_NoParams_ReturnsShiftsForNowAndLater()
         {
             // Arrange
             IRepository<Library.Models.Shift> shiftRepository = Substitute.For<IRepository<Library.Models.Shift>>();
@@ -59,7 +59,7 @@ namespace Project.Zap.Tests
 
             // Assert
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            shiftRepository.Received(1).Get("SELECT * FROM c WHERE c.StartDateTime > @start", Arg.Is<Dictionary<string, object>>(x => x.ContainsKey("@start")));
+            shiftRepository.Received(1).Get("SELECT * FROM c WHERE c.StartDateTime >= @startDateTime", Arg.Is<Dictionary<string, object>>(x => x.ContainsKey("@startDateTime")));
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
         }
 
@@ -127,6 +127,32 @@ namespace Project.Zap.Tests
             ViewResult viewResult = Assert.IsType<ViewResult>(result);
             SearchShiftViewModel viewModelResult = Assert.IsAssignableFrom<SearchShiftViewModel>(viewResult.ViewData.Model);
             Assert.Single(viewModelResult.Result);
+        }
+
+        [Fact]
+        public async Task Search_SearchViewModel_ResultsFilteredByLocationName()
+        {
+            // Arrange
+            IRepository<Library.Models.Shift> shiftRepository = Substitute.For<IRepository<Library.Models.Shift>>();
+            shiftRepository.Get(Arg.Any<string>(), Arg.Any<IDictionary<string, object>>()).Returns(new[]
+            {
+                new Library.Models.Shift { StartDateTime = DateTime.Now.Add(new TimeSpan(1,0,0,0)), LocationId = "2" },
+                new Library.Models.Shift { StartDateTime = DateTime.Now.Add(new TimeSpan(1,0,0,0)), LocationId = "1" }
+
+            });
+            ILocationService locationService = Substitute.For<ILocationService>();
+            locationService.Get().Returns(new[] { new Library.Models.Location { id = "1", Name = "Contoso" }, new Library.Models.Location { id = "2", Name = "Fabrikam" } });
+            ShiftsController controller = this.GetController(shiftRepository: shiftRepository, locationService: locationService);
+            SearchShiftViewModel viewModel = new SearchShiftViewModel { FilterByLocation = "Contoso" };
+
+            // Act
+            IActionResult result = await controller.Index(viewModel);
+
+            // Assert
+            ViewResult viewResult = Assert.IsType<ViewResult>(result);
+            SearchShiftViewModel viewModelResult = Assert.IsAssignableFrom<SearchShiftViewModel>(viewResult.ViewData.Model);
+            Assert.Single(viewModelResult.Result);
+            Assert.Equal(2, viewModelResult.MapPoints.Count());
         }
 
         [Fact]
