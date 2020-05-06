@@ -109,7 +109,7 @@ namespace Project.Zap.Tests
             // Arrange
             IRepository<Location> repository = Substitute.For<IRepository<Location>>();
             IMapService mapService = Substitute.For<IMapService>();
-            Location location = new Location { Address = new Address { Point = new Point() } };
+            Location location = new Location { Address = new Address { Text = "" } };
             repository.Get(Arg.Any<string>(), Arg.Any<Dictionary<string, object>>()).Returns(new[] { location });
             ILocationService service = this.GetLocationService(locationRepository: repository, mapService: mapService);
             
@@ -121,7 +121,6 @@ namespace Project.Zap.Tests
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             repository.Received(1).Get("SELECT * FROM c WHERE c.Name = @name", Arg.Any<Dictionary<string, object>>());
             repository.Received(1).Replace(location);
-            mapService.Received(1).GetCoordinates(location.Address);
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed  
         }
 

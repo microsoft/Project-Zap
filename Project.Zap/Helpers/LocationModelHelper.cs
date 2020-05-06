@@ -18,16 +18,25 @@ namespace Project.Zap.Helpers
 
         public static Location Map(this LocationViewModel viewModel)
         {
-            return new Location
+            var location = new Location
             {
                 Name = viewModel.Name,
                 Address = new Address
                 {
                     Text = viewModel?.Address,
-                    ZipOrPostcode = viewModel?.ZipOrPostcode
+                    ZipOrPostcode = viewModel?.ZipOrPostcode,
                 }
             };
+            if (viewModel.Latitude != 0 && viewModel.Latitude != 0)
+            {
+                location.Address.Point = new Point
+                {
+                    coordinates = new double[] { viewModel.Latitude, viewModel.Longitude}
+                };
+            }
+            return location;
         }
+
 
         public static Location Map(this AddLocationViewModel viewModel)
         {
@@ -44,12 +53,19 @@ namespace Project.Zap.Helpers
 
         public static LocationViewModel Map(this Location location)
         {
-            return new LocationViewModel
+            var viewModel = new LocationViewModel
             {
                 Name = location.Name,
                 Address = location?.Address?.Text,
                 ZipOrPostcode = location?.Address?.ZipOrPostcode
             };
+
+            if (location?.Address?.Point?.coordinates != null)
+                viewModel.Point = new PointViewModel
+                {
+                    Coordinates = location.Address.Point.coordinates
+                };
+            return viewModel;
         }
     }
 }

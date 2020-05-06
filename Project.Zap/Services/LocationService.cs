@@ -66,7 +66,10 @@ namespace Project.Zap.Services
                 return;
             }
             existing.Address = location.Address;
-            existing.Address.Point = await this.mapService.GetCoordinates(location.Address);
+            if (existing.Address.Point == null)
+            {
+                existing.Address.Point = await this.mapService.GetCoordinates(location.Address);
+            }
             await this.repository.Replace(existing);
         }
 

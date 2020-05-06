@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Project.Zap.Helpers;
 using Project.Zap.Library.Models;
 using Project.Zap.Models;
@@ -13,10 +14,12 @@ namespace Project.Zap.Controllers
     public class LocationsController : Controller
     {
         private readonly ILocationService locationService;
+        private readonly IConfiguration configuration;
 
-        public LocationsController(ILocationService locationService)
+        public LocationsController(ILocationService locationService, IConfiguration configuration)
         {
             this.locationService = locationService;
+            this.configuration = configuration;
         }
 
         public async Task<IActionResult> Index()
@@ -56,12 +59,13 @@ namespace Project.Zap.Controllers
         public async Task<IActionResult> Edit(string id)
         {
             Location location = await this.locationService.GetByName(id);
+            ViewData["AzureMapsKey"] = this.configuration["AzureMapsSubscriptionKey"];
             return View(location.Map());
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditLocation(AddLocationViewModel viewModel)
+        public async Task<IActionResult> EditLocation(LocationViewModel viewModel)
         {
             await this.locationService.Update(viewModel.Map());
 
