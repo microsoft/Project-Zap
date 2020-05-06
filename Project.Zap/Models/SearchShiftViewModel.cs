@@ -15,7 +15,7 @@ namespace Project.Zap.Models
         [Required]
         [Display(Name = "Starting from")]
         [DisplayFormat(DataFormatString = "{yyyy-MM-ddTHH:mm}")]
-        public DateTime Start { get; set; } = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
+        public DateTime Start { get; set; } = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute, 0);
 
         [BindProperty]
         [Display(Name = "Location")]
