@@ -73,7 +73,7 @@ namespace Project.Zap
                .AddDataAnnotationsLocalization();
             services.AddRazorPages();
 
-            services.AddSingleton<IValidationAttributeAdapterProvider, DateLessThanAttributeAdapterProvider>();
+            services.AddSingleton<IValidationAttributeAdapterProvider, CustomValidationAttributeAdapterProvider>();
 
             services.AddTransient<Database>(x => this.GetCosmosDatabase().Result);
             

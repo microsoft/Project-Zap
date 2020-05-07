@@ -16,6 +16,7 @@ namespace Project.Zap.Models
         [BindProperty]
         [Required]
         [Display(Name = "Start")]
+        [DateMustBeEqualOrGreaterThanCurrent]
         [DateLessThan("End")]
         [DisplayFormat(DataFormatString = "{yyyy-MM-ddTHH:mm}")]
         public DateTime Start { get; set; } = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
