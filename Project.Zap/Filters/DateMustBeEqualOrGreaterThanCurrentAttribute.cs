@@ -18,7 +18,7 @@ namespace Project.Zap.Filters
             ErrorMessage = ErrorMessageString;
             DateTime currentValue = (DateTime)value;
 
-            if (currentValue <= DateTime.Today)
+            if (currentValue <= DateTime.Now)
             {
                 return new ValidationResult(ErrorMessage);
             }

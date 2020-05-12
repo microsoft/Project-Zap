@@ -116,7 +116,7 @@ namespace Project.Zap.Controllers
 
         private async Task<IActionResult> Search(SearchShiftViewModel search, IEnumerable<Location> locations)
         {
-            List<string> locationIds = new List<string>();
+             List<string> locationIds = new List<string>();
 
             if (search.Locations != null && search.Locations.Any())
             {
@@ -346,6 +346,7 @@ namespace Project.Zap.Controllers
             if (!ModelState.IsValid)
             {
                 this.logger.LogError("Add shift view model is not valid");
+                viewModel.LocationNames = this.GetLocationNames(await this.locationService.Get());
                 return View("Add", viewModel);
             }
 

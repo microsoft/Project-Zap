@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.ApplicationInsights.AspNetCore;
+using Microsoft.AspNetCore.Mvc;
 using Project.Zap.Filters;
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -28,13 +29,12 @@ namespace Project.Zap.Models
         public DateTime End { get; set; } = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
 
         [BindProperty]
-        [Required]
+        [Required(ErrorMessageResourceName ="WorkTypeRequired", ErrorMessageResourceType = typeof(Zap.Properties.Resources))]
         [Display(Name = "WorkType")]
         public string WorkType { get; set; }
 
         [BindProperty]
-        [Required]   
-        [Range(1, 200)]
+        [Range(1, 200, ErrorMessageResourceName ="QuantityRange", ErrorMessageResourceType =typeof(Zap.Properties.Resources))]
         [Display(Name = "Quantity")]
         public int Quantity { get; set; }
 
