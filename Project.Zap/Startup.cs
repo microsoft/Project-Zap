@@ -95,6 +95,7 @@ namespace Project.Zap
                 var supportedCultures = new List<CultureInfo>
                     {
                         new CultureInfo("en-US"),
+                        new CultureInfo("en-gb"),
                         new CultureInfo("fr")
                     };
 
@@ -138,6 +139,7 @@ namespace Project.Zap
             var supportedUICultures = new[]
            {
                 new CultureInfo("en-US"),
+                new CultureInfo("en-gb"),
                 new CultureInfo("fr"),
             };
 

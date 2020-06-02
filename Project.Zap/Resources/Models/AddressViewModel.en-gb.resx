@@ -121,6 +121,6 @@
     <value>City</value>
   </data>
   <data name="ZipOrPostCode" xml:space="preserve">
-    <value>Zip</value>
+    <value>Postcode</value>
   </data>
 </root>

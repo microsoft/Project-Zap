@@ -117,10 +117,28 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="City" xml:space="preserve">
-    <value>City</value>
+  <data name="Available" xml:space="preserve">
+    <value>Available</value>
   </data>
-  <data name="ZipOrPostCode" xml:space="preserve">
-    <value>Zip</value>
+  <data name="DateMustBeEqualOrGreaterThanCurrent" xml:space="preserve">
+    <value>Date must not be in the past</value>
+  </data>
+  <data name="End" xml:space="preserve">
+    <value>End</value>
+  </data>
+  <data name="LocationName" xml:space="preserve">
+    <value>Location</value>
+  </data>
+  <data name="Quantity" xml:space="preserve">
+    <value>Quantity</value>
+  </data>
+  <data name="Start" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="StartLessThanEnd" xml:space="preserve">
+    <value>Start Date and Time needs to be before End</value>
+  </data>
+  <data name="WorkType" xml:space="preserve">
+    <value>Work Type</value>
   </data>
 </root>
