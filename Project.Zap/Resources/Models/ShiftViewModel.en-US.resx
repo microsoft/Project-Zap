@@ -120,6 +120,9 @@
   <data name="Available" xml:space="preserve">
     <value>Available</value>
   </data>
+  <data name="DateMustBeEqualOrGreaterThanCurrent" xml:space="preserve">
+    <value>Date must not be in the past</value>
+  </data>
   <data name="End" xml:space="preserve">
     <value>End</value>
   </data>

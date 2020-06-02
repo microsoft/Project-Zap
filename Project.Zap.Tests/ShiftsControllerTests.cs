@@ -37,6 +37,8 @@ namespace Project.Zap.Tests
         {
             // Arrange
             ShiftsController controller = this.GetController();
+            controller.HttpContext.User = new ClaimsPrincipal(new ClaimsIdentity(new[] { new Claim("extension_zaprole", "org_a_manager") }));
+
 
             // Act
             IActionResult result = await controller.Index();
@@ -69,6 +71,7 @@ namespace Project.Zap.Tests
             // Arrange
             ILocationService locationService = Substitute.For<ILocationService>();
             ShiftsController controller = this.GetController(locationService: locationService);
+            controller.HttpContext.User = new ClaimsPrincipal(new ClaimsIdentity(new[] { new Claim("extension_zaprole", "org_a_manager") }));
             SearchShiftViewModel viewModel = new SearchShiftViewModel { Locations = new List<string> { "Contoso" }, Start = DateTime.Now };
 
             // Act

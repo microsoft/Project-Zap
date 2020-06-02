@@ -42,6 +42,7 @@
 @section Scripts
 {
     <script>
+        
         $.validator.addMethod('datelessthan', function (value, element, params) {
             var compareDateId = "#NewShift_" + params[0].dataset.valDatelessthanProperty;
             var compareValue = $(compareDateId).val()
@@ -53,5 +54,18 @@
             options.rules['datelessthan'] = [options.element, parseInt(options.params['property'])];
             options.messages['datelessthan'] = options.message;
         });
+
+        $.validator.addMethod("datemustbeequalorgreaterthancurrent", function (value, element, param) {
+
+            var today = new Date();
+            var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+            var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+            var dateTime = date + ' ' + time;
+
+            return value < dateTime;
+
+        });
+
+       
     </script>
 }

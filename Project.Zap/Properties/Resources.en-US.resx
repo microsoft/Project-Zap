@@ -117,19 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="infoSelect" xml:space="preserve">
-    <value>Use ctrl+click to select and unselect multiple items</value>
+  <data name="QuantityRange" xml:space="preserve">
+    <value>The field Quantity must be between 1 and 200</value>
   </data>
-  <data name="Location" xml:space="preserve">
-    <value>Location</value>
-  </data>
-  <data name="SearchButton" xml:space="preserve">
-    <value>Search</value>
-  </data>
-  <data name="Start" xml:space="preserve">
-    <value>Starting from</value>
-  </data>
-  <data name="ZipOrPostcode" xml:space="preserve">
-    <value>Zip Code</value>
+  <data name="WorkTypeRequired" xml:space="preserve">
+    <value>The Work Type field is required</value>
   </data>
 </root>

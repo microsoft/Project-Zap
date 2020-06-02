@@ -9,7 +9,10 @@
 <form asp-controller="Shifts" asp-action="OnSearch" method="post">
     <div class="row">
         <div class="d-none d-xs-block d-sm-block col-md-4 font-weight-bold mt-2 pl-0">@Localizer["Start"]</div>
-        <div class="d-none d-xs-block d-sm-block col-md-4 font-weight-bold mt-2 pl-0">@Localizer["Location"]</div>
+        <div class="d-none d-xs-block d-sm-block col-md-4 font-weight-bold mt-2 pl-0">
+            @Localizer["Location"]
+            <a href="#" data-toggle="tooltip" title="@Localizer["infoSelect"]"> <i class="icon-info-sign"></i></a>
+        </div>
         <div class="d-none d-xs-block d-sm-block col-md-3 font-weight-bold mt-2 pl-0">@Localizer["ZipOrPostcode"]</div>
         <div class="d-none d-xs-block d-sm-block col-md-1 font-weight-bold mt-2 invisible">@Localizer["SearchButton"]</div>
     </div>
@@ -32,7 +35,10 @@
         </div>
 
 
-        <div class="d-block d-xs-none d-sm-none col-xs-6 col-sm-6 font-weight-bold mt-2 pl-0">@Localizer["Location"]</div>
+        <div class="d-block d-xs-none d-sm-none col-xs-6 col-sm-6 font-weight-bold mt-2 pl-0">
+            @Localizer["Location"]
+            <a href="#" data-toggle="tooltip" title="@Localizer["infoSelect"]"> <i class="icon-info-sign"></i></a>
+        </div>
         <div class="col-xs-6 col-sm-6 col-md-4 mt-2 pl-0">
             <select class="form-control" asp-for="@Model.Locations" asp-items="@Model.LocationNames" multiple="multiple">
             </select>

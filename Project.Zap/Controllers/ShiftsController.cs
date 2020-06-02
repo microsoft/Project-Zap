@@ -54,7 +54,12 @@ namespace Project.Zap.Controllers
             if (locations == null || !locations.Any())
             {
                 this.logger.LogInformation("No locations, so redirecting to location view");
-                return Redirect("/Locations");
+                Claim id = HttpContext?.User?.Claims?.Where(x => x.Type == "extension_zaprole").FirstOrDefault();
+
+                if (id.Value == "org_a_manager")
+                {
+                    return Redirect("/Locations");
+                }
             }
 
             return await this.Search(search ?? new SearchShiftViewModel(), locations);
@@ -67,7 +72,7 @@ namespace Project.Zap.Controllers
             SearchShiftViewModel viewModel = new SearchShiftViewModel
             {
                 LocationNames = this.GetLocationNames(locations),
-                Result = shiftViewModels.Where(x => string.IsNullOrEmpty(filterLocation) ? true : x.LocationName == filterLocation),
+                Result = shiftViewModels.Where(x => string.IsNullOrEmpty(filterLocation) ? true : x.LocationName == filterLocation).OrderBy(x => x.Start),
                 MapPoints = this.GetMapPoints(shiftViewModels, locations)
             };
             return viewModel;
@@ -106,12 +111,12 @@ namespace Project.Zap.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult OnSearch(SearchShiftViewModel search)
         {
-            return RedirectToAction("Index", new { Start = search.Start.ToString("yyyy-MM-ddTHH:mm"), search.Locations, search.UseMyLocation, search.Available, search.ZipOrPostcode });
+            return RedirectToAction("Index", new { Start = search.Start.ToString("yyyy-MM-ddTHH:mm"), search.Locations, search.UseMyLocation, search.Available, search.ZipOrPostcode, search.DistanceInMeters});
         }
 
         private async Task<IActionResult> Search(SearchShiftViewModel search, IEnumerable<Location> locations)
         {
-            List<string> locationIds = new List<string>();
+             List<string> locationIds = new List<string>();
 
             if (search.Locations != null && search.Locations.Any())
             {
@@ -251,7 +256,7 @@ namespace Project.Zap.Controllers
 
             await this.shiftRepository.Update(shift);
 
-            return Redirect("/Shifts");
+            return RedirectToAction("ViewShifts");
         }
 
         [HttpGet]
@@ -341,6 +346,7 @@ namespace Project.Zap.Controllers
             if (!ModelState.IsValid)
             {
                 this.logger.LogError("Add shift view model is not valid");
+                viewModel.LocationNames = this.GetLocationNames(await this.locationService.Get());
                 return View("Add", viewModel);
             }
 
