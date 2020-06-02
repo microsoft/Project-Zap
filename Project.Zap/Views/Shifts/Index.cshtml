@@ -64,10 +64,10 @@
         <div class="col-xs-6 col-sm-6 col-md-4 my-auto">@shift.LocationName</div>
     
         <div class="d-block d-xs-none d-sm-none col-xs-6 col-sm-6 font-weight-bold mt-2">@Localizer["TableStart"]</div>
-        <div class="col-xs-6 col-sm-6 col-md-2 my-auto">@shift.Start.ToString("MM/dd/yyyy HH:mm")</div>
+        <div class="col-xs-6 col-sm-6 col-md-2 my-auto">@shift.Start.ToString("d", System.Threading.Thread.CurrentThread.CurrentUICulture) @shift.Start.ToString("HH:mm")</div>
     
         <div class="d-block d-xs-none d-sm-none col-xs-6 col-sm-6 font-weight-bold mt-2">@Localizer["TableEnd"]</div>
-        <div class="col-xs-6 col-sm-6 col-md-2 my-auto">@shift.End.ToString("MM/dd/yyyy HH:mm")</div>
+        <div class="col-xs-6 col-sm-6 col-md-2 my-auto">@shift.End.ToString("d", System.Threading.Thread.CurrentThread.CurrentUICulture) @shift.End.ToString("HH:mm")</div>
     
     
         <div class="d-block d-xs-none d-sm-none col-xs-6 col-sm-6 font-weight-bold mt-2">@Localizer["TableWorkType"]</div>
