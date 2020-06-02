@@ -117,10 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="City" xml:space="preserve">
-    <value>City</value>
+  <data name="Register" xml:space="preserve">
+    <value>Register</value>
   </data>
-  <data name="ZipOrPostCode" xml:space="preserve">
-    <value>Zip</value>
+  <data name="SignOutMessage" xml:space="preserve">
+    <value>Once you have registered with the code supplied by your organisation you will be signed out and will need to log in again.</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Register with your organisation</value>
   </data>
 </root>

@@ -117,10 +117,67 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="City" xml:space="preserve">
-    <value>City</value>
+  <data name="AddressText" xml:space="preserve">
+    <value>Address</value>
   </data>
-  <data name="ZipOrPostCode" xml:space="preserve">
-    <value>Zip</value>
+  <data name="ErrorTitle" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="LinkBook" xml:space="preserve">
+    <value>Book</value>
+  </data>
+  <data name="LinkDelete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="LinkView" xml:space="preserve">
+    <value>View</value>
+  </data>
+  <data name="ListView" xml:space="preserve">
+    <value>List View</value>
+  </data>
+  <data name="MapView" xml:space="preserve">
+    <value>Map View</value>
+  </data>
+  <data name="ResultsTitle" xml:space="preserve">
+    <value>Results</value>
+  </data>
+  <data name="SearchButton" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="SuccessTitle" xml:space="preserve">
+    <value>Success</value>
+  </data>
+  <data name="TableAvailable" xml:space="preserve">
+    <value>Available</value>
+  </data>
+  <data name="TableBook" xml:space="preserve">
+    <value>Book</value>
+  </data>
+  <data name="TableDelete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="TableEnd" xml:space="preserve">
+    <value>End Time</value>
+  </data>
+  <data name="TableLocation" xml:space="preserve">
+    <value>Location</value>
+  </data>
+  <data name="TableQuantity" xml:space="preserve">
+    <value>Quantity</value>
+  </data>
+  <data name="TableStart" xml:space="preserve">
+    <value>Start Time</value>
+  </data>
+  <data name="TableView" xml:space="preserve">
+    <value>View</value>
+  </data>
+  <data name="TableWorkType" xml:space="preserve">
+    <value>Work Type</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Shifts</value>
+  </data>
+  <data name="ZipOrPostcode" xml:space="preserve">
+    <value>Postcode</value>
   </data>
 </root>

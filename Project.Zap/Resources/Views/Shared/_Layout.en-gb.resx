@@ -117,10 +117,40 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="City" xml:space="preserve">
-    <value>City</value>
+  <data name="Add" xml:space="preserve">
+    <value>Add</value>
   </data>
-  <data name="ZipOrPostCode" xml:space="preserve">
-    <value>Zip</value>
+  <data name="BookShifts" xml:space="preserve">
+    <value>Book Shifts</value>
+  </data>
+  <data name="DataRequest" xml:space="preserve">
+    <value>Data Request</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="ManageOrganization" xml:space="preserve">
+    <value>Manage Locations</value>
+  </data>
+  <data name="MyShifts" xml:space="preserve">
+    <value>My Shifts</value>
+  </data>
+  <data name="PartnerOrganizations" xml:space="preserve">
+    <value>Partner Organisations</value>
+  </data>
+  <data name="Privacy" xml:space="preserve">
+    <value>Privacy</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="Shifts" xml:space="preserve">
+    <value>Shifts</value>
+  </data>
+  <data name="Upload" xml:space="preserve">
+    <value>Upload</value>
+  </data>
+  <data name="View" xml:space="preserve">
+    <value>View</value>
   </data>
 </root>

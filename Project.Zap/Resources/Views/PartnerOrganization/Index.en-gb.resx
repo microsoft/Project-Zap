@@ -117,10 +117,22 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="City" xml:space="preserve">
-    <value>City</value>
+  <data name="DeleteButton" xml:space="preserve">
+    <value>Delete</value>
   </data>
-  <data name="ZipOrPostCode" xml:space="preserve">
-    <value>Zip</value>
+  <data name="NewTitle" xml:space="preserve">
+    <value>New Partner</value>
+  </data>
+  <data name="TableDelete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="TableName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="TableRegCode" xml:space="preserve">
+    <value>Registration Code</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Partners</value>
   </data>
 </root>

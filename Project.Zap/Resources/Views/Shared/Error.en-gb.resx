@@ -117,10 +117,25 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="City" xml:space="preserve">
-    <value>City</value>
+  <data name="DevMessage" xml:space="preserve">
+    <value>The Development environment shouldn't be enabled for deployed applications.
+    It can result in displaying sensitive information from exceptions to end users.
+    For local debugging, enable the Development environment by setting the ASPNETCORE_ENVIRONMENT environment variable to Development
+    and restarting the app.</value>
   </data>
-  <data name="ZipOrPostCode" xml:space="preserve">
-    <value>Zip</value>
+  <data name="DevSubTitle" xml:space="preserve">
+    <value>Swapping to Development environment will display more detailed information about the error that occurred.</value>
+  </data>
+  <data name="DevTitle" xml:space="preserve">
+    <value>Development Mode</value>
+  </data>
+  <data name="ErrorId" xml:space="preserve">
+    <value>Request ID</value>
+  </data>
+  <data name="ErrorSubTitle" xml:space="preserve">
+    <value>An error occurred while processing your request.</value>
+  </data>
+  <data name="ErrorTitle" xml:space="preserve">
+    <value>Error</value>
   </data>
 </root>
