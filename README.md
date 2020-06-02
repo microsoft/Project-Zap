@@ -5,6 +5,8 @@ Companies can easily upload available shifts at their locations from a CSV file 
 
 The source code has been made available on GitHub to quickly enable companies to provide access to work opportunities and meet the labor needs of essential businesses.
 
+*Microsoft is the author and first owner of the software and provides it on an open source basis for free use by third parties. By making the software available, Microsoft does not provide employee sharing or temporary worker services or act as an employment agent, temporary worker agent, recruitment consultant, or in any similar capacity. Any such services provided via or in connection with the Zap software have no connection to Microsoft.*
+
 # Deploy Project Zap
 To get started using Project Zap please follow the [deployment guide](./docs/azuredeploy.md) to use the provided Azure Resource Manager templates to provision the application in your own Azure subscription.
 
