@@ -12,7 +12,7 @@
     <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.7.0" />
     <PackageReference Include="Microsoft.Graph" Version="3.0.1" />
     <PackageReference Include="Microsoft.Graph.Auth" Version="1.0.0-preview.4" />
-    <PackageReference Include="Microsoft.Identity.Client" Version="4.10.0" />
+    <PackageReference Include="Microsoft.Identity.Client" Version="4.61.3" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
   </ItemGroup>
 
